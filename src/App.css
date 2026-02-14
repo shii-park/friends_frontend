@@ -284,7 +284,7 @@ body {
 }
 
 .storage-card:hover {
-  box-shadow: 8px 8px 0px var(--primary) !important;
+  box-shadow: 8px 8px 0px var(--rarity-color) !important;
   transform: translate(-2px, -2px);
 }
 
@@ -300,7 +300,7 @@ body {
 }
 
 .card-level {
-  background: var(--rarity-color, var(--primary)); /* Use rarity color */
+  background: var(--primary);
   color: #000;
   padding: 2px 8px;
   font-weight: 900;
