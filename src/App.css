@@ -515,26 +515,26 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Push content to ends */
-  padding: 0 3rem 180px; /* Removed top padding */
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 2rem 180px;
 }
 
 .battle-side {
   display: flex;
-  width: 100%;
-  gap: 2rem;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 3rem;
 }
 
 .battle-side.opponent {
-  justify-content: flex-start;
-  align-items: flex-start; /* Ensure elements touch the top */
-  padding-top: 1rem;
+  margin-top: 1rem;
 }
 
 .battle-side.player {
-  justify-content: flex-end;
-  align-items: flex-end; /* Keep player elements at bottom */
+  margin-bottom: 1rem;
 }
 
 .battle-ui {
@@ -563,11 +563,8 @@ body {
 }
 
 .battle-side.player .chara-plate {
-  position: fixed;
-  bottom: 180px; /* Fixed above the hand-selector */
-  right: 2rem;
-  z-index: 110;
-  width: 280px;
+  width: 320px;
+  margin-top: 1rem;
 }
 
 .hp-bar-container {
@@ -596,16 +593,14 @@ body {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  padding: 1rem;
-  width: 100%;
 }
 
 .battle-side.opponent .battle-cards-container {
-  align-items: flex-start; /* Opponent cards top-aligned */
+  /* reset */
 }
 
 .battle-side.player .battle-cards-container {
-  align-items: flex-end; /* Player cards bottom-aligned */
+  /* reset */
 }
 
 .battle-card {
