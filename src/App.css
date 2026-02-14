@@ -354,7 +354,7 @@ input:focus,
   height: 52px;
   background: white;
   color: var(--primary-dark);
-  box-shadow: 0 -4px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.05), 4px 0 12px rgba(0,0,0,0.05), -4px 0 12px rgba(0,0,0,0.05); /* Enhanced shadow for top and sides */
   z-index: 2;
 }
 
