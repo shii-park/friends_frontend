@@ -69,12 +69,12 @@ const Battle: React.FC = () => {
     } else if (winner === 'player') {
       const isSpecial = selectedChara.specialType === playerHand;
       const dmg = calculateDamage({ ...selectedChara, ...selectedEquip }, opponent, isSpecial);
-      setOpponentHp(prev => Math.max(0, prev - dmg));
+      setOpponentHp((prev: number) => Math.max(0, prev - dmg));
       setDamagePopup({ value: dmg, target: 'opponent' });
     } else {
       const isSpecial = opponent.chara.specialType === opponentHand;
       const dmg = calculateDamage(opponent, { ...selectedChara, ...selectedEquip }, isSpecial);
-      setPlayerHp(prev => Math.max(0, prev - dmg));
+      setPlayerHp((prev: number) => Math.max(0, prev - dmg));
       setDamagePopup({ value: dmg, target: 'player' });
     }
 
