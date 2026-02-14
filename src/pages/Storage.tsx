@@ -105,7 +105,7 @@ const Storage: React.FC = () => {
               <div 
                 key={chara.cardId} 
                 className="storage-card chara-card"
-                style={{ borderColor: getRarityColor(chara.rarity) }}
+                style={{ borderColor: getRarityColor(chara.rarity), '--rarity-color': getRarityColor(chara.rarity) } as React.CSSProperties}
                 onClick={() => setSelectedCard({ id: chara.cardId, type: 'chara' })}
               >
                 <div className="card-image-placeholder">Chara</div>
@@ -124,7 +124,7 @@ const Storage: React.FC = () => {
               <div 
                 key={equip.cardId} 
                 className="storage-card equip-card"
-                style={{ borderColor: getRarityColor(equip.rarity) }}
+                style={{ borderColor: getRarityColor(equip.rarity), '--rarity-color': getRarityColor(equip.rarity) } as React.CSSProperties}
                 onClick={() => setSelectedCard({ id: equip.cardId, type: 'equip' })}
               >
                 <div className="card-image-placeholder">Equip</div>

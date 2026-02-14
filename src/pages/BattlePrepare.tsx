@@ -61,7 +61,7 @@ const BattlePrepare: React.FC = () => {
                   <div 
                     key={chara.cardId} 
                     className={`storage-card ${selectedChara?.cardId === chara.cardId ? 'selected' : ''}`}
-                    style={{ borderColor: getRarityColor(chara.rarity) }}
+                    style={{ borderColor: getRarityColor(chara.rarity), '--rarity-color': getRarityColor(chara.rarity) } as React.CSSProperties}
                     onClick={() => { setSelectedChara(chara); setStep(2); }}
                   >
                     <div className="card-name">{chara.name}</div>
@@ -76,7 +76,7 @@ const BattlePrepare: React.FC = () => {
                   <div 
                     key={equip.cardId} 
                     className={`storage-card ${selectedEquip?.cardId === equip.cardId ? 'selected' : ''}`}
-                    style={{ borderColor: getRarityColor(equip.rarity) }}
+                    style={{ borderColor: getRarityColor(equip.rarity), '--rarity-color': getRarityColor(equip.rarity) } as React.CSSProperties}
                     onClick={() => setSelectedEquip(equip)}
                   >
                     <div className="card-name">{equip.name}</div>

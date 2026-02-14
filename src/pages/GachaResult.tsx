@@ -27,7 +27,7 @@ const GachaResult: React.FC = () => {
               <div 
                 key={item.cardId + index} 
                 className="storage-card"
-                style={{ borderColor: getRarityColor(item.rarity) }}
+                style={{ borderColor: getRarityColor(item.rarity), '--rarity-color': getRarityColor(item.rarity) } as React.CSSProperties}
               >
                 <div className="card-image-placeholder">
                   {'charaId' in item ? 'Chara' : 'Equip'}
