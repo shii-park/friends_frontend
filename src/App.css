@@ -331,6 +331,137 @@ body {
   text-transform: uppercase;
 }
 
+/* Battle Select / Prepare */
+.battle-select-page, .battle-prepare-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-dark);
+}
+
+.battle-select-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.battle-type-container {
+  display: flex;
+  gap: 3rem;
+  width: 100%;
+  max-width: 1000px;
+  justify-content: center;
+}
+
+.battle-type-card {
+  flex: 1;
+  max-width: 400px;
+  background: #000;
+  border: 3px solid var(--primary);
+  border-radius: 4px;
+  padding: 4rem 2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+}
+
+.battle-type-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 15px 15px 0px var(--primary);
+}
+
+.battle-type-icon { font-size: 5rem; margin-bottom: 2rem; }
+.battle-type-title { font-size: 2.2rem; font-weight: 900; color: var(--primary); margin-bottom: 1rem; text-transform: uppercase; }
+.battle-type-desc { color: white; opacity: 0.8; font-weight: 600; line-height: 1.6; }
+
+/* Battle Prepare */
+.battle-prepare-content {
+  flex: 1;
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+  overflow: hidden;
+}
+
+.selection-section {
+  flex: 1;
+  background: #000;
+  border: 2px solid var(--primary);
+  border-radius: 4px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.selection-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 24px;
+}
+
+.step-indicator {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1rem;
+}
+
+.step-indicator span { font-weight: 700; color: white; opacity: 0.4; padding: 0.5rem 1rem; }
+.step-indicator span.active { color: var(--primary); opacity: 1; font-weight: 900; border-bottom: 3px solid var(--primary); }
+
+.preview-section { width: 420px; display: flex; flex-direction: column; gap: 2rem; }
+
+.vs-container {
+  background: #000;
+  border: 3px solid var(--primary);
+  border-radius: 4px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
+}
+
+.vs-badge { font-size: 3rem; font-weight: 900; color: var(--primary); font-style: italic; text-shadow: 4px 4px 0px #000; }
+
+.player-side h3, .opponent-side h3 { color: white; font-weight: 900; text-transform: uppercase; margin-bottom: 0.5rem; font-size: 0.9rem; }
+
+.preview-card {
+  background: #111;
+  border: 2px solid var(--primary);
+  border-radius: 4px;
+  padding: 1.5rem;
+  color: white;
+  text-align: center;
+}
+
+.preview-chara-name { font-size: 1.3rem; font-weight: 900; color: var(--primary); margin-bottom: 0.4rem; }
+.preview-equip-name { font-size: 0.95rem; color: #888; font-weight: 700; }
+
+.battle-start-button {
+  width: 100%;
+  padding: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 900;
+  border-radius: 4px;
+  border: none;
+  background: var(--primary);
+  color: #000;
+  cursor: pointer;
+  box-shadow: 8px 8px 0px #000;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.battle-start-button:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 10px 10px 0px #000; }
+.battle-start-button:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
+
 .battle-page {
   background: var(--bg-dark);
 }
@@ -435,12 +566,50 @@ body {
   background: #000;
   border: 4px solid var(--primary);
   padding: 4rem;
+  box-shadow: 15px 15px 0px rgba(204, 255, 0, 0.1);
 }
 
 .result-title {
   color: var(--primary);
-  font-size: 5rem;
+  font-size: 6rem;
   font-weight: 900;
+  text-transform: uppercase;
+  text-shadow: 6px 6px 0px rgba(0,0,0,1);
+}
+
+.rewards-section {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.rewards-section h2 {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+}
+
+.reward-item {
+  background: #111;
+  border: 2px solid var(--primary);
+  margin-bottom: 1rem;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reward-label {
+  color: white;
+  font-weight: 800;
+}
+
+.reward-value {
+  color: var(--primary);
+  font-weight: 900;
+  font-size: 1.4rem;
 }
 
 .home-button {
