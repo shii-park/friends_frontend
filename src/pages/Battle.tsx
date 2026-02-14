@@ -10,8 +10,12 @@ const Battle: React.FC = () => {
   const { user, gachaStones } = useUser();
   const { selectedChara, selectedEquip, opponent } = location.state || {};
 
-  const [playerHp, setPlayerHp] = useState(0);
-  const [opponentHp, setOpponentHp] = useState(0);
+  const [playerHp, setPlayerHp] = useState(() => 
+    selectedChara ? selectedChara.hp + (selectedEquip?.bonusHp || 0) : 0
+  );
+  const [opponentHp, setOpponentHp] = useState(() => 
+    opponent ? opponent.chara.hp + (opponent.equip?.bonusAtk || 0) : 0
+  );
   const [isAnimating, setIsAnimating] = useState(false);
   const [damagePopup, setDamagePopup] = useState<{ value: number, target: 'player' | 'opponent' } | null>(null);
   const [lastResult, setLastResult] = useState<{playerHand: Hand, opponentHand: Hand, winner: 'player' | 'opponent' | 'draw' | null}>({
@@ -19,14 +23,6 @@ const Battle: React.FC = () => {
     opponentHand: 'G',
     winner: null
   });
-
-  // 初期HP設定
-  useEffect(() => {
-    if (selectedChara) {
-      setPlayerHp(selectedChara.hp + (selectedEquip?.bonusHp || 0));
-      setOpponentHp(opponent.chara.hp + (opponent.equip?.bonusAtk || 0)); // モックデータの整合性
-    }
-  }, [selectedChara, selectedEquip, opponent]);
 
   if (!selectedChara || !opponent) return null;
 
@@ -88,7 +84,7 @@ const Battle: React.FC = () => {
 
   // 決着判定
   useEffect(() => {
-    if (!isAnimating) {
+    if (!isAnimating && (playerHp > 0 || opponentHp > 0)) {
       if (opponentHp <= 0) {
         setTimeout(() => navigate('/battle-result', { state: { result: 'win' } }), 2000);
       } else if (playerHp <= 0) {
