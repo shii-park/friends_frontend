@@ -8,7 +8,30 @@ const Storage: React.FC = () => {
   const { user, ownedCharas, ownedEquips } = useUser();
   const [tab, setTab] = React.useState<'chara' | 'equip'>('chara');
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <div style={{ 
+        color: '#333', 
+        padding: '50px', 
+        backgroundColor: '#fff', 
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '20px'
+      }}>
+        <h2>ユーザー情報が見つかりません</h2>
+        <p>タイトル画面からユーザー名を入力して「始める」を押してください。</p>
+        <button 
+          onClick={() => navigate('/')}
+          style={{ padding: '10px 20px', borderRadius: '8px', cursor: 'pointer' }}
+        >
+          タイトルへ戻る
+        </button>
+      </div>
+    );
+  }
 
   const renderRarity = (rarity: string) => {
     const colors: Record<string, string> = {

@@ -177,14 +177,17 @@ body {
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
+  color: #333;
 }
 
 .storage-header {
+  background-color: #ffffff;
   padding: 1rem 2rem;
   border-bottom: 1px solid #f0f0f0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: #333;
 }
 
 .storage-header h1 {

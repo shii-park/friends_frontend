@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { UserProvider } from './hooks/useUser';
 import Title from './pages/Title';
 import Home from './pages/Home';
@@ -20,11 +20,18 @@ function App() {
         <Routes>
           <Route path="/" element={<Title />} />
           <Route path="/home" element={<Home />} />
+          
+          {/* バトル関連 */}
           <Route path="/battle-select" element={<Placeholder name="Battle Select" />} />
           <Route path="/battle-prepare" element={<Placeholder name="Battle Prepare" />} />
           <Route path="/battle" element={<Placeholder name="Battle" />} />
           <Route path="/battle-result" element={<Placeholder name="Battle Result" />} />
+          
+          {/* ストレージ関連 (ドキュメントの/strageと一般的な/storage両方に対応) */}
           <Route path="/storage" element={<Storage />} />
+          <Route path="/strage" element={<Navigate to="/storage" replace />} />
+          
+          {/* ガチャ関連 */}
           <Route path="/gacha" element={<Placeholder name="Gacha" />} />
           <Route path="/gacha-effect" element={<Placeholder name="Gacha Effect" />} />
           <Route path="/gacha-result" element={<Placeholder name="Gacha Result" />} />
