@@ -24,11 +24,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+* {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
 button:focus, 
 button:active,
 input:focus,
-.storage-card:focus {
+.storage-card:focus,
+.menu-card:focus {
   outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Unified App Header */
@@ -45,8 +52,32 @@ input:focus,
   color: var(--primary);
 }
 
+.header-left, .header-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.header-right {
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.header-center {
+  flex: 2;
+  text-align: center;
+}
+
+.header-center h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
 .header-stats-item {
-  background: rgba(204, 255, 0, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   padding: 0 16px;
   height: 36px;
   display: flex;
@@ -56,6 +87,7 @@ input:focus,
   font-size: 0.9rem;
   border: 1px solid var(--primary);
   color: var(--primary);
+  white-space: nowrap;
 }
 
 .header-user-name {

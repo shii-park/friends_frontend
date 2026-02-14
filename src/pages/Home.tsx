@@ -11,9 +11,9 @@ const Home: React.FC = () => {
   }
 
   const menuItems = [
-    { label: 'バトル', path: '/battle-select', color: '#CCFF00', icon: '⚔️', description: 'NPCやオンラインで対戦', textColor: '#000000' },
-    { label: 'ストレージ', path: '/storage', color: '#CCFF00', icon: '🎒', description: 'キャラクター・装備の確認', textColor: '#000000' },
-    { label: 'ガチャ', path: '/gacha', color: '#CCFF00', icon: '💎', description: '新しいカードを入手', textColor: '#000000' },
+    { label: 'バトル', path: '/battle-select', color: '#ff7675', icon: '⚔️', description: 'NPCやオンラインで対戦', textColor: '#000000' },
+    { label: 'ストレージ', path: '/storage', color: '#74b9ff', icon: '🎒', description: 'キャラクター・装備の確認', textColor: '#000000' },
+    { label: 'ガチャ', path: '/gacha', color: '#ffeaa7', icon: '💎', description: '新しいカードを入手', textColor: '#000000' },
   ];
 
   return (
