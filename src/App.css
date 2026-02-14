@@ -451,6 +451,176 @@ body {
   cursor: pointer;
 }
 
+/* Gacha Page */
+.gacha-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.gacha-content {
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+
+.gacha-banner {
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  background: #000;
+  border: 4px solid var(--primary);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+}
+
+.gacha-banner h2 {
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.gacha-button-container {
+  display: flex;
+  gap: 2rem;
+}
+
+.gacha-button {
+  width: 240px;
+  height: 120px;
+  border-radius: 4px;
+  border: none;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.gacha-button.single {
+  background: transparent;
+  color: var(--primary);
+  border: 3px solid var(--primary);
+}
+
+.gacha-button.multi {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 6px 6px 0px #000;
+}
+
+.gacha-button:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0px var(--primary);
+}
+
+.gacha-button.multi:hover {
+  box-shadow: 10px 10px 0px #000;
+}
+
+.gacha-count { font-size: 1.4rem; }
+.gacha-cost { font-size: 0.9rem; opacity: 0.8; }
+
+/* Gacha Effect Page */
+.gacha-effect-page {
+  height: 100vh;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primary);
+}
+
+.crystal {
+  width: 100px;
+  height: 100px;
+  background: var(--primary);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  margin: 0 auto 2rem;
+  animation: pulse 1s infinite alternate, rotate 3s infinite linear;
+  box-shadow: 0 0 50px var(--primary);
+}
+
+@keyframes pulse {
+  from { transform: scale(1); opacity: 0.8; }
+  to { transform: scale(1.2); opacity: 1; }
+}
+
+@keyframes rotate {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+.effect-text {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+}
+
+/* Gacha Result Page */
+.gacha-result-page {
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 2rem;
+}
+
+.gacha-result-header h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 4rem;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  justify-items: center;
+}
+
+.result-grid .storage-card {
+  width: 160px;
+  padding: 12px;
+}
+
+.back-to-home, .back-to-gacha {
+  padding: 1.2rem 3rem;
+  border-radius: 4px;
+  border: none;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.back-to-home {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.back-to-gacha {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 6px 6px 0px #000;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .app-header { height: auto; flex-direction: column; padding: 1rem; }
@@ -460,4 +630,12 @@ body {
   .menu-card { width: 100%; height: auto; flex-direction: row; padding: 20px; box-shadow: 4px 4px 0px #000; }
   .storage-content { margin: 0 1rem 1rem; padding: 1rem; }
   .vs-container { flex-direction: column; }
+
+  /* Gacha Mobile */
+  .gacha-content { padding: 1.5rem; gap: 2rem; }
+  .gacha-banner { height: 200px; padding: 1.5rem; }
+  .gacha-banner h2 { font-size: 2rem; }
+  .gacha-button-container { flex-direction: column; width: 100%; }
+  .gacha-button { width: 100%; height: 80px; }
+  .gacha-result-header h1 { font-size: 2.5rem; }
 }
