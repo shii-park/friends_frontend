@@ -449,7 +449,14 @@ body {
   padding-bottom: 1rem;
 }
 
-.step-indicator span { font-weight: 700; color: white; opacity: 0.4; padding: 0.5rem 1rem; }
+.step-indicator span { 
+  font-weight: 700; 
+  color: white; 
+  opacity: 0.4; 
+  padding: 0.5rem 1rem; 
+  cursor: pointer; /* Added pointer cursor */
+  transition: all 0.2s;
+}
 .step-indicator span.active { color: var(--primary); opacity: 1; font-weight: 900; border-bottom: 3px solid var(--primary); }
 
 .preview-section { width: 420px; display: flex; flex-direction: column; gap: 2rem; }

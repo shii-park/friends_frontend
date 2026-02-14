@@ -50,8 +50,18 @@ const BattlePrepare: React.FC = () => {
       <main className="battle-prepare-content">
         <div className="selection-section">
           <div className="step-indicator">
-            <span className={step === 1 ? 'active' : ''}>1. キャラクター選択</span>
-            <span className={step === 2 ? 'active' : ''}>2. 装備選択</span>
+            <span 
+              className={step === 1 ? 'active' : ''} 
+              onClick={() => setStep(1)}
+            >
+              1. キャラクター選択
+            </span>
+            <span 
+              className={step === 2 ? 'active' : ''} 
+              onClick={() => setStep(2)}
+            >
+              2. 装備選択
+            </span>
           </div>
 
           <div className="selection-list">
@@ -78,7 +88,6 @@ const BattlePrepare: React.FC = () => {
               </div>
             ) : (
               <div className="card-grid mini">
-                <button className="back-to-step1" onClick={() => setStep(1)}>← キャラ選択に戻る</button>
                 {ownedEquips.map((equip) => (
                   <div 
                     key={equip.cardId} 
