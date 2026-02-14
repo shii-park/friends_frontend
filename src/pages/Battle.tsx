@@ -12,6 +12,7 @@ const Battle: React.FC = () => {
   const [opponentHp, setOpponentHp] = useState(0);
   const [battleLog, setBattleLog] = useState<string[]>(['バトル開始！']);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [damagePopup, setDamagePopup] = useState<{ value: number, target: 'player' | 'opponent' } | null>(null);
   const [lastResult, setLastResult] = useState<{playerHand: Hand, opponentHand: Hand, winner: 'player' | 'opponent' | 'draw' | null}>({
     playerHand: 'G',
     opponentHand: 'G',
@@ -29,13 +30,11 @@ const Battle: React.FC = () => {
   if (!selectedChara || !opponent) return null;
 
   const calculateDamage = (attacker: any, defender: any, isSpecial: boolean) => {
-    // dmg = (ATK + BonusATK) * (0.8 ~ 1) + (TECH + BonusTECH) * (0.5 ~ 1) 
-    // def = (ATK + BonusATK) * (0.3~0.5)
     const atk = (attacker.atk || attacker.chara.atk) + (attacker.bonusAtk || attacker.equip?.bonusAtk || 0);
     const tech = (attacker.tech || attacker.chara.tech) + (attacker.bonusTech || attacker.equip?.bonusTech || 0);
     
     let dmg = atk * (0.8 + Math.random() * 0.2) + tech * (0.5 + Math.random() * 0.5);
-    if (isSpecial) dmg *= 1.5; // 必殺技補正（独自解釈）
+    if (isSpecial) dmg *= 1.5;
 
     const defAtk = (defender.atk || defender.chara.atk) + (defender.bonusAtk || defender.equip?.bonusAtk || 0);
     const def = defAtk * (0.3 + Math.random() * 0.2);
@@ -74,14 +73,17 @@ const Battle: React.FC = () => {
       const isSpecial = selectedChara.specialType === playerHand;
       const dmg = calculateDamage({ ...selectedChara, ...selectedEquip }, opponent, isSpecial);
       setOpponentHp(prev => Math.max(0, prev - dmg));
+      setDamagePopup({ value: dmg, target: 'opponent' });
       setBattleLog(prev => [`あなたの攻撃！${isSpecial ? '【必殺】' : ''}${dmg}のダメージ！`, ...prev]);
     } else {
       const isSpecial = opponent.chara.specialType === opponentHand;
       const dmg = calculateDamage(opponent, { ...selectedChara, ...selectedEquip }, isSpecial);
       setPlayerHp(prev => Math.max(0, prev - dmg));
+      setDamagePopup({ value: dmg, target: 'player' });
       setBattleLog(prev => [`相手の攻撃！${isSpecial ? '【必殺】' : ''}${dmg}のダメージ！`, ...prev]);
     }
 
+    setTimeout(() => setDamagePopup(null), 1000);
     setIsAnimating(false);
   };
 
@@ -113,7 +115,10 @@ const Battle: React.FC = () => {
             <div className="hp-text">{opponentHp} HP</div>
           </div>
           <div className={`chara-sprite ${isAnimating && lastResult.winner === 'opponent' ? 'attacking' : ''}`}>
-            👿
+            <span style={{ position: 'relative' }}>
+              👿
+              {damagePopup?.target === 'opponent' && <div className="damage-popup">-{damagePopup.value}</div>}
+            </span>
           </div>
         </div>
 
@@ -130,7 +135,10 @@ const Battle: React.FC = () => {
         {/* Player Side */}
         <div className="battle-side player">
           <div className={`chara-sprite ${isAnimating && lastResult.winner === 'player' ? 'attacking' : ''}`}>
-            🛡️
+            <span style={{ position: 'relative' }}>
+              🛡️
+              {damagePopup?.target === 'player' && <div className="damage-popup">-{damagePopup.value}</div>}
+            </span>
           </div>
           <div className="chara-plate">
             <div className="chara-name">{selectedChara.name}</div>

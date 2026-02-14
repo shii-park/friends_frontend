@@ -11,9 +11,9 @@ const Home: React.FC = () => {
   }
 
   const menuItems = [
-    { label: 'バトル', path: '/battle-select', color: '#e91e63', description: 'NPCやオンラインで対戦' },
-    { label: 'ストレージ', path: '/storage', color: '#2196f3', description: 'キャラクター・装備の確認' },
-    { label: 'ガチャ', path: '/gacha', color: '#ffeb3b', description: '新しいカードを入手', textColor: '#000' },
+    { label: 'バトル', path: '/battle-select', color: '#ff7675', icon: '⚔️', description: 'NPCやオンラインで対戦' },
+    { label: 'ストレージ', path: '/storage', color: '#74b9ff', icon: '🎒', description: 'キャラクター・装備の確認' },
+    { label: 'ガチャ', path: '/gacha', color: '#ffeaa7', icon: '💎', description: '新しいカードを入手', textColor: '#2d3436' },
   ];
 
   return (
@@ -37,6 +37,7 @@ const Home: React.FC = () => {
             style={{ backgroundColor: item.color, color: item.textColor || '#fff' }}
             onClick={() => navigate(item.path)}
           >
+            <span className="menu-icon" style={{ fontSize: '5rem', marginBottom: '1rem' }}>{item.icon}</span>
             <h2 className="menu-label">{item.label}</h2>
             <p className="menu-desc">{item.description}</p>
           </button>
