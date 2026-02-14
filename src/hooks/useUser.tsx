@@ -13,8 +13,8 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [ownedCharas] = useState<Chara[]>([]);
-  const [ownedEquips] = useState<Equip[]>([]);
+  const [ownedCharas, setOwnedCharas] = useState<Chara[]>([]);
+  const [ownedEquips, setOwnedEquips] = useState<Equip[]>([]);
 
   const login = (userName: string) => {
     const newUser: User = {
@@ -27,6 +27,49 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       coin: 1000,
     };
     setUser(newUser);
+
+    // 初期配布データのシミュレーション
+    const initialChara: Chara = {
+      cardId: 'c1',
+      charaId: 'chara_001',
+      name: '冒険者',
+      rarity: 'C',
+      acquiredDate: new Date().toISOString(),
+      level: 1,
+      exp: 0,
+      hp: 100,
+      atk: 10,
+      tech: 5,
+      initHp: 100,
+      initAtk: 10,
+      initTech: 5,
+      maxHp: 500,
+      maxAtk: 50,
+      maxTech: 30,
+      specialType: 'G',
+    };
+
+    const initialEquip: Equip = {
+      cardId: 'e1',
+      equipId: 'equip_001',
+      name: '錆びた剣',
+      rarity: 'C',
+      acquiredDate: new Date().toISOString(),
+      level: 1,
+      exp: 0,
+      bonusHp: 0,
+      bonusAtk: 5,
+      bonusTech: 0,
+      initBonusHp: 0,
+      initBonusAtk: 5,
+      initBonusTech: 0,
+      maxBonusHp: 100,
+      maxBonusAtk: 50,
+      maxBonusTech: 20,
+    };
+
+    setOwnedCharas([initialChara]);
+    setOwnedEquips([initialEquip]);
   };
 
   const updateStats = (rp: number, coin: number) => {
