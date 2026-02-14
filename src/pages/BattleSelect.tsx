@@ -13,14 +13,12 @@ const BattleSelect: React.FC = () => {
       id: 'npc',
       title: 'NPCバトル',
       description: 'コンピューターと対戦して腕を磨こう。',
-      color: '#4caf50',
       icon: '🤖',
     },
     {
       id: 'online',
       title: 'オンラインバトル',
       description: '全国のプレイヤーとリアルタイムで対戦！',
-      color: '#f44336',
       icon: '⚔️',
     },
   ];
@@ -50,7 +48,6 @@ const BattleSelect: React.FC = () => {
             <button
               key={type.id}
               className="battle-type-card"
-              style={{ borderTop: `8px solid ${type.color}` }}
               onClick={() => handleSelect(type.id)}
             >
               <div className="battle-type-icon">{type.icon}</div>
