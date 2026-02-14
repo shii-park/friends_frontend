@@ -501,3 +501,77 @@ body {
   background-color: #ff9800;
   color: white;
 }
+
+/* Battle Select Page */
+.battle-select-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.battle-select-header {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.battle-select-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.battle-select-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.battle-type-container {
+  display: flex;
+  gap: 3rem;
+  max-width: 1000px;
+  width: 100%;
+  justify-content: center;
+}
+
+.battle-type-card {
+  flex: 1;
+  max-width: 400px;
+  background: white;
+  border-radius: 24px;
+  border: 1px solid #eee;
+  padding: 3rem 2rem;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.battle-type-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.battle-type-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+}
+
+.battle-type-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.battle-type-desc {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+}
