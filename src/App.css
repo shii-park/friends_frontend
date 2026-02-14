@@ -758,6 +758,20 @@ body {
   text-shadow: 4px 4px 0px #000;
 }
 
+.choose-hand-text {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-style: italic;
+  background: #000;
+  padding: 1rem 3rem;
+  border-radius: 4px;
+  border: 2px solid var(--primary);
+  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+}
+
 .damage-popup {
   color: var(--primary);
   font-size: 3rem;

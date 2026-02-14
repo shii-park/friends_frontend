@@ -147,12 +147,16 @@ const Battle: React.FC = () => {
         </div>
 
         <div className="battle-center">
-          {isAnimating && (
+          {isAnimating ? (
             <div className="hand-display">
               <div className="hand player-hand">{handToEmoji(lastResult.playerHand)}</div>
               <div className="vs-text">VS</div>
               <div className="hand opponent-hand">{handToEmoji(lastResult.opponentHand)}</div>
             </div>
+          ) : (
+            playerHp > 0 && opponentHp > 0 && (
+              <div className="choose-hand-text">CHOOSE YOUR HAND!</div>
+            )
           )}
         </div>
 
