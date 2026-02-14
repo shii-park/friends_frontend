@@ -36,7 +36,7 @@ const Home: React.FC = () => {
         {menuItems.map((item) => (
           <button
             key={item.label}
-            className="menu-card"
+            className={`menu-card ${item.path === '/storage' ? 'rotate-right' : ''}`}
             style={{ backgroundColor: item.color, color: item.textColor || '#fff' }}
             onClick={() => navigate(item.path)}
           >

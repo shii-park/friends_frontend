@@ -263,6 +263,10 @@ input:focus,
   box-shadow: var(--shadow-lg);
 }
 
+.menu-card.rotate-right:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
 .menu-label {
   font-size: 2.5rem;
   font-weight: 900;
