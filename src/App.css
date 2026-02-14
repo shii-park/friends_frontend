@@ -517,24 +517,23 @@ body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 2rem 180px;
+  padding: 0 2rem 180px;
+  position: relative;
 }
 
 .battle-side {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
   width: 100%;
-  gap: 3rem;
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 
 .battle-side.opponent {
-  margin-top: 1rem;
+  padding-top: 2rem;
 }
 
 .battle-side.player {
-  margin-bottom: 1rem;
+  padding-bottom: 2rem;
 }
 
 .battle-ui {
@@ -557,14 +556,21 @@ body {
 .chara-plate {
   background: #000;
   border: 2px solid var(--primary);
-  padding: 1.5rem;
-  width: 320px;
-  box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
+  padding: 1rem 1.5rem;
+  width: 280px;
+  box-shadow: 6px 6px 0px rgba(0,0,0,0.5);
+  position: absolute;
+  z-index: 10;
+}
+
+.battle-side.opponent .chara-plate {
+  top: 2rem;
+  left: 2rem;
 }
 
 .battle-side.player .chara-plate {
-  width: 320px;
-  margin-top: 1rem;
+  bottom: 2rem;
+  right: 2rem;
 }
 
 .hp-bar-container {
@@ -588,19 +594,20 @@ body {
   font-size: 0.8rem;
 }
 
+.battle-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+}
+
 /* Battle Cards Representation */
 .battle-cards-container {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-}
-
-.battle-side.opponent .battle-cards-container {
-  /* reset */
-}
-
-.battle-side.player .battle-cards-container {
-  /* reset */
+  z-index: 5;
 }
 
 .battle-card {
