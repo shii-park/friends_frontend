@@ -4,7 +4,7 @@ import { useUser } from '../hooks/useUser';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, gachaStones } = useUser();
 
   if (!user) {
     return <div>読み込み中...</div>;
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
           <div className="user-stats">
             <span>RP: {user.rp}</span>
             <span>コイン: {user.coin}</span>
-            <span>石: 0</span> {/* 石の型定義を後で調整 */}
+            <span>石: {gachaStones}</span>
           </div>
         </div>
       </header>

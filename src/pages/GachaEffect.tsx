@@ -5,14 +5,15 @@ const GachaEffect: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const count = location.state?.count || 1;
+  const results = location.state?.results || [];
 
   useEffect(() => {
     // 演出をシミュレーション（3秒後に結果画面へ）
     const timer = setTimeout(() => {
-      navigate('/gacha-result', { state: { count } });
+      navigate('/gacha-result', { state: { count, results } });
     }, 3000);
     return () => clearTimeout(timer);
-  }, [navigate, count]);
+  }, [navigate, count, results]);
 
   return (
     <div className="gacha-effect-page">

@@ -4,23 +4,30 @@ import { useUser } from '../hooks/useUser';
 
 const Gacha: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, gachaStones, drawGacha } = useUser();
 
   if (!user) return null;
 
   const handleGacha = (count: number) => {
-    // 石の消費チェック（本来はここで実装）
-    // 演出画面へ遷移
-    navigate('/gacha-effect', { state: { count } });
+    if (gachaStones < count) {
+      alert('石が足りません');
+      return;
+    }
+    
+    // ガチャ実行
+    const results = drawGacha(count);
+    
+    // 演出画面へ遷移（結果データを渡す）
+    navigate('/gacha-effect', { state: { count, results } });
   };
 
   return (
     <div className="gacha-page">
       <header className="gacha-header">
         <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
-        <h1>ガチャ</h1>
+        <h1>ガチャ <small style={{ fontSize: '0.8rem', opacity: 0.5 }}>v1.0</small></h1>
         <div className="user-currency">
-          <span>石: 10</span> {/* 石の管理を後で追加 */}
+          <span>石: {gachaStones}</span>
         </div>
       </header>
 
