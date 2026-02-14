@@ -10,7 +10,6 @@ const Battle: React.FC = () => {
 
   const [playerHp, setPlayerHp] = useState(0);
   const [opponentHp, setOpponentHp] = useState(0);
-  const [battleLog, setBattleLog] = useState<string[]>(['バトル開始！']);
   const [isAnimating, setIsAnimating] = useState(false);
   const [damagePopup, setDamagePopup] = useState<{ value: number, target: 'player' | 'opponent' } | null>(null);
   const [lastResult, setLastResult] = useState<{playerHand: Hand, opponentHand: Hand, winner: 'player' | 'opponent' | 'draw' | null}>({
@@ -68,19 +67,17 @@ const Battle: React.FC = () => {
 
   const processBattleTurn = (winner: 'player' | 'opponent' | 'draw', playerHand: Hand, opponentHand: Hand) => {
     if (winner === 'draw') {
-      setBattleLog(prev => ['引き分け！ダメージなし', ...prev]);
+      // 引き分け
     } else if (winner === 'player') {
       const isSpecial = selectedChara.specialType === playerHand;
       const dmg = calculateDamage({ ...selectedChara, ...selectedEquip }, opponent, isSpecial);
       setOpponentHp(prev => Math.max(0, prev - dmg));
       setDamagePopup({ value: dmg, target: 'opponent' });
-      setBattleLog(prev => [`あなたの攻撃！${isSpecial ? '【必殺】' : ''}${dmg}のダメージ！`, ...prev]);
     } else {
       const isSpecial = opponent.chara.specialType === opponentHand;
       const dmg = calculateDamage(opponent, { ...selectedChara, ...selectedEquip }, isSpecial);
       setPlayerHp(prev => Math.max(0, prev - dmg));
       setDamagePopup({ value: dmg, target: 'player' });
-      setBattleLog(prev => [`相手の攻撃！${isSpecial ? '【必殺】' : ''}${dmg}のダメージ！`, ...prev]);
     }
 
     setTimeout(() => setDamagePopup(null), 1000);
@@ -91,10 +88,8 @@ const Battle: React.FC = () => {
   useEffect(() => {
     if (!isAnimating) {
       if (opponentHp <= 0) {
-        setBattleLog(prev => ['あなたの勝利！', ...prev]);
         setTimeout(() => navigate('/battle-result', { state: { result: 'win' } }), 2000);
       } else if (playerHp <= 0) {
-        setBattleLog(prev => ['敗北...', ...prev]);
         setTimeout(() => navigate('/battle-result', { state: { result: 'lose' } }), 2000);
       }
     }
