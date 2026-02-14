@@ -85,23 +85,24 @@ const Storage: React.FC = () => {
         </div>
       </header>
 
-      <main className="storage-content">
-        <div className="storage-controls">
-          <div className="tab-buttons">
-            <button 
-              className={`tab-button ${tab === 'chara' ? 'active' : ''}`}
-              onClick={() => setTab('chara')}
-            >
-              キャラクター
-            </button>
-            <button 
-              className={`tab-button ${tab === 'equip' ? 'active' : ''}`}
-              onClick={() => setTab('equip')}
-            >
-              装備
-            </button>
-          </div>
+      <div className="storage-tabs-container">
+        <div className="tab-buttons">
+          <button 
+            className={`tab-button ${tab === 'chara' ? 'active' : ''}`}
+            onClick={() => setTab('chara')}
+          >
+            キャラクター
+          </button>
+          <button 
+            className={`tab-button ${tab === 'equip' ? 'active' : ''}`}
+            onClick={() => setTab('equip')}
+          >
+            装備
+          </button>
         </div>
+      </div>
+
+      <main className="storage-content">
         <div className="card-grid">
           {tab === 'chara' ? (
             ownedCharas.map((chara: Chara) => (
