@@ -4,6 +4,7 @@ import Title from './pages/Title';
 import Home from './pages/Home';
 import Storage from './pages/Storage';
 import BattleSelect from './pages/BattleSelect';
+import BattlePrepare from './pages/BattlePrepare';
 import Gacha from './pages/Gacha';
 import GachaEffect from './pages/GachaEffect';
 import GachaResult from './pages/GachaResult';
@@ -27,7 +28,7 @@ function App() {
           
           {/* バトル関連 */}
           <Route path="/battle-select" element={<BattleSelect />} />
-          <Route path="/battle-prepare" element={<Placeholder name="Battle Prepare" />} />
+          <Route path="/battle-prepare" element={<BattlePrepare />} />
           <Route path="/battle" element={<Placeholder name="Battle" />} />
           <Route path="/battle-result" element={<Placeholder name="Battle Result" />} />
           
