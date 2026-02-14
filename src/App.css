@@ -26,12 +26,29 @@ body {
 
 * {
   outline: none !important;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+*:focus, 
+*:active,
+*:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button, 
+input, 
+select, 
+textarea,
+.storage-card,
+.menu-card {
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none !important;
 }
 
 button:focus, 
 button:active,
-input:focus,
 .storage-card:focus,
 .menu-card:focus {
   outline: none !important;
