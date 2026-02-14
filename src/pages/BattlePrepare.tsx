@@ -64,8 +64,15 @@ const BattlePrepare: React.FC = () => {
                     style={{ borderColor: getRarityColor(chara.rarity), '--rarity-color': getRarityColor(chara.rarity) } as React.CSSProperties}
                     onClick={() => { setSelectedChara(chara); setStep(2); }}
                   >
-                    <div className="card-name">{chara.name}</div>
-                    <div className="card-level">Lv.{chara.level}</div>
+                    <div className="card-image-placeholder">Chara</div>
+                    <div className="card-info">
+                      <div className="card-name">{chara.name}</div>
+                      <div className="card-level">Lv.{chara.level}</div>
+                      <div className="card-stats">
+                        <span>HP: {chara.hp}</span>
+                        <span>ATK: {chara.atk}</span>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -79,8 +86,14 @@ const BattlePrepare: React.FC = () => {
                     style={{ borderColor: getRarityColor(equip.rarity), '--rarity-color': getRarityColor(equip.rarity) } as React.CSSProperties}
                     onClick={() => setSelectedEquip(equip)}
                   >
-                    <div className="card-name">{equip.name}</div>
-                    <div className="card-level">Lv.{equip.level}</div>
+                    <div className="card-image-placeholder">Equip</div>
+                    <div className="card-info">
+                      <div className="card-name">{equip.name}</div>
+                      <div className="card-level">Lv.{equip.level}</div>
+                      <div className="card-stats">
+                        <span>ATK: +{equip.bonusAtk}</span>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
