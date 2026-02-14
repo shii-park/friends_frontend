@@ -1125,6 +1125,34 @@ input:focus,
   .storage-content { margin: 0 1rem 1rem; padding: 1.5rem; }
   .card-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
 
+  .battle-select-page {
+    height: auto;
+    min-height: 100vh;
+  }
+  .battle-select-content {
+    align-items: flex-start;
+    padding: 1rem;
+  }
+  .battle-type-container {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .battle-type-card {
+    padding: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .battle-type-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+  }
+  .battle-type-title {
+    font-size: 1.6rem;
+  }
+
   .battle-prepare-content { 
     flex-direction: column; 
     overflow-y: auto; 
