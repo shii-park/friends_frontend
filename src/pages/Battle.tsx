@@ -151,12 +151,6 @@ const Battle: React.FC = () => {
       </div>
 
       <div className="battle-ui">
-        <div className="battle-log">
-          {battleLog.slice(0, 3).map((log, i) => (
-            <div key={i} className="log-entry">{log}</div>
-          ))}
-        </div>
-
         <div className="hand-selector">
           {(['G', 'C', 'P'] as Hand[]).map(h => (
             <button 
