@@ -516,14 +516,19 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding: 1rem 3rem;
+  padding: 1rem 3rem 180px; /* Space for fixed bottom UI */
   background: radial-gradient(circle at center, #222 0%, #000 100%);
 }
 
 .battle-ui {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background: #000;
   padding: 1.5rem 2.5rem;
   border-top: 3px solid var(--primary);
+  z-index: 100;
 }
 
 .hand-selector {
