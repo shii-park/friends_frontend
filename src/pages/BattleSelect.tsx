@@ -32,9 +32,16 @@ const BattleSelect: React.FC = () => {
 
   return (
     <div className="battle-select-page">
-      <header className="battle-select-header">
-        <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
-        <h1>バトル選択</h1>
+      <header className="app-header">
+        <div className="header-left">
+          <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
+        </div>
+        <div className="header-center">
+          <h1>バトル選択</h1>
+        </div>
+        <div className="header-right">
+          <div className="header-stats-item">RP: {user.rp}</div>
+        </div>
       </header>
 
       <main className="battle-select-content">

@@ -23,11 +23,15 @@ const Gacha: React.FC = () => {
 
   return (
     <div className="gacha-page">
-      <header className="gacha-header">
-        <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
-        <h1>ガチャ <small style={{ fontSize: '0.8rem', opacity: 0.5 }}>v1.0</small></h1>
-        <div className="user-currency">
-          <span>石: {gachaStones}</span>
+      <header className="app-header">
+        <div className="header-left">
+          <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
+        </div>
+        <div className="header-center">
+          <h1>ガチャ</h1>
+        </div>
+        <div className="header-right">
+          <div className="header-stats-item">石: {gachaStones}</div>
         </div>
       </header>
 

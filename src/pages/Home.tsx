@@ -18,14 +18,17 @@ const Home: React.FC = () => {
 
   return (
     <div className="home-page">
-      <header className="home-header">
-        <div className="user-info">
-          <div className="user-name">{user.userName}</div>
-          <div className="user-stats">
-            <span>RP: {user.rp}</span>
-            <span>コイン: {user.coin}</span>
-            <span>石: {gachaStones}</span>
-          </div>
+      <header className="app-header">
+        <div className="header-left">
+          <div className="header-user-name">{user.userName}</div>
+        </div>
+        <div className="header-center">
+          <h1>FRIENDS GAME</h1>
+        </div>
+        <div className="header-right">
+          <div className="header-stats-item">RP: {user.rp}</div>
+          <div className="header-stats-item">コイン: {user.coin}</div>
+          <div className="header-stats-item">石: {gachaStones}</div>
         </div>
       </header>
 

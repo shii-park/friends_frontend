@@ -73,25 +73,29 @@ const Storage: React.FC = () => {
 
   return (
     <div className="storage-page">
-      <header className="storage-header">
-        <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
-        <h1>ストレージ</h1>
-        <div className="user-coin-display">
-          <span>コイン: {user.coin}</span>
+      <header className="app-header">
+        <div className="header-left">
+          <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
         </div>
-        <div className="tab-buttons">
-          <button 
-            className={`tab-button ${tab === 'chara' ? 'active' : ''}`}
-            onClick={() => setTab('chara')}
-          >
-            キャラクター
-          </button>
-          <button 
-            className={`tab-button ${tab === 'equip' ? 'active' : ''}`}
-            onClick={() => setTab('equip')}
-          >
-            装備
-          </button>
+        <div className="header-center">
+          <h1>ストレージ</h1>
+        </div>
+        <div className="header-right">
+          <div className="header-stats-item">コイン: {user.coin}</div>
+          <div className="tab-buttons">
+            <button 
+              className={`tab-button ${tab === 'chara' ? 'active' : ''}`}
+              onClick={() => setTab('chara')}
+            >
+              キャラクター
+            </button>
+            <button 
+              className={`tab-button ${tab === 'equip' ? 'active' : ''}`}
+              onClick={() => setTab('equip')}
+            >
+              装備
+            </button>
+          </div>
         </div>
       </header>
 

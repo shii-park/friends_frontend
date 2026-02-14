@@ -39,9 +39,16 @@ const BattlePrepare: React.FC = () => {
 
   return (
     <div className="battle-prepare-page">
-      <header className="battle-prepare-header">
-        <button className="back-button" onClick={() => navigate('/battle-select')}>← 戻る</button>
-        <h1>バトル準備</h1>
+      <header className="app-header">
+        <div className="header-left">
+          <button className="back-button" onClick={() => navigate('/battle-select')}>← 戻る</button>
+        </div>
+        <div className="header-center">
+          <h1>バトル準備</h1>
+        </div>
+        <div className="header-right">
+          {/* 追加のステータスがあればここに表示 */}
+        </div>
       </header>
 
       <main className="battle-prepare-content">
