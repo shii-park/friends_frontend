@@ -541,7 +541,15 @@ body {
   border: 2px solid var(--primary);
   padding: 1.5rem;
   width: 320px;
-  box-shadow: 8px 8px 0px rgba(0,0,0,0.5); /* Added solid shadow */
+  box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
+}
+
+.battle-side.player .chara-plate {
+  position: fixed;
+  bottom: 180px; /* Fixed above the hand-selector */
+  right: 2rem;
+  z-index: 110;
+  width: 280px;
 }
 
 .hp-bar-container {
@@ -895,6 +903,13 @@ body {
   .menu-card { width: 100%; height: auto; flex-direction: row; padding: 20px; box-shadow: 4px 4px 0px #000; }
   .storage-content { margin: 0 1rem 1rem; padding: 1rem; }
   .vs-container { flex-direction: column; }
+
+  .battle-side.player .chara-plate {
+    bottom: 160px;
+    right: 1rem;
+    width: 240px;
+    padding: 1rem;
+  }
 
   /* Gacha Mobile */
   .gacha-content { padding: 1.5rem; gap: 2rem; }
