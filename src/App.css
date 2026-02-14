@@ -371,7 +371,6 @@ input:focus,
   background-color: white;
   border-radius: 10px;
   margin: 0 3rem 2rem;
-  box-shadow: var(--shadow-sm);
   border: 1px solid rgba(0,0,0,0.05);
 }
 
