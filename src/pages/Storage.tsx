@@ -34,19 +34,15 @@ const Storage: React.FC = () => {
     );
   }
 
-  const renderRarity = (rarity: string) => {
+  const getRarityColor = (rarity: string) => {
     const colors: Record<string, string> = {
-      C: '#888',
-      UC: '#4caf50',
-      R: '#2196f3',
-      SR: '#9c27b0',
-      SSR: '#ff9800',
+      C: '#a7b0a0',
+      UC: '#baed82',
+      R: '#11c9c3',
+      SR: '#004ef5',
+      SSR: '#f369ce',
     };
-    return (
-      <span className="rarity-badge" style={{ backgroundColor: colors[rarity] }}>
-        {rarity}
-      </span>
-    );
+    return colors[rarity] || '#ccc';
   };
 
   const getCardData = () => {
@@ -109,9 +105,9 @@ const Storage: React.FC = () => {
               <div 
                 key={chara.cardId} 
                 className="storage-card chara-card"
+                style={{ borderColor: getRarityColor(chara.rarity) }}
                 onClick={() => setSelectedCard({ id: chara.cardId, type: 'chara' })}
               >
-                <div className="card-rarity">{renderRarity(chara.rarity)}</div>
                 <div className="card-image-placeholder">Chara</div>
                 <div className="card-info">
                   <div className="card-name">{chara.name}</div>
@@ -128,9 +124,9 @@ const Storage: React.FC = () => {
               <div 
                 key={equip.cardId} 
                 className="storage-card equip-card"
+                style={{ borderColor: getRarityColor(equip.rarity) }}
                 onClick={() => setSelectedCard({ id: equip.cardId, type: 'equip' })}
               >
-                <div className="card-rarity">{renderRarity(equip.rarity)}</div>
                 <div className="card-image-placeholder">Equip</div>
                 <div className="card-info">
                   <div className="card-name">{equip.name}</div>
@@ -148,11 +144,14 @@ const Storage: React.FC = () => {
       {/* 強化モーダル */}
       {selectedCard && currentCard && (
         <div className="modal-overlay" onClick={() => setSelectedCard(null)}>
-          <div className="strengthen-modal" onClick={e => e.stopPropagation()}>
+          <div 
+            className="strengthen-modal" 
+            style={{ borderColor: getRarityColor(currentCard.rarity) }} 
+            onClick={e => e.stopPropagation()}
+          >
             <h2>カード強化</h2>
             <div className="modal-card-info">
               <div className="modal-card-visual">
-                {renderRarity(currentCard.rarity)}
                 <div className="modal-image-placeholder">{selectedCard.type === 'chara' ? 'Chara' : 'Equip'}</div>
               </div>
               <div className="modal-card-details">

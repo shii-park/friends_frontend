@@ -7,19 +7,11 @@ const GachaResult: React.FC = () => {
   const location = useLocation();
   const results: (Chara | Equip)[] = location.state?.results || [];
 
-  const renderRarity = (rarity: string) => {
+  const getRarityColor = (rarity: string) => {
     const colors: Record<string, string> = {
-      C: '#888',
-      UC: '#4caf50',
-      R: '#2196f3',
-      SR: '#9c27b0',
-      SSR: '#ff9800',
+      C: '#a7b0a0', UC: '#baed82', R: '#11c9c3', SR: '#004ef5', SSR: '#f369ce',
     };
-    return (
-      <span className="rarity-badge" style={{ backgroundColor: colors[rarity] }}>
-        {rarity}
-      </span>
-    );
+    return colors[rarity] || '#ccc';
   };
 
   return (
@@ -32,8 +24,11 @@ const GachaResult: React.FC = () => {
         <div className="result-grid">
           {results.length > 0 ? (
             results.map((item, index) => (
-              <div key={item.cardId + index} className="storage-card">
-                <div className="card-rarity">{renderRarity(item.rarity)}</div>
+              <div 
+                key={item.cardId + index} 
+                className="storage-card"
+                style={{ borderColor: getRarityColor(item.rarity) }}
+              >
                 <div className="card-image-placeholder">
                   {'charaId' in item ? 'Chara' : 'Equip'}
                 </div>

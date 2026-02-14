@@ -26,15 +26,11 @@ const BattlePrepare: React.FC = () => {
     }
   };
 
-  const renderRarity = (rarity: string) => {
+  const getRarityColor = (rarity: string) => {
     const colors: Record<string, string> = {
-      C: '#888', UC: '#4caf50', R: '#2196f3', SR: '#9c27b0', SSR: '#ff9800',
+      C: '#a7b0a0', UC: '#baed82', R: '#11c9c3', SR: '#004ef5', SSR: '#f369ce',
     };
-    return (
-      <span className="rarity-badge" style={{ backgroundColor: colors[rarity] }}>
-        {rarity}
-      </span>
-    );
+    return colors[rarity] || '#ccc';
   };
 
   return (
@@ -65,9 +61,9 @@ const BattlePrepare: React.FC = () => {
                   <div 
                     key={chara.cardId} 
                     className={`storage-card ${selectedChara?.cardId === chara.cardId ? 'selected' : ''}`}
+                    style={{ borderColor: getRarityColor(chara.rarity) }}
                     onClick={() => { setSelectedChara(chara); setStep(2); }}
                   >
-                    <div className="card-rarity">{renderRarity(chara.rarity)}</div>
                     <div className="card-name">{chara.name}</div>
                     <div className="card-level">Lv.{chara.level}</div>
                   </div>
@@ -80,9 +76,9 @@ const BattlePrepare: React.FC = () => {
                   <div 
                     key={equip.cardId} 
                     className={`storage-card ${selectedEquip?.cardId === equip.cardId ? 'selected' : ''}`}
+                    style={{ borderColor: getRarityColor(equip.rarity) }}
                     onClick={() => setSelectedEquip(equip)}
                   >
-                    <div className="card-rarity">{renderRarity(equip.rarity)}</div>
                     <div className="card-name">{equip.name}</div>
                     <div className="card-level">Lv.{equip.level}</div>
                   </div>
