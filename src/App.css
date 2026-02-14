@@ -608,6 +608,15 @@ body {
   justify-content: center;
   gap: 1.5rem;
   z-index: 5;
+  width: 100%;
+}
+
+.battle-side.opponent .battle-cards-container {
+  align-items: flex-start; /* Prevent vertical stretch, align to top */
+}
+
+.battle-side.player .battle-cards-container {
+  align-items: flex-end; /* Prevent vertical stretch, align to bottom */
 }
 
 .battle-card {
@@ -621,6 +630,7 @@ body {
   box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
   position: relative;
   transition: transform 0.2s;
+  height: fit-content; /* Ensure height matches content */
 }
 
 .battle-card.chara {
