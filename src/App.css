@@ -573,6 +573,103 @@ body {
   font-size: 0.8rem;
 }
 
+/* Battle Cards Representation */
+.battle-cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+.battle-side.opponent .battle-cards-container {
+  align-items: flex-start; /* Opponent cards top-aligned */
+}
+
+.battle-side.player .battle-cards-container {
+  align-items: flex-end; /* Player cards bottom-aligned */
+}
+
+.battle-card {
+  background: #000;
+  border: 3px solid var(--primary);
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.battle-card.chara {
+  width: 140px;
+  z-index: 2;
+}
+
+.battle-card.equip {
+  width: 90px;
+  z-index: 1;
+  margin-bottom: -10px; /* Slight offset for visual layer */
+}
+
+.battle-card-image {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.battle-card-image.mini {
+  font-size: 0.7rem;
+}
+
+.battle-card-name {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: center;
+}
+
+.battle-card-name.mini {
+  font-size: 0.65rem;
+  color: var(--primary);
+}
+
+/* Battle Animations */
+.battle-card.attacking {
+  animation: attack-anim 0.5s ease-in-out;
+}
+
+.battle-side.player .battle-card.attacking {
+  animation: attack-anim-player 0.5s ease-in-out;
+}
+
+@keyframes attack-anim {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(60px) rotate(5deg); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes attack-anim-player {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-60px) rotate(-5deg); }
+  100% { transform: translateX(0); }
+}
+
 .hand-button {
   background: #000; /* Changed from #fff to black */
   border: 3px solid var(--primary); /* Changed to brand color */

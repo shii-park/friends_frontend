@@ -95,6 +95,13 @@ const Battle: React.FC = () => {
 
   const handToEmoji = (h: Hand) => h === 'G' ? '✊' : h === 'C' ? '✌️' : '✋';
 
+  const getRarityColor = (rarity: string) => {
+    const colors: Record<string, string> = {
+      C: '#a7b0a0', UC: '#baed82', R: '#11c9c3', SR: '#004ef5', SSR: '#f369ce',
+    };
+    return colors[rarity] || '#ccc';
+  };
+
   if (!user) return null;
 
   return (
@@ -123,11 +130,19 @@ const Battle: React.FC = () => {
             </div>
             <div className="hp-text">{opponentHp} HP</div>
           </div>
-          <div className={`chara-sprite ${isAnimating && lastResult.winner === 'opponent' ? 'attacking' : ''}`}>
-            <span style={{ position: 'relative' }}>
-              👿
+          
+          <div className="battle-cards-container">
+            <div className={`battle-card chara ${isAnimating && lastResult.winner === 'opponent' ? 'attacking' : ''}`}
+                 style={{ borderColor: getRarityColor(opponent.chara.rarity) }}>
+              <div className="battle-card-image">Chara</div>
+              <div className="battle-card-name">{opponent.chara.name}</div>
               {damagePopup?.target === 'opponent' && <div className="damage-popup">-{damagePopup.value}</div>}
-            </span>
+            </div>
+            <div className="battle-card equip"
+                 style={{ borderColor: getRarityColor(opponent.equip.rarity) }}>
+              <div className="battle-card-image mini">Equip</div>
+              <div className="battle-card-name mini">{opponent.equip.name}</div>
+            </div>
           </div>
         </div>
 
@@ -143,12 +158,20 @@ const Battle: React.FC = () => {
 
         {/* Player Side */}
         <div className="battle-side player">
-          <div className={`chara-sprite ${isAnimating && lastResult.winner === 'player' ? 'attacking' : ''}`}>
-            <span style={{ position: 'relative' }}>
-              🛡️
+          <div className="battle-cards-container">
+            <div className="battle-card equip"
+                 style={{ borderColor: getRarityColor(selectedEquip.rarity) }}>
+              <div className="battle-card-image mini">Equip</div>
+              <div className="battle-card-name mini">{selectedEquip.name}</div>
+            </div>
+            <div className={`battle-card chara ${isAnimating && lastResult.winner === 'player' ? 'attacking' : ''}`}
+                 style={{ borderColor: getRarityColor(selectedChara.rarity) }}>
+              <div className="battle-card-image">Chara</div>
+              <div className="battle-card-name">{selectedChara.name}</div>
               {damagePopup?.target === 'player' && <div className="damage-popup">-{damagePopup.value}</div>}
-            </span>
+            </div>
           </div>
+
           <div className="chara-plate">
             <div className="chara-name">{selectedChara.name}</div>
             <div className="hp-bar-container">
