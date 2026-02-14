@@ -1,17 +1,22 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../hooks/useUser';
 
 const Title: React.FC = () => {
   const navigate = useNavigate();
-  const isLoggedIn = false; // TODO: 本来はグローバルな状態やバックエンドの状況で判断
+  const { user, login } = useUser();
   const [userName, setUserName] = React.useState('');
 
   const handleStart = () => {
-    if (!isLoggedIn && !userName.trim()) {
+    if (!user && !userName.trim()) {
       alert('ユーザー名を入力してください');
       return;
     }
-    // TODO: ログイン処理やユーザー登録処理
+    
+    if (!user) {
+      login(userName);
+    }
+    
     navigate('/home');
   };
 
@@ -20,7 +25,7 @@ const Title: React.FC = () => {
       <div className="title-container">
         <h1 className="game-title">Friends Game</h1>
         
-        {!isLoggedIn && (
+        {!user && (
           <div className="login-box">
             <input
               type="text"
