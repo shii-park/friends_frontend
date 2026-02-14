@@ -82,6 +82,11 @@ const Storage: React.FC = () => {
         </div>
         <div className="header-right">
           <div className="header-stats-item">コイン: {user.coin}</div>
+        </div>
+      </header>
+
+      <main className="storage-content">
+        <div className="storage-controls">
           <div className="tab-buttons">
             <button 
               className={`tab-button ${tab === 'chara' ? 'active' : ''}`}
@@ -97,9 +102,6 @@ const Storage: React.FC = () => {
             </button>
           </div>
         </div>
-      </header>
-
-      <main className="storage-content">
         <div className="card-grid">
           {tab === 'chara' ? (
             ownedCharas.map((chara: Chara) => (
