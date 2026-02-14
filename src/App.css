@@ -1,4 +1,17 @@
-/* Global / Reset */
+/* Global Reset - Aggressively remove focus rings and blue outlines */
+* {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+*:focus, 
+*:active, 
+*:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Base Styles */
 :root {
   --primary: #CCFF00; /* Neon Lime */
   --primary-dark: #AACC00;
@@ -7,7 +20,9 @@
   --text-main: #FFFFFF;
   --text-accent: #CCFF00;
   --text-sub: #888888;
-  --shadow-neon: 0 0 15px rgba(204, 255, 0, 0.3);
+  --shadow-sm: 0 4px 0px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 8px 0px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 12px 0px rgba(0, 0, 0, 0.3);
 }
 
 #root {
@@ -24,38 +39,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-* {
-  outline: none !important;
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-*:focus, 
-*:active,
-*:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-button, 
-input, 
-select, 
-textarea,
-.storage-card,
-.menu-card {
-  -webkit-appearance: none;
-  appearance: none;
-  outline: none !important;
-}
-
-button:focus, 
-button:active,
-.storage-card:focus,
-.menu-card:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Unified App Header */
+/* Components Styling (Restored after global reset) */
 .app-header {
   background: #000000;
   padding: 1.2rem 3rem;
@@ -114,7 +98,6 @@ button:active,
   text-transform: uppercase;
 }
 
-/* Common Components */
 .back-button {
   padding: 0.6rem 1.2rem;
   background: transparent;
@@ -134,10 +117,13 @@ button:active,
   color: #000;
 }
 
-/* Title Page */
 .title-page {
   background: var(--bg-dark);
   color: var(--primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .game-title {
@@ -156,6 +142,7 @@ button:active,
   background: rgba(255, 255, 255, 0.05);
   color: white;
   width: 300px;
+  margin-bottom: 2rem;
 }
 
 .start-button {
@@ -167,14 +154,13 @@ button:active,
   border: none;
   border-radius: 4px;
   box-shadow: 6px 6px 0px #000;
+  cursor: pointer;
 }
 
-/* Home Page */
 .home-page {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-dark);
 }
 
 .home-menu {
@@ -198,11 +184,16 @@ button:active,
   align-items: center;
   padding: 40px;
   box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .menu-card:hover {
   transform: scale(1.05) rotate(-2deg);
-  box-shadow: 15px 15px 0px var(--primary);
+  box-shadow: 15px 15px 0px var(--primary) !important;
+}
+
+.menu-card.rotate-right:hover {
+  transform: scale(1.05) rotate(2deg);
 }
 
 .menu-label {
@@ -219,17 +210,14 @@ button:active,
   opacity: 0.7;
 }
 
-/* Storage Page */
 .storage-page {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-dark);
 }
 
 .storage-tabs-container {
   padding: 1.5rem 3rem 0;
-  background-color: var(--bg-dark);
   display: flex;
 }
 
@@ -237,16 +225,21 @@ button:active,
   display: flex;
   align-items: flex-end;
   gap: 4px;
+  padding-left: 1rem;
 }
 
 .storage-tabs-container .tab-button {
   height: 44px;
   padding: 0 32px;
-  background: #000;
-  color: var(--text-sub);
+  border-radius: 10px 10px 0 0;
   border: 1px solid var(--primary);
   border-bottom: none;
-  border-radius: 4px 4px 0 0;
+  background: #000;
+  color: var(--text-sub);
+  cursor: pointer;
+  font-weight: 800;
+  transition: all 0.2s;
+  margin-bottom: -1px;
 }
 
 .storage-tabs-container .tab-button.active {
@@ -261,11 +254,11 @@ button:active,
 .storage-content {
   flex: 1;
   padding: 3rem;
+  overflow-y: auto;
   background-color: var(--bg-panel);
+  border-radius: 10px;
   margin: 0 3rem 2rem;
   border: 2px solid var(--primary);
-  border-radius: 4px;
-  overflow-y: auto;
 }
 
 .card-grid {
@@ -282,17 +275,27 @@ button:active,
 .storage-card {
   background: #000;
   border: 2px solid var(--primary);
-  color: white;
+  border-radius: 4px;
+  padding: 20px;
   box-shadow: 5px 5px 0px rgba(204, 255, 0, 0.1);
+  transition: all 0.2s;
+  cursor: pointer;
 }
 
 .storage-card:hover {
-  box-shadow: 8px 8px 0px var(--primary);
+  box-shadow: 8px 8px 0px var(--primary) !important;
+  transform: translate(-2px, -2px);
+}
+
+.card-info {
+  margin-top: 12px;
+  text-align: left;
 }
 
 .card-name {
   font-weight: 900;
   color: var(--primary);
+  text-transform: uppercase;
 }
 
 .card-level {
@@ -301,11 +304,8 @@ button:active,
   padding: 2px 8px;
   font-weight: 900;
   display: inline-block;
-}
-
-.card-info {
-  margin-top: 12px;
-  text-align: left;
+  font-size: 0.8rem;
+  margin-top: 4px;
 }
 
 .card-stats {
@@ -330,73 +330,100 @@ button:active,
   text-transform: uppercase;
 }
 
-/* Battle */
 .battle-page {
   background: var(--bg-dark);
+}
+
+.battle-arena {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 1rem 3rem;
 }
 
 .chara-plate {
   background: #000;
   border: 2px solid var(--primary);
+  padding: 1.5rem;
+  width: 320px;
 }
 
 .hp-bar-container {
+  height: 12px;
   background: #333;
   border: 1px solid var(--primary);
+  margin-top: 10px;
 }
 
 .hp-bar {
   background: var(--primary);
+  height: 100%;
+  transition: width 0.5s ease;
 }
 
 .hp-text {
   color: var(--primary);
+  font-weight: 900;
+  text-align: right;
+  font-size: 0.8rem;
 }
 
 .hand-button {
-  background: #000;
-  border: 2px solid var(--primary);
-  color: white;
+  background: #fff;
+  border: 3px solid #000;
+  width: 130px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 6px 6px 0px #000;
+  transition: all 0.2s;
 }
 
 .hand-button.special {
   background: var(--primary);
-  color: #000;
+}
+
+.special-badge {
+  background: #000;
+  color: var(--primary);
+  padding: 2px 8px;
+  font-weight: 900;
+  font-size: 0.7rem;
 }
 
 .damage-popup {
   color: var(--primary);
+  font-size: 3rem;
+  font-weight: 900;
   text-shadow: 2px 2px 0 #000;
+  position: absolute;
+  animation: damage-float 0.8s forwards;
 }
 
-/* Gacha */
-.gacha-banner {
-  background: #000;
-  border: 4px solid var(--primary);
+@keyframes damage-float {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-50px); opacity: 0; }
 }
 
-.gacha-button.single { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
-.gacha-button.multi { background: var(--primary); color: #000; }
-
-/* Modal */
 .strengthen-modal {
   background: #000;
   border: 4px solid var(--primary);
-  color: white;
-}
-
-.modal-level {
-  color: var(--primary);
+  padding: 3rem;
+  max-width: 600px;
+  width: 90%;
 }
 
 .upgrade-button {
   background: var(--primary);
   color: #000;
-}
-
-/* Results */
-.battle-result-page {
-  background: var(--bg-dark);
+  padding: 1rem;
+  font-weight: 900;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .battle-result-page.win {
@@ -406,30 +433,30 @@ button:active,
 .result-container {
   background: #000;
   border: 4px solid var(--primary);
+  padding: 4rem;
 }
 
 .result-title {
   color: var(--primary);
-}
-
-.reward-item {
-  background: #111;
-  border: 1px solid var(--primary);
-}
-
-.reward-value {
-  color: var(--primary);
+  font-size: 5rem;
+  font-weight: 900;
 }
 
 .home-button {
   background: var(--primary);
   color: #000;
+  padding: 1.2rem 4rem;
+  font-weight: 900;
+  cursor: pointer;
 }
 
-/* Responsive fixes */
+/* Responsive Design */
 @media (max-width: 768px) {
   .app-header { height: auto; flex-direction: column; padding: 1rem; }
-  .header-stats-item { width: 100%; justify-content: center; }
-  .menu-card { width: 100%; height: auto; flex-direction: row; }
-  .storage-content { margin: 0 1rem 1rem; }
+  .header-stats-item { width: 100%; justify-content: center; margin-top: 0.5rem; }
+  .game-title { font-size: 3rem; }
+  .home-menu { flex-direction: column; padding: 1rem; }
+  .menu-card { width: 100%; height: auto; flex-direction: row; padding: 20px; box-shadow: 4px 4px 0px #000; }
+  .storage-content { margin: 0 1rem 1rem; padding: 1rem; }
+  .vs-container { flex-direction: column; }
 }
