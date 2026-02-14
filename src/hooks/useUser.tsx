@@ -9,6 +9,7 @@ interface UserContextType {
   login: (userName: string) => void;
   updateStats: (rp: number, coin: number) => void;
   drawGacha: (count: number) => (Chara | Equip)[];
+  levelUpCard: (cardId: string, type: 'chara' | 'equip') => { success: boolean, message?: string };
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -126,6 +127,70 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const levelUpCard = (cardId: string, type: 'chara' | 'equip') => {
+    if (!user) return { success: false };
+
+    const costs: Record<number, number> = {
+      2: 100, 3: 200, 4: 300, 5: 400, 6: 500, 
+      7: 600, 8: 700, 9: 800, 10: 10000
+    };
+
+    if (type === 'chara') {
+      const charaIndex = ownedCharas.findIndex(c => c.cardId === cardId);
+      if (charaIndex === -1) return { success: false, message: 'カードが見つかりません' };
+      
+      const chara = ownedCharas[charaIndex];
+      if (chara.level >= 10) return { success: false, message: '最大レベルです' };
+
+      const cost = costs[chara.level + 1];
+      if (user.coin < cost) return { success: false, message: 'コインが足りません' };
+
+      // ステータス計算
+      const nextLevel = chara.level + 1;
+      const calc = (init: number, max: number) => Math.floor(init + (max - init) / 9 * (nextLevel - 1));
+
+      const updatedChara: Chara = {
+        ...chara,
+        level: nextLevel,
+        hp: calc(chara.initHp, chara.maxHp),
+        atk: calc(chara.initAtk, chara.maxAtk),
+        tech: calc(chara.initTech, chara.maxTech),
+      };
+
+      const newCharas = [...ownedCharas];
+      newCharas[charaIndex] = updatedChara;
+      setOwnedCharas(newCharas);
+      setUser({ ...user, coin: user.coin - cost });
+      return { success: true };
+    } else {
+      const equipIndex = ownedEquips.findIndex(e => e.cardId === cardId);
+      if (equipIndex === -1) return { success: false, message: '装備が見つかりません' };
+
+      const equip = ownedEquips[equipIndex];
+      if (equip.level >= 10) return { success: false, message: '最大レベルです' };
+
+      const cost = costs[equip.level + 1];
+      if (user.coin < cost) return { success: false, message: 'コインが足りません' };
+
+      const nextLevel = equip.level + 1;
+      const calc = (init: number, max: number) => Math.floor(init + (max - init) / 9 * (nextLevel - 1));
+
+      const updatedEquip: Equip = {
+        ...equip,
+        level: nextLevel,
+        bonusHp: calc(equip.initBonusHp, equip.maxBonusHp),
+        bonusAtk: calc(equip.initBonusAtk, equip.maxBonusAtk),
+        bonusTech: calc(equip.initBonusTech, equip.maxBonusTech),
+      };
+
+      const newEquips = [...ownedEquips];
+      newEquips[equipIndex] = updatedEquip;
+      setOwnedEquips(newEquips);
+      setUser({ ...user, coin: user.coin - cost });
+      return { success: true };
+    }
+  };
+
   const drawGacha = (count: number): (Chara | Equip)[] => {
     if (gachaStones < count) return [];
     
@@ -198,7 +263,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <UserContext.Provider value={{ user, ownedCharas, ownedEquips, gachaStones, login, updateStats, drawGacha }}>
+    <UserContext.Provider value={{ user, ownedCharas, ownedEquips, gachaStones, login, updateStats, drawGacha, levelUpCard }}>
       {children}
     </UserContext.Provider>
   );

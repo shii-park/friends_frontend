@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
 import type { Chara, Equip } from '../types/game';
 
 const Storage: React.FC = () => {
   const navigate = useNavigate();
-  const { user, ownedCharas, ownedEquips } = useUser();
-  const [tab, setTab] = React.useState<'chara' | 'equip'>('chara');
+  const { user, ownedCharas, ownedEquips, levelUpCard } = useUser();
+  const [tab, setTab] = useState<'chara' | 'equip'>('chara');
+  const [selectedCard, setSelectedCard] = useState<{ id: string, type: 'chara' | 'equip' } | null>(null);
 
   if (!user) {
     return (
@@ -48,11 +49,36 @@ const Storage: React.FC = () => {
     );
   };
 
+  const getCardData = () => {
+    if (!selectedCard) return null;
+    if (selectedCard.type === 'chara') {
+      return ownedCharas.find(c => c.cardId === selectedCard.id);
+    }
+    return ownedEquips.find(e => e.cardId === selectedCard.id);
+  };
+
+  const handleLevelUp = () => {
+    if (!selectedCard) return;
+    const result = levelUpCard(selectedCard.id, selectedCard.type);
+    if (!result.success) {
+      alert(result.message || '強化に失敗しました');
+    }
+  };
+
+  const currentCard = getCardData();
+  const costs: Record<number, number> = {
+    2: 100, 3: 200, 4: 300, 5: 400, 6: 500, 
+    7: 600, 8: 700, 9: 800, 10: 10000
+  };
+
   return (
     <div className="storage-page">
       <header className="storage-header">
         <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
         <h1>ストレージ</h1>
+        <div className="user-coin-display">
+          <span>コイン: {user.coin}</span>
+        </div>
         <div className="tab-buttons">
           <button 
             className={`tab-button ${tab === 'chara' ? 'active' : ''}`}
@@ -73,7 +99,11 @@ const Storage: React.FC = () => {
         <div className="card-grid">
           {tab === 'chara' ? (
             ownedCharas.map((chara: Chara) => (
-              <div key={chara.cardId} className="storage-card chara-card">
+              <div 
+                key={chara.cardId} 
+                className="storage-card chara-card"
+                onClick={() => setSelectedCard({ id: chara.cardId, type: 'chara' })}
+              >
                 <div className="card-rarity">{renderRarity(chara.rarity)}</div>
                 <div className="card-image-placeholder">Chara</div>
                 <div className="card-info">
@@ -88,7 +118,11 @@ const Storage: React.FC = () => {
             ))
           ) : (
             ownedEquips.map((equip: Equip) => (
-              <div key={equip.cardId} className="storage-card equip-card">
+              <div 
+                key={equip.cardId} 
+                className="storage-card equip-card"
+                onClick={() => setSelectedCard({ id: equip.cardId, type: 'equip' })}
+              >
                 <div className="card-rarity">{renderRarity(equip.rarity)}</div>
                 <div className="card-image-placeholder">Equip</div>
                 <div className="card-info">
@@ -103,6 +137,49 @@ const Storage: React.FC = () => {
           )}
         </div>
       </main>
+
+      {/* 強化モーダル */}
+      {selectedCard && currentCard && (
+        <div className="modal-overlay" onClick={() => setSelectedCard(null)}>
+          <div className="strengthen-modal" onClick={e => e.stopPropagation()}>
+            <h2>カード強化</h2>
+            <div className="modal-card-info">
+              <div className="modal-card-visual">
+                {renderRarity(currentCard.rarity)}
+                <div className="modal-image-placeholder">{selectedCard.type === 'chara' ? 'Chara' : 'Equip'}</div>
+              </div>
+              <div className="modal-card-details">
+                <h3>{currentCard.name}</h3>
+                <p className="modal-level">Lv.{currentCard.level} → {currentCard.level < 10 ? currentCard.level + 1 : 'MAX'}</p>
+                {selectedCard.type === 'chara' ? (
+                  <div className="modal-stats">
+                    <p>HP: {(currentCard as Chara).hp} → {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</p>
+                    <p>ATK: {(currentCard as Chara).atk} → {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</p>
+                  </div>
+                ) : (
+                  <div className="modal-stats">
+                    <p>Bonus ATK: +{(currentCard as Equip).bonusAtk} → {(currentCard as Equip).level < 10 ? '???' : 'MAX'}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="modal-actions">
+              <p className="upgrade-cost">
+                消費コイン: {currentCard.level < 10 ? costs[currentCard.level + 1] : '-'}
+              </p>
+              <button 
+                className="upgrade-button" 
+                disabled={currentCard.level >= 10 || user.coin < costs[currentCard.level + 1]}
+                onClick={handleLevelUp}
+              >
+                強化する
+              </button>
+              <button className="close-button" onClick={() => setSelectedCard(null)}>閉じる</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
