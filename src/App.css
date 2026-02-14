@@ -439,6 +439,42 @@ body {
   min-height: 100vh;
   background-color: #f0f2f5;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gacha-result-header {
+  margin-bottom: 2rem;
+}
+
+.gacha-result-content {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+.result-grid .storage-card {
+  width: 140px;
+  padding: 8px;
+  font-size: 0.9rem;
+}
+
+.result-grid .card-image-placeholder {
+  height: 120px;
+}
+
+.result-grid .card-name {
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .result-actions {
