@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Title from './pages/Title';
+import Home from './pages/Home';
 import './App.css';
 
 // プレースホルダーコンポーネント
@@ -15,7 +16,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Title />} />
-        <Route path="/home" element={<Placeholder name="Home" />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/battle-select" element={<Placeholder name="Battle Select" />} />
         <Route path="/battle-prepare" element={<Placeholder name="Battle Prepare" />} />
         <Route path="/battle" element={<Placeholder name="Battle" />} />
