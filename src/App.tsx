@@ -3,6 +3,9 @@ import { UserProvider } from './hooks/useUser';
 import Title from './pages/Title';
 import Home from './pages/Home';
 import Storage from './pages/Storage';
+import Gacha from './pages/Gacha';
+import GachaEffect from './pages/GachaEffect';
+import GachaResult from './pages/GachaResult';
 import './App.css';
 
 // プレースホルダーコンポーネント
@@ -32,9 +35,9 @@ function App() {
           <Route path="/strage" element={<Navigate to="/storage" replace />} />
           
           {/* ガチャ関連 */}
-          <Route path="/gacha" element={<Placeholder name="Gacha" />} />
-          <Route path="/gacha-effect" element={<Placeholder name="Gacha Effect" />} />
-          <Route path="/gacha-result" element={<Placeholder name="Gacha Result" />} />
+          <Route path="/gacha" element={<Gacha />} />
+          <Route path="/gacha-effect" element={<GachaEffect />} />
+          <Route path="/gacha-result" element={<GachaResult />} />
         </Routes>
       </Router>
     </UserProvider>
