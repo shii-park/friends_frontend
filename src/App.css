@@ -1125,10 +1125,33 @@ input:focus,
   .storage-content { margin: 0 1rem 1rem; padding: 1.5rem; }
   .card-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
 
-  .battle-prepare-content { flex-direction: column; overflow-y: auto; }
+  .battle-prepare-content { 
+    flex-direction: column; 
+    overflow-y: auto; 
+    height: auto;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  .selection-section { 
+    flex: none; 
+    width: 100%;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+  .selection-list {
+    max-height: 350px;
+    overflow-y: auto;
+  }
   .preview-section { width: 100%; }
-  .vs-container { padding: 1.5rem; flex-direction: row; }
-  .vs-badge { font-size: 2rem; }
+  .vs-container { 
+    padding: 1.5rem; 
+    flex-direction: row; 
+    gap: 1rem;
+  }
+  .vs-badge { font-size: 1.8rem; }
+  .preview-card { padding: 1rem; }
+  .preview-chara-name { font-size: 1.1rem; }
+  .preview-equip-name { font-size: 0.8rem; }
 
   .battle-arena { padding: 1rem; }
   .chara-plate { width: 160px; padding: 0.8rem; }
@@ -1143,4 +1166,13 @@ input:focus,
 @media (max-width: 480px) {
   .header-stats-item { font-size: 0.75rem; padding: 4px 8px; }
   .tab-button { padding: 0 12px; font-size: 0.8rem; }
+
+  .vs-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .vs-badge {
+    margin: -0.5rem 0;
+    z-index: 1;
+  }
 }
