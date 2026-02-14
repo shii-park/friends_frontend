@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useUser } from '../hooks/useUser';
 
 type Hand = 'G' | 'C' | 'P';
 
 const Battle: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, gachaStones } = useUser();
   const { selectedChara, selectedEquip, opponent } = location.state || {};
 
   const [playerHp, setPlayerHp] = useState(0);
@@ -97,8 +99,24 @@ const Battle: React.FC = () => {
 
   const handToEmoji = (h: Hand) => h === 'G' ? '✊' : h === 'C' ? '✌️' : '✋';
 
+  if (!user) return null;
+
   return (
     <div className="battle-page">
+      <header className="app-header">
+        <div className="header-left">
+          <div className="header-user-name">{user.userName}</div>
+        </div>
+        <div className="header-center">
+          <h1>BATTLE</h1>
+        </div>
+        <div className="header-right">
+          <div className="header-stats-item">RP: {user.rp}</div>
+          <div className="header-stats-item">コイン: {user.coin}</div>
+          <div className="header-stats-item">石: {gachaStones}</div>
+        </div>
+      </header>
+
       <div className="battle-arena">
         {/* Opponent Side */}
         <div className="battle-side opponent">
