@@ -824,18 +824,106 @@ body {
   box-shadow: none;
 }
 
-/* Results */
-.battle-result-page.win { background: radial-gradient(circle, #00b894, #000); }
-.battle-result-page.lose { background: radial-gradient(circle, #d63031, #000); }
+/* Battle Result Redesign */
+.battle-result-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-main);
+  text-align: center;
+  background-color: var(--bg-light);
+}
+
+.battle-result-page.win {
+  background: radial-gradient(circle at center, #ffffff 0%, #e8f5e9 100%);
+}
+
+.battle-result-page.lose {
+  background: radial-gradient(circle at center, #ffffff 0%, #ffebee 100%);
+}
+
+.result-container {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  padding: 4rem;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  width: 100%;
+  max-width: 540px;
+  box-shadow: var(--shadow-lg);
+}
+
+.result-title {
+  font-size: 5rem;
+  font-weight: 900;
+  margin-bottom: 2.5rem;
+  letter-spacing: -2px;
+  background: linear-gradient(to bottom, var(--primary-dark), var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));
+}
+
+.battle-result-page.lose .result-title {
+  background: linear-gradient(to bottom, #d63031, #ff7675);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rewards-section {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.rewards-section h2 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-sub);
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
 
 .reward-item {
-  color: white;
-  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.reward-label {
+  font-weight: 700;
+  color: var(--text-sub);
 }
 
 .reward-value {
-  color: #fdcb6e;
+  color: var(--primary-dark);
   font-weight: 900;
+  font-size: 1.3rem;
+}
+
+.home-button {
+  padding: 1.2rem 4rem;
+  font-size: 1.4rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--text-main), #2d3436);
+  color: white;
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.home-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
 }
 
 /* Gacha Result */
