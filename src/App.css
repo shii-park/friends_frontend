@@ -28,6 +28,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+button:focus, 
+button:active,
+input:focus,
+.storage-card:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* Common Components */
 .back-button {
   padding: 0.6rem 1.2rem;
