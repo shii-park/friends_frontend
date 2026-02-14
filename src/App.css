@@ -734,3 +734,192 @@ body {
   box-shadow: none;
   cursor: not-allowed;
 }
+
+/* Battle Page */
+.battle-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle, #1a1a1a, #000);
+  color: white;
+  overflow: hidden;
+}
+
+.battle-arena {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+  position: relative;
+}
+
+.battle-side {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.battle-side.opponent {
+  justify-content: flex-start;
+}
+
+.battle-side.player {
+  justify-content: flex-end;
+}
+
+.chara-plate {
+  width: 300px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.chara-name {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.hp-bar-container {
+  height: 12px;
+  background: #333;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.hp-bar {
+  height: 100%;
+  background: linear-gradient(to right, #4caf50, #8bc34a);
+  transition: width 0.5s ease-out;
+}
+
+.hp-text {
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.chara-sprite {
+  font-size: 6rem;
+  transition: transform 0.3s;
+}
+
+.chara-sprite.attacking {
+  animation: attack-anim 0.5s ease-in-out;
+}
+
+@keyframes attack-anim {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(100px); }
+  100% { transform: translateX(0); }
+}
+
+.battle-side.player .chara-sprite.attacking {
+  animation: attack-anim-player 0.5s ease-in-out;
+}
+
+@keyframes attack-anim-player {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-100px); }
+  100% { transform: translateX(0); }
+}
+
+.battle-center {
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hand-display {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+}
+
+.hand {
+  font-size: 4rem;
+}
+
+.vs-text {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #f44336;
+}
+
+.battle-ui {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.battle-log {
+  height: 80px;
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.log-entry {
+  margin-bottom: 0.5rem;
+}
+
+.hand-selector {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.hand-button {
+  width: 120px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.hand-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+}
+
+.hand-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hand-button.special {
+  border-color: #ff9800;
+  box-shadow: 0 0 15px rgba(255, 152, 0, 0.3);
+}
+
+.hand-icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.special-badge {
+  position: absolute;
+  top: -10px;
+  background: #ff9800;
+  color: black;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
