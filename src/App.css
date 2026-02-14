@@ -259,7 +259,7 @@ input:focus,
 }
 
 .menu-card:hover {
-  transform: translateY(-20px);
+  transform: scale(1.05) rotate(-2deg);
   box-shadow: var(--shadow-lg);
 }
 
