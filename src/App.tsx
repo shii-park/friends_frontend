@@ -6,18 +6,11 @@ import Storage from './pages/Storage';
 import BattleSelect from './pages/BattleSelect';
 import BattlePrepare from './pages/BattlePrepare';
 import Battle from './pages/Battle';
+import BattleResult from './pages/BattleResult';
 import Gacha from './pages/Gacha';
 import GachaEffect from './pages/GachaEffect';
 import GachaResult from './pages/GachaResult';
 import './App.css';
-
-// プレースホルダーコンポーネント
-const Placeholder = ({ name }: { name: string }) => (
-  <div style={{ padding: '20px' }}>
-    <h1>{name} Page</h1>
-    <p>現在開発中です。</p>
-  </div>
-);
 
 function App() {
   return (
@@ -31,7 +24,7 @@ function App() {
           <Route path="/battle-select" element={<BattleSelect />} />
           <Route path="/battle-prepare" element={<BattlePrepare />} />
           <Route path="/battle" element={<Battle />} />
-          <Route path="/battle-result" element={<Placeholder name="Battle Result" />} />
+          <Route path="/battle-result" element={<BattleResult />} />
           
           {/* ストレージ関連 (ドキュメントの/strageと一般的な/storage両方に対応) */}
           <Route path="/storage" element={<Storage />} />
