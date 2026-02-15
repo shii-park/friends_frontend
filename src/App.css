@@ -175,12 +175,14 @@ body {
 .home-menu-left {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
+  align-items: flex-start;
 }
 
 .home-menu-right {
   display: flex;
   align-items: center;
+  margin-left: 2rem;
 }
 
 .menu-card {
@@ -199,9 +201,23 @@ body {
   width: 500px;
   height: 200px;
   flex-direction: row;
-  padding: 0 40px;
+  padding: 0 60px;
   gap: 2rem;
   justify-content: flex-start;
+  transform: skewX(15deg);
+}
+
+/* Align the slanted edges by offsetting the cards */
+.home-menu-left .menu-card.landscape:nth-child(1) {
+  margin-left: -58px;
+}
+
+.home-menu-left .menu-card.landscape:nth-child(2) {
+  margin-left: 0px;
+}
+
+.menu-card.landscape > * {
+  transform: skewX(-15deg);
 }
 
 .menu-card.square {
@@ -215,6 +231,10 @@ body {
   transform: scale(1.05) rotate(-2deg);
   box-shadow: 15px 15px 0px var(--primary) !important;
   z-index: 10;
+}
+
+.menu-card.landscape:hover {
+  transform: scale(1.05) rotate(-2deg) skewX(15deg);
 }
 
 /* rotate-right is not explicitly used now but kept for consistency if needed */
