@@ -14,39 +14,43 @@ const Home: React.FC = () => {
     <div className="home-page">
       <div className="home-main-container">
         <div className="home-title-container">
-          <div className="home-user-info">
-            <div className="home-user-name">{user.userName}</div>
-            <div className="home-stats-summary">
-              <span>RP: {user.rp}</span>
-              <span>COIN: {user.coin}</span>
-              <span>STONE: {gachaStones}</span>
+          <h1 className="home-large-title">FRIENDS GAME</h1>
+          <div className="home-title-sub-info">
+            <div className="home-user-info">
+              <div className="home-user-name">{user.userName}</div>
             </div>
           </div>
-          <h1 className="home-large-title">FRIENDS GAME</h1>
         </div>
 
         <main className="home-menu">
           <div className="home-menu-left">
-            <button
-              className="menu-card landscape"
-              onClick={() => navigate('/storage')}
-            >
-              <span className="menu-icon">🎒</span>
-              <div className="menu-text">
-                <h2 className="menu-label">ストレージ</h2>
-                <p className="menu-desc">キャラクター・装備の確認</p>
-              </div>
-            </button>
-            <button
-              className="menu-card landscape"
-              onClick={() => navigate('/gacha')}
-            >
-              <span className="menu-icon">💎</span>
-              <div className="menu-text">
-                <h2 className="menu-label">ガチャ</h2>
-                <p className="menu-desc">新しいカードを入手</p>
-              </div>
-            </button>
+            <div className="home-stats-summary">
+              <div className="stat-item">RP: {user.rp}</div>
+              <div className="stat-item">COIN: {user.coin}</div>
+              <div className="stat-item">STONE: {gachaStones}</div>
+            </div>
+            <div className="home-menu-cards-row">
+              <button
+                className="menu-card landscape"
+                onClick={() => navigate('/storage')}
+              >
+                <span className="menu-icon">🎒</span>
+                <div className="menu-text">
+                  <h2 className="menu-label">ストレージ</h2>
+                  <p className="menu-desc">キャラクター・装備の確認</p>
+                </div>
+              </button>
+              <button
+                className="menu-card landscape"
+                onClick={() => navigate('/gacha')}
+              >
+                <span className="menu-icon">💎</span>
+                <div className="menu-text">
+                  <h2 className="menu-label">ガチャ</h2>
+                  <p className="menu-desc">新しいカードを入手</p>
+                </div>
+              </button>
+            </div>
           </div>
           <div className="home-menu-right">
             <button
