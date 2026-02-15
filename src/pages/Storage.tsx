@@ -116,6 +116,7 @@ const Storage: React.FC = () => {
                   <div className="card-stats">
                     <span>HP: {chara.hp}</span>
                     <span>ATK: {chara.atk}</span>
+                    <span>TECH: {chara.tech}</span>
                   </div>
                 </div>
               </div>
@@ -133,7 +134,9 @@ const Storage: React.FC = () => {
                   <div className="card-name">{equip.name}</div>
                   <div className="card-level">Lv.{equip.level}</div>
                   <div className="card-stats">
+                    <span>HP: +{equip.bonusHp}</span>
                     <span>ATK: +{equip.bonusAtk}</span>
+                    <span>TECH: +{equip.bonusTech}</span>
                   </div>
                 </div>
               </div>
@@ -162,10 +165,13 @@ const Storage: React.FC = () => {
                   <div className="modal-stats">
                     <p><span>HP</span> <span>{(currentCard as Chara).hp} <span className="arrow">→</span> {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</span></p>
                     <p><span>ATK</span> <span>{(currentCard as Chara).atk} <span className="arrow">→</span> {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</span></p>
+                    <p><span>TECH</span> <span>{(currentCard as Chara).tech} <span className="arrow">→</span> {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</span></p>
                   </div>
                 ) : (
                   <div className="modal-stats">
+                    <p><span>Bonus HP</span> <span>+{(currentCard as Equip).bonusHp} <span className="arrow">→</span> {(currentCard as Equip).level < 10 ? '???' : 'MAX'}</span></p>
                     <p><span>Bonus ATK</span> <span>+{(currentCard as Equip).bonusAtk} <span className="arrow">→</span> {(currentCard as Equip).level < 10 ? '???' : 'MAX'}</span></p>
+                    <p><span>Bonus TECH</span> <span>+{(currentCard as Equip).bonusTech} <span className="arrow">→</span> {(currentCard as Equip).level < 10 ? '???' : 'MAX'}</span></p>
                   </div>
                 )}
               </div>

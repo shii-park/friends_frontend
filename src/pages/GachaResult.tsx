@@ -35,6 +35,21 @@ const GachaResult: React.FC = () => {
                 <div className="card-info">
                   <div className="card-name">{item.name}</div>
                   <div className="card-level">Lv.{item.level}</div>
+                  <div className="card-stats">
+                    {'charaId' in item ? (
+                      <>
+                        <span>HP: {(item as Chara).hp}</span>
+                        <span>ATK: {(item as Chara).atk}</span>
+                        <span>TECH: {(item as Chara).tech}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>HP: +{(item as Equip).bonusHp}</span>
+                        <span>ATK: +{(item as Equip).bonusAtk}</span>
+                        <span>TECH: +{(item as Equip).bonusTech}</span>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             ))

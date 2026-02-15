@@ -16,8 +16,8 @@ const BattlePrepare: React.FC = () => {
   // 対戦相手のモックデータ
   const opponent = {
     name: '強敵ライバル',
-    chara: { name: '伝説の剣士', rarity: 'SSR', level: 10, hp: 800, atk: 80 },
-    equip: { name: '神殺しの剣', rarity: 'SSR', level: 10, bonusAtk: 100 }
+    chara: { name: '伝説の剣士', rarity: 'SSR', level: 10, hp: 800, atk: 80, tech: 50 },
+    equip: { name: '神殺しの剣', rarity: 'SSR', level: 10, bonusHp: 50, bonusAtk: 100, bonusTech: 30 }
   };
 
   const handleStartBattle = () => {
@@ -78,32 +78,36 @@ const BattlePrepare: React.FC = () => {
                     <div className="card-info">
                       <div className="card-name">{chara.name}</div>
                       <div className="card-level">Lv.{chara.level}</div>
-                      <div className="card-stats">
-                        <span>HP: {chara.hp}</span>
-                        <span>ATK: {chara.atk}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="card-grid mini">
-                {ownedEquips.map((equip) => (
-                  <div 
-                    key={equip.cardId} 
-                    className={`storage-card ${selectedEquip?.cardId === equip.cardId ? 'selected' : ''}`}
-                    style={{ borderColor: getRarityColor(equip.rarity), '--rarity-color': getRarityColor(equip.rarity) } as React.CSSProperties}
-                    onClick={() => setSelectedEquip(equip)}
-                  >
-                    <div className="card-image-placeholder">Equip</div>
-                    <div className="card-info">
-                      <div className="card-name">{equip.name}</div>
-                      <div className="card-level">Lv.{equip.level}</div>
-                      <div className="card-stats">
-                        <span>ATK: +{equip.bonusAtk}</span>
-                      </div>
-                    </div>
-                  </div>
+                                        <div className="card-stats">
+                                          <span>HP: {chara.hp}</span>
+                                          <span>ATK: {chara.atk}</span>
+                                          <span>TECH: {chara.tech}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <div className="card-grid mini">
+                                  {ownedEquips.map((equip) => (
+                                    <div 
+                                      key={equip.cardId} 
+                                      className={`storage-card ${selectedEquip?.cardId === equip.cardId ? 'selected' : ''}`}
+                                      style={{ borderColor: getRarityColor(equip.rarity), '--rarity-color': getRarityColor(equip.rarity) } as React.CSSProperties}
+                                      onClick={() => setSelectedEquip(equip)}
+                                    >
+                                      <div className="card-image-placeholder">Equip</div>
+                                      <div className="card-info">
+                                        <div className="card-name">{equip.name}</div>
+                                        <div className="card-level">Lv.{equip.level}</div>
+                                        <div className="card-stats">
+                                          <span>HP: +{equip.bonusHp}</span>
+                                          <span>ATK: +{equip.bonusAtk}</span>
+                                          <span>TECH: +{equip.bonusTech}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                      
                 ))}
               </div>
             )}
@@ -119,6 +123,11 @@ const BattlePrepare: React.FC = () => {
                   <>
                     <div className="preview-chara-name">{selectedChara.name}</div>
                     <div className="preview-equip-name">{selectedEquip ? `E: ${selectedEquip.name}` : '装備未選択'}</div>
+                    <div className="preview-stats-total">
+                      <div>HP: {selectedChara.hp + (selectedEquip?.bonusHp || 0)}</div>
+                      <div>ATK: {selectedChara.atk + (selectedEquip?.bonusAtk || 0)}</div>
+                      <div>TECH: {selectedChara.tech + (selectedEquip?.bonusTech || 0)}</div>
+                    </div>
                   </>
                 ) : (
                   <div className="empty-preview">キャラを選択してください</div>
@@ -133,6 +142,11 @@ const BattlePrepare: React.FC = () => {
               <div className="preview-card opponent">
                 <div className="preview-chara-name">{opponent.chara.name}</div>
                 <div className="preview-equip-name">E: {opponent.equip.name}</div>
+                <div className="preview-stats-total">
+                  <div>HP: {opponent.chara.hp + (opponent.equip?.bonusHp || 0)}</div>
+                  <div>ATK: {opponent.chara.atk + (opponent.equip?.bonusAtk || 0)}</div>
+                  <div>TECH: {opponent.chara.tech + (opponent.equip?.bonusTech || 0)}</div>
+                </div>
               </div>
             </div>
           </div>

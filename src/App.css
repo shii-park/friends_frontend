@@ -669,7 +669,19 @@ body {
 }
 
 .preview-chara-name { font-size: 1.3rem; font-weight: 900; color: var(--primary); margin-bottom: 0.4rem; }
-.preview-equip-name { font-size: 0.95rem; color: #888; font-weight: 700; }
+.preview-equip-name { font-size: 0.95rem; color: #888; font-weight: 700; margin-bottom: 0.8rem; }
+
+.preview-stats-total {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-align: left;
+}
 
 .battle-start-button {
   width: 100%;
