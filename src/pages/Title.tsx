@@ -4,17 +4,17 @@ import { useUser } from '../hooks/useUser';
 
 const Title: React.FC = () => {
   const navigate = useNavigate();
-  const { user, login } = useUser();
+  const { user, login, isLoading } = useUser();
   const [userName, setUserName] = React.useState('');
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (!user && !userName.trim()) {
       alert('ユーザー名を入力してください');
       return;
     }
     
     if (!user) {
-      login(userName);
+      await login(userName);
     }
     
     navigate('/home');
@@ -33,16 +33,24 @@ const Title: React.FC = () => {
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               className="username-input"
+              disabled={isLoading}
             />
           </div>
         )}
 
-        <button onClick={handleStart} className="start-button">
-          始める
+        <button 
+          onClick={handleStart} 
+          className="start-button"
+          disabled={isLoading}
+        >
+          {isLoading ? '通信中...' : '始める'}
         </button>
       </div>
     </div>
   );
 };
+
+export default Title;
+
 
 export default Title;

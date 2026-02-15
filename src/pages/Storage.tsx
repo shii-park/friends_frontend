@@ -53,15 +53,16 @@ const Storage: React.FC = () => {
     return ownedEquips.find(e => e.cardId === selectedCard.id);
   };
 
-  const handleLevelUp = () => {
+  const handleLevelUp = async () => {
     if (!selectedCard) return;
-    const result = levelUpCard(selectedCard.id, selectedCard.type);
+    const result = await levelUpCard(selectedCard.id, selectedCard.type);
     if (!result.success) {
       alert(result.message || '強化に失敗しました');
     }
   };
 
   const currentCard = getCardData();
+  const { isLoading } = useUser();
   const costs: Record<number, number> = {
     2: 100, 3: 200, 4: 300, 5: 400, 6: 500, 
     7: 600, 8: 700, 9: 800, 10: 10000
@@ -176,10 +177,10 @@ const Storage: React.FC = () => {
               </p>
               <button 
                 className="upgrade-button" 
-                disabled={currentCard.level >= 10 || user.coin < costs[currentCard.level + 1]}
+                disabled={isLoading || currentCard.level >= 10 || user.coin < costs[currentCard.level + 1]}
                 onClick={handleLevelUp}
               >
-                強化する
+                {isLoading ? '強化中...' : '強化する'}
               </button>
               <button className="close-button" onClick={() => setSelectedCard(null)}>閉じる</button>
             </div>

@@ -4,21 +4,25 @@ import { useUser } from '../hooks/useUser';
 
 const Gacha: React.FC = () => {
   const navigate = useNavigate();
-  const { user, gachaStones, drawGacha } = useUser();
+  const { user, gachaStones, drawGacha, isLoading } = useUser();
 
   if (!user) return null;
 
-  const handleGacha = (count: number) => {
+  const handleGacha = async (count: number) => {
     if (gachaStones < count) {
       alert('石が足りません');
       return;
     }
     
     // ガチャ実行
-    const results = drawGacha(count);
+    const results = await drawGacha(count);
     
-    // 演出画面へ遷移（結果データを渡す）
-    navigate('/gacha-effect', { state: { count, results } });
+    if (results && results.length > 0) {
+      // 演出画面へ遷移（結果データを渡す）
+      navigate('/gacha-effect', { state: { count, results } });
+    } else {
+      alert('ガチャの実行に失敗しました');
+    }
   };
 
   return (
@@ -45,11 +49,19 @@ const Gacha: React.FC = () => {
 
         <div className="gacha-actions">
           <div className="gacha-button-container">
-            <button className="gacha-button single" onClick={() => handleGacha(1)}>
+            <button 
+              className="gacha-button single" 
+              onClick={() => handleGacha(1)}
+              disabled={isLoading}
+            >
               <span className="gacha-count">1回引く</span>
               <span className="gacha-cost">石 1個</span>
             </button>
-            <button className="gacha-button multi" onClick={() => handleGacha(10)}>
+            <button 
+              className="gacha-button multi" 
+              onClick={() => handleGacha(10)}
+              disabled={isLoading}
+            >
               <span className="gacha-count">10回引く</span>
               <span className="gacha-cost">石 10個</span>
             </button>
@@ -59,5 +71,6 @@ const Gacha: React.FC = () => {
     </div>
   );
 };
+
 
 export default Gacha;
