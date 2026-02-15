@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { User, Chara, Equip } from '../types/game';
-import { apiService } from '../services/api';
 
 interface UserContextType {
   user: User | null;
@@ -12,171 +11,143 @@ interface UserContextType {
   updateStats: (rp: number, coin: number) => Promise<void>;
   drawGacha: (count: number) => Promise<(Chara | Equip)[]>;
   levelUpCard: (cardId: string, type: 'chara' | 'equip') => Promise<{ success: boolean, message?: string }>;
-  fetchUserData: (userId: string) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
+
+// 擬似的な通信遅延
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [ownedCharas, setOwnedCharas] = useState<Chara[]>([]);
   const [ownedEquips, setOwnedEquips] = useState<Equip[]>([]);
-  const [gachaStones, setGachaStones] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [gachaStones, setGachaStones] = useState<number>(50);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // 初回読み込み（本来はログインチェックなどを行う）
+  // 初期化
   useEffect(() => {
-    const init = async () => {
-      // 開発用に固定のユーザーIDでデータを取得してみる
-      await fetchUserData('dev-user');
-      setIsLoading(false);
-    };
-    init();
+    setUser({
+      userId: 'dev-user',
+      userName: '開発者ユーザー',
+      latestLoginDate: new Date().toISOString(),
+      registeredDate: new Date().toISOString(),
+      streakLogin: 1,
+      rp: 120,
+      coin: 5000,
+    });
+    setOwnedCharas([
+      {
+        cardId: 'c1', charaId: 'chara_001', name: '冒険者', rarity: 'C',
+        acquiredDate: new Date().toISOString(), level: 5, exp: 0,
+        hp: 150, atk: 15, tech: 8, initHp: 100, initAtk: 10, initTech: 5,
+        maxHp: 500, maxAtk: 50, maxTech: 30, specialType: 'G',
+      }
+    ]);
+    setOwnedEquips([
+      {
+        cardId: 'e1', equipId: 'equip_001', name: '錆びた剣', rarity: 'C',
+        acquiredDate: new Date().toISOString(), level: 1, exp: 0,
+        bonusHp: 0, bonusAtk: 5, bonusTech: 0, initBonusHp: 0, initBonusAtk: 5, initBonusTech: 0,
+        maxBonusHp: 100, maxBonusAtk: 50, maxBonusTech: 20,
+      }
+    ]);
   }, []);
-
-  const fetchUserData = async (userId: string) => {
-    setIsLoading(true);
-    try {
-      const userData = await apiService.getUser(userId);
-      const cardsData = await apiService.getOwnedCards(userId);
-      
-      setUser(userData);
-      setOwnedCharas(cardsData.charas);
-      setOwnedEquips(cardsData.equips);
-      setGachaStones(cardsData.stones);
-    } catch (error) {
-      console.error('Failed to fetch user data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const login = async (userName: string) => {
     setIsLoading(true);
-    try {
-      const newUser = await apiService.login(userName);
-      setUser(newUser);
-      // ログイン直後は初期データを取得
-      const cardsData = await apiService.getOwnedCards(newUser.userId);
-      setOwnedCharas(cardsData.charas);
-      setOwnedEquips(cardsData.equips);
-      setGachaStones(cardsData.stones);
-    } catch (error) {
-      console.error('Login failed:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    await sleep(800);
+    const newUser: User = {
+      userId: Math.random().toString(36).substring(2, 11),
+      userName,
+      latestLoginDate: new Date().toISOString(),
+      registeredDate: new Date().toISOString(),
+      streakLogin: 1,
+      rp: 0,
+      coin: 1000,
+    };
+    setUser(newUser);
+    setIsLoading(false);
   };
 
   const updateStats = async (rp: number, coin: number) => {
-    if (!user) return;
-    // 本来はサーバーに送信
-    // await apiService.updateBattleResult(user.userId, ...);
-    setUser({ ...user, rp: user.rp + rp, coin: user.coin + coin });
+    if (user) {
+      setUser({ ...user, rp: user.rp + rp, coin: user.coin + coin });
+    }
   };
 
   const levelUpCard = async (cardId: string, type: 'chara' | 'equip') => {
     if (!user) return { success: false };
-    
     setIsLoading(true);
-    try {
-      // 本来は apiService.levelUpCard(user.userId, cardId, type) を呼ぶ
-      // ここでは以前のロジックを非同期に模倣
-      const costs: Record<number, number> = {
-        2: 100, 3: 200, 4: 300, 5: 400, 6: 500, 
-        7: 600, 8: 700, 9: 800, 10: 10000
+    await sleep(1000);
+
+    const costs: Record<number, number> = {
+      2: 100, 3: 200, 4: 300, 5: 400, 6: 500, 
+      7: 600, 8: 700, 9: 800, 10: 10000
+    };
+
+    if (type === 'chara') {
+      const charaIndex = ownedCharas.findIndex(c => c.cardId === cardId);
+      if (charaIndex === -1) { setIsLoading(false); return { success: false, message: 'カードが見つかりません' }; }
+      const chara = ownedCharas[charaIndex];
+      const cost = costs[chara.level + 1];
+      if (user.coin < cost) { setIsLoading(false); return { success: false, message: 'コインが足りません' }; }
+
+      const nextLevel = chara.level + 1;
+      const calc = (init: number, max: number) => Math.floor(init + (max - init) / 9 * (nextLevel - 1));
+      const updatedChara: Chara = {
+        ...chara, level: nextLevel,
+        hp: calc(chara.initHp, chara.maxHp),
+        atk: calc(chara.initAtk, chara.maxAtk),
+        tech: calc(chara.initTech, chara.maxTech),
       };
+      setOwnedCharas(prev => { const n = [...prev]; n[charaIndex] = updatedChara; return n; });
+      setUser({ ...user, coin: user.coin - cost });
+    } else {
+      const equipIndex = ownedEquips.findIndex(e => e.cardId === cardId);
+      if (equipIndex === -1) { setIsLoading(false); return { success: false, message: '装備が見つかりません' }; }
+      const equip = ownedEquips[equipIndex];
+      const cost = costs[equip.level + 1];
+      if (user.coin < cost) { setIsLoading(false); return { success: false, message: 'コインが足りません' }; }
 
-      if (type === 'chara') {
-        const charaIndex = ownedCharas.findIndex(c => c.cardId === cardId);
-        if (charaIndex === -1) return { success: false, message: 'カードが見つかりません' };
-        
-        const chara = ownedCharas[charaIndex];
-        if (chara.level >= 10) return { success: false, message: '最大レベルです' };
-
-        const cost = costs[chara.level + 1];
-        if (user.coin < cost) return { success: false, message: 'コインが足りません' };
-
-        const nextLevel = chara.level + 1;
-        const calc = (init: number, max: number) => Math.floor(init + (max - init) / 9 * (nextLevel - 1));
-
-        const updatedChara: Chara = {
-          ...chara,
-          level: nextLevel,
-          hp: calc(chara.initHp, chara.maxHp),
-          atk: calc(chara.initAtk, chara.maxAtk),
-          tech: calc(chara.initTech, chara.maxTech),
-        };
-
-        setOwnedCharas(prev => {
-          const next = [...prev];
-          next[charaIndex] = updatedChara;
-          return next;
-        });
-        setUser({ ...user, coin: user.coin - cost });
-        return { success: true };
-      } else {
-        const equipIndex = ownedEquips.findIndex(e => e.cardId === cardId);
-        if (equipIndex === -1) return { success: false, message: '装備が見つかりません' };
-
-        const equip = ownedEquips[equipIndex];
-        if (equip.level >= 10) return { success: false, message: '最大レベルです' };
-
-        const cost = costs[equip.level + 1];
-        if (user.coin < cost) return { success: false, message: 'コインが足りません' };
-
-        const nextLevel = equip.level + 1;
-        const calc = (init: number, max: number) => Math.floor(init + (max - init) / 9 * (nextLevel - 1));
-
-        const updatedEquip: Equip = {
-          ...equip,
-          level: nextLevel,
-          bonusHp: calc(equip.initBonusHp, equip.maxBonusHp),
-          bonusAtk: calc(equip.initBonusAtk, equip.maxBonusAtk),
-          bonusTech: calc(equip.initBonusTech, equip.maxBonusTech),
-        };
-
-        setOwnedEquips(prev => {
-          const next = [...prev];
-          next[equipIndex] = updatedEquip;
-          return next;
-        });
-        setUser({ ...user, coin: user.coin - cost });
-        return { success: true };
-      }
-    } finally {
-      setIsLoading(false);
+      const nextLevel = equip.level + 1;
+      const calc = (init: number, max: number) => Math.floor(init + (max - init) / 9 * (nextLevel - 1));
+      const updatedEquip: Equip = {
+        ...equip, level: nextLevel,
+        bonusHp: calc(equip.initBonusHp, equip.maxBonusHp),
+        bonusAtk: calc(equip.initBonusAtk, equip.maxBonusAtk),
+        bonusTech: calc(equip.initBonusTech, equip.maxBonusTech),
+      };
+      setOwnedEquips(prev => { const n = [...prev]; n[equipIndex] = updatedEquip; return n; });
+      setUser({ ...user, coin: user.coin - cost });
     }
+    setIsLoading(false);
+    return { success: true };
   };
 
   const drawGacha = async (count: number): Promise<(Chara | Equip)[]> => {
-    if (!user || gachaStones < count) return [];
-    
+    if (gachaStones < count) return [];
     setIsLoading(true);
-    try {
-      const result = await apiService.drawGacha(user.userId, count);
-      
-      const newCharas = result.newItems.filter(item => 'charaId' in item) as Chara[];
-      const newEquips = result.newItems.filter(item => 'equipId' in item) as Equip[];
-      
-      setOwnedCharas(prev => [...prev, ...newCharas]);
-      setOwnedEquips(prev => [...prev, ...newEquips]);
-      setGachaStones(result.remainingStones);
-
-      return result.newItems;
-    } catch (error) {
-      console.error('Gacha failed:', error);
-      return [];
-    } finally {
-      setIsLoading(false);
+    await sleep(1500);
+    setGachaStones(prev => prev - count);
+    const newItems: (Chara | Equip)[] = [];
+    // 抽選ロジック（簡略化）
+    for (let i = 0; i < count; i++) {
+      newItems.push({
+        cardId: Math.random().toString(36).substring(2, 11),
+        charaId: 'chara_mock', name: 'モックキャラ', rarity: 'R',
+        acquiredDate: new Date().toISOString(), level: 1, exp: 0,
+        hp: 100, atk: 10, tech: 5, initHp: 100, initAtk: 10, initTech: 5,
+        maxHp: 500, maxAtk: 50, maxTech: 30, specialType: 'G',
+      });
     }
+    setOwnedCharas(prev => [...prev, ...newItems.filter(i => 'charaId' in i) as Chara[]]);
+    setIsLoading(false);
+    return newItems;
   };
 
   return (
-    <UserContext.Provider value={{ 
-      user, ownedCharas, ownedEquips, gachaStones, isLoading,
-      login, updateStats, drawGacha, levelUpCard, fetchUserData 
-    }}>
+    <UserContext.Provider value={{ user, ownedCharas, ownedEquips, gachaStones, isLoading, login, updateStats, drawGacha, levelUpCard }}>
       {children}
     </UserContext.Provider>
   );
@@ -184,8 +155,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 export const useUser = () => {
   const context = useContext(UserContext);
-  if (context === undefined) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
+  if (context === undefined) throw new Error('useUser must be used within a UserProvider');
   return context;
 };

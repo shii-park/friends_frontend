@@ -157,15 +157,15 @@ const Storage: React.FC = () => {
               </div>
               <div className="modal-card-details">
                 <h3>{currentCard.name}</h3>
-                <p className="modal-level">Lv.{currentCard.level} → {currentCard.level < 10 ? currentCard.level + 1 : 'MAX'}</p>
+                <p className="modal-level">Lv.{currentCard.level} <span className="arrow">→</span> {currentCard.level < 10 ? currentCard.level + 1 : 'MAX'}</p>
                 {selectedCard.type === 'chara' ? (
                   <div className="modal-stats">
-                    <p>HP: {(currentCard as Chara).hp} → {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</p>
-                    <p>ATK: {(currentCard as Chara).atk} → {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</p>
+                    <p><span>HP</span> <span>{(currentCard as Chara).hp} <span className="arrow">→</span> {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</span></p>
+                    <p><span>ATK</span> <span>{(currentCard as Chara).atk} <span className="arrow">→</span> {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</span></p>
                   </div>
                 ) : (
                   <div className="modal-stats">
-                    <p>Bonus ATK: +{(currentCard as Equip).bonusAtk} → {(currentCard as Equip).level < 10 ? '???' : 'MAX'}</p>
+                    <p><span>Bonus ATK</span> <span>+{(currentCard as Equip).bonusAtk} <span className="arrow">→</span> {(currentCard as Equip).level < 10 ? '???' : 'MAX'}</span></p>
                   </div>
                 )}
               </div>
