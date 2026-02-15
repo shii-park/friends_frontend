@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import type { User, Chara, Equip } from '../types/game';
+import type { User, Chara, Equip, Rarity } from '../types/game';
 
 interface UserContextType {
   user: User | null;
@@ -131,17 +131,64 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     await sleep(1500);
     setGachaStones(prev => prev - count);
     const newItems: (Chara | Equip)[] = [];
-    // 抽選ロジック（簡略化）
+
+    const rarities: { rarity: Rarity; weight: number }[] = [
+      { rarity: 'SSR', weight: 1.5 },
+      { rarity: 'SR', weight: 4.5 },
+      { rarity: 'R', weight: 10 },
+      { rarity: 'UC', weight: 24 },
+      { rarity: 'C', weight: 60 },
+    ];
+
     for (let i = 0; i < count; i++) {
-      newItems.push({
-        cardId: Math.random().toString(36).substring(2, 11),
-        charaId: 'chara_mock', name: 'モックキャラ', rarity: 'R',
-        acquiredDate: new Date().toISOString(), level: 1, exp: 0,
-        hp: 100, atk: 10, tech: 5, initHp: 100, initAtk: 10, initTech: 5,
-        maxHp: 500, maxAtk: 50, maxTech: 30, specialType: 'G',
-      });
+      const isChara = Math.random() < 0.5;
+      const rand = Math.random() * 100;
+      let cumulative = 0;
+      let selectedRarity: Rarity = 'C';
+
+      for (const r of rarities) {
+        cumulative += r.weight;
+        if (rand <= cumulative) {
+          selectedRarity = r.rarity;
+          break;
+        }
+      }
+
+      const cardId = Math.random().toString(36).substring(2, 11);
+      
+      if (isChara) {
+        newItems.push({
+          cardId,
+          charaId: `chara_${selectedRarity}_${cardId}`,
+          name: `${selectedRarity} キャラクター`,
+          rarity: selectedRarity,
+          acquiredDate: new Date().toISOString(),
+          level: 1, exp: 0,
+          hp: 100, atk: 10, tech: 5,
+          initHp: 100, initAtk: 10, initTech: 5,
+          maxHp: 500, maxAtk: 50, maxTech: 30,
+          specialType: (['G', 'C', 'P'] as const)[Math.floor(Math.random() * 3)],
+        });
+      } else {
+        newItems.push({
+          cardId,
+          equipId: `equip_${selectedRarity}_${cardId}`,
+          name: `${selectedRarity} 装備`,
+          rarity: selectedRarity,
+          acquiredDate: new Date().toISOString(),
+          level: 1, exp: 0,
+          bonusHp: 10, bonusAtk: 5, bonusTech: 2,
+          initBonusHp: 10, initBonusAtk: 5, initBonusTech: 2,
+          maxBonusHp: 100, maxBonusAtk: 50, maxBonusTech: 20,
+        });
+      }
     }
-    setOwnedCharas(prev => [...prev, ...newItems.filter(i => 'charaId' in i) as Chara[]]);
+
+    const newCharas = newItems.filter(i => 'charaId' in i) as Chara[];
+    const newEquips = newItems.filter(i => 'equipId' in i) as Equip[];
+    setOwnedCharas(prev => [...prev, ...newCharas]);
+    setOwnedEquips(prev => [...prev, ...newEquips]);
+    
     setIsLoading(false);
     return newItems;
   };
