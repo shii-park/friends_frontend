@@ -44,7 +44,7 @@ const BattleResult: React.FC = () => {
         </div>
 
         <div className="result-actions">
-          <button className="home-button" onClick={() => navigate('/home')}>
+          <button className="home-button" onClick={() => navigate('/home', { state: { from: '/battle-result' } })}>
             ホームへ戻る
           </button>
         </div>

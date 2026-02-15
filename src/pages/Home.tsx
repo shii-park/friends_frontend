@@ -32,7 +32,7 @@ const Home: React.FC = () => {
             <div className="home-menu-cards-row">
               <button
                 className="menu-card landscape"
-                onClick={() => navigate('/storage')}
+                onClick={() => navigate('/storage', { state: { from: '/home' } })}
               >
                 <span className="menu-icon">🎒</span>
                 <div className="menu-text">
@@ -42,7 +42,7 @@ const Home: React.FC = () => {
               </button>
               <button
                 className="menu-card landscape"
-                onClick={() => navigate('/gacha')}
+                onClick={() => navigate('/gacha', { state: { from: '/home' } })}
               >
                 <span className="menu-icon">💎</span>
                 <div className="menu-text">
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
           <div className="home-menu-right">
             <button
               className="menu-card square"
-              onClick={() => navigate('/battle-select')}
+              onClick={() => navigate('/battle-select', { state: { from: '/home' } })}
             >
               <span className="menu-icon">⚔️</span>
               <h2 className="menu-label">バトル</h2>

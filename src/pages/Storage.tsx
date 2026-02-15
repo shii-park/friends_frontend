@@ -72,7 +72,7 @@ const Storage: React.FC = () => {
     <div className="storage-page">
       <header className="app-header">
         <div className="header-left">
-          <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
+          <button className="back-button" onClick={() => navigate('/home', { state: { from: '/storage' } })}>↑ 戻る</button>
         </div>
         <div className="header-center">
           <h1>ストレージ</h1>
