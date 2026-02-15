@@ -1327,29 +1327,55 @@ body {
 
 /* Gacha Result Page */
 .gacha-result-page {
-  min-height: 100vh;
+  height: 100vh; /* 固定高 */
   background-color: var(--bg-dark);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem 2rem;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
 .gacha-result-header h1 {
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: 900;
   color: var(--primary);
   text-transform: uppercase;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
+}
+
+.gacha-result-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1000px;
+  overflow-y: auto; /* ここをスクロール可能に */
+  padding: 1rem;
+  margin-bottom: 2rem;
+  /* スクロールバーのカスタマイズ（任意） */
+}
+
+.gacha-result-content::-webkit-scrollbar {
+  width: 8px;
+}
+.gacha-result-content::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
 }
 
 .result-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 2rem;
-  width: 100%;
-  max-width: 1000px;
   justify-items: center;
+}
+
+.result-actions {
+  display: flex;
+  gap: 2rem;
+  padding-bottom: 1rem;
+  justify-content: center; /* 左右中央揃え */
+  width: 100%;
+  margin-top: 1.5rem; /* 上に余白を追加 */
 }
 
 .result-grid .storage-card {
