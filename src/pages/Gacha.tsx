@@ -42,6 +42,7 @@ const Gacha: React.FC = () => {
 
       <main className="gacha-content">
         <div className="gacha-banner">
+          <div className="gacha-banner-bg-text">TRY YOUR LUCK</div>
           <img src={gachaImage} alt="ガチャバナー" className="gacha-banner-image" />
         </div>
 
