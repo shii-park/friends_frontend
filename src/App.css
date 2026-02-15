@@ -238,13 +238,15 @@ body {
 }
 
 .home-menu {
-  margin-top: auto;
+  flex: 1; /* 残りのスペースをすべて使う */
+  margin-top: 2rem;
   width: 100%;
   display: grid;
-  grid-template-columns: 1.6fr 1fr; /* Make right side (Battle) smaller */
+  grid-template-columns: 1.6fr 1fr;
   gap: 4rem;
-  align-items: flex-end;
+  align-items: stretch; /* 子供を縦一杯に伸ばす */
   padding: 0;
+  min-height: 0; /* flex内のグリッド崩れ防止 */
 }
 
 .home-menu-left {
@@ -252,6 +254,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  justify-content: flex-end; /* 左側のコンテンツは下に寄せる */
 }
 
 .home-menu-cards-row {
@@ -263,7 +266,7 @@ body {
 
 .home-menu-right {
   display: flex;
-  align-items: flex-end;
+  align-items: stretch;
   width: 100%;
 }
 
@@ -290,26 +293,76 @@ body {
 
 .menu-card.square {
   width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-  max-height: 420px;
+  height: auto; /* stretchによって自動で伸びる */
+  min-height: 500px;
   flex-direction: column;
   padding: 40px;
+  justify-content: center;
+}
+
+.menu-card.square .menu-icon {
+  font-size: 8rem; /* アイコンをさらに巨大に */
+  margin-bottom: 1rem;
+}
+
+.menu-card.square .menu-label {
+  font-size: 5rem;
+  margin: 1.5rem 0;
+  line-height: 1.1;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 950;
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease; /* アニメーション追加 */
+}
+
+/* ホバー時の背景塗りつぶし用擬似要素 */
+.menu-card.square .menu-label::after {
+  content: '';
+  position: absolute;
+  left: -40px;
+  right: -40px;
+  top: -10px;
+  bottom: -10px;
+  background: transparent; /* 通常時は透明 */
+  z-index: -1;
+  transition: all 0.3s ease;
+  border-top: 4px solid var(--primary); /* 上の線 */
+  border-bottom: 4px solid var(--primary); /* 下の線 */
+}
+
+/* 以前の before/after は after に統合したので削除 */
+.menu-card.square .menu-label::before {
+  display: none;
+}
+
+/* ホバー時の変化 */
+.menu-card.square:hover .menu-label {
+  color: #000; /* 文字を黒に */
+}
+
+.menu-card.square:hover .menu-label::after {
+  background: var(--primary); /* 背景をライム色に */
 }
 
 .menu-card:hover {
-  transform: scale(1.05) rotate(-2deg);
+  transform: scale(1.05); /* 回転を削除し、拡大のみに */
   box-shadow: 15px 15px 0px var(--primary) !important;
   z-index: 10;
 }
 
 .menu-card.landscape:hover {
-  transform: scale(1.05) rotate(-2deg);
+  transform: scale(1.05);
 }
 
-/* rotate-right is not explicitly used now but kept for consistency if needed */
 .menu-card.square:hover {
-  transform: scale(1.05) rotate(2deg);
+  transform: scale(1.05);
 }
 
 .menu-text {

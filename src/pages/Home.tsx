@@ -57,8 +57,7 @@ const Home: React.FC = () => {
               className="menu-card square"
               onClick={() => navigate('/battle-select', { state: { from: '/home' } })}
             >
-              <span className="menu-icon">⚔️</span>
-              <h2 className="menu-label">バトル</h2>
+              <h2 className="menu-label">BATTLE</h2>
               <p className="menu-desc">NPCやオンラインで対戦</p>
             </button>
           </div>
