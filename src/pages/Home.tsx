@@ -10,12 +10,6 @@ const Home: React.FC = () => {
     return <div>読み込み中...</div>;
   }
 
-  const menuItems = [
-    { label: 'バトル', path: '/battle-select', color: '#ff7675', icon: '⚔️', description: 'NPCやオンラインで対戦', textColor: '#000000' },
-    { label: 'ストレージ', path: '/storage', color: '#74b9ff', icon: '🎒', description: 'キャラクター・装備の確認', textColor: '#000000' },
-    { label: 'ガチャ', path: '/gacha', color: '#ffeaa7', icon: '💎', description: '新しいカードを入手', textColor: '#000000' },
-  ];
-
   return (
     <div className="home-page">
       <header className="app-header">
@@ -33,18 +27,38 @@ const Home: React.FC = () => {
       </header>
 
       <main className="home-menu">
-        {menuItems.map((item) => (
+        <div className="home-menu-left">
           <button
-            key={item.label}
-            className={`menu-card ${item.path === '/storage' ? 'rotate-right' : ''}`}
-            style={{ backgroundColor: item.color, color: item.textColor || '#fff' }}
-            onClick={() => navigate(item.path)}
+            className="menu-card landscape"
+            onClick={() => navigate('/storage')}
           >
-            <span className="menu-icon" style={{ fontSize: '5rem', marginBottom: '1rem' }}>{item.icon}</span>
-            <h2 className="menu-label">{item.label}</h2>
-            <p className="menu-desc">{item.description}</p>
+            <span className="menu-icon">🎒</span>
+            <div className="menu-text">
+              <h2 className="menu-label">ストレージ</h2>
+              <p className="menu-desc">キャラクター・装備の確認</p>
+            </div>
           </button>
-        ))}
+          <button
+            className="menu-card landscape"
+            onClick={() => navigate('/gacha')}
+          >
+            <span className="menu-icon">💎</span>
+            <div className="menu-text">
+              <h2 className="menu-label">ガチャ</h2>
+              <p className="menu-desc">新しいカードを入手</p>
+            </div>
+          </button>
+        </div>
+        <div className="home-menu-right">
+          <button
+            className="menu-card square"
+            onClick={() => navigate('/battle-select')}
+          >
+            <span className="menu-icon">⚔️</span>
+            <h2 className="menu-label">バトル</h2>
+            <p className="menu-desc">NPCやオンラインで対戦</p>
+          </button>
+        </div>
       </main>
     </div>
   );
