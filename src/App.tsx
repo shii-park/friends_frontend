@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 import { UserProvider } from './hooks/useUser';
 import Title from './pages/Title';
 import Home from './pages/Home';
@@ -13,9 +14,14 @@ import GachaEffect from './pages/GachaEffect';
 import GachaResult from './pages/GachaResult';
 import './App.css';
 
+interface TransitionConfig {
+  direction: number;
+  type: 'vertical' | 'horizontal' | 'fade' | 'zoom';
+}
+
 // ページ遷移のアニメーション設定
-const pageVariants = {
-  initial: (custom: { direction: number, type: 'vertical' | 'horizontal' | 'fade' | 'zoom' }) => ({
+const pageVariants: Variants = {
+  initial: (custom: TransitionConfig) => ({
     y: custom.type === 'vertical' ? (custom.direction > 0 ? '100%' : custom.direction < 0 ? '-100%' : 0) : 0,
     x: custom.type === 'horizontal' ? (custom.direction > 0 ? '100%' : custom.direction < 0 ? '-100%' : 0) : 0,
     opacity: (custom.type === 'fade' || custom.type === 'zoom') ? 0 : 1,
@@ -31,7 +37,7 @@ const pageVariants = {
       ease: [0.43, 0.13, 0.23, 0.96]
     }
   },
-  exit: (custom: { direction: number, type: 'vertical' | 'horizontal' | 'fade' | 'zoom' }) => ({
+  exit: (custom: TransitionConfig) => ({
     y: custom.type === 'vertical' ? (custom.direction > 0 ? '-100%' : custom.direction < 0 ? '100%' : 0) : 0,
     x: custom.type === 'horizontal' ? (custom.direction > 0 ? '-100%' : custom.direction < 0 ? '100%' : 0) : 0,
     opacity: (custom.type === 'fade' || custom.type === 'zoom') ? 0 : 1,
@@ -43,7 +49,7 @@ const pageVariants = {
   })
 };
 
-const PageTransition = ({ children, transitionConfig }: { children: React.ReactNode, transitionConfig: { direction: number, type: 'vertical' | 'horizontal' | 'fade' | 'zoom' } }) => {
+const PageTransition = ({ children, transitionConfig }: { children: React.ReactNode, transitionConfig: TransitionConfig }) => {
   const location = useLocation();
 
   return (
@@ -70,7 +76,7 @@ const PageTransition = ({ children, transitionConfig }: { children: React.ReactN
 function AnimatedRoutes() {
   const location = useLocation();
   
-  const getTransitionConfig = (): { direction: number, type: 'vertical' | 'horizontal' | 'fade' | 'zoom' } => {
+  const getTransitionConfig = (): TransitionConfig => {
     const from = location.state?.from;
     const to = location.pathname;
 
