@@ -161,16 +161,69 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #222 0%, var(--bg-dark) 70%);
+}
+
+.home-title-container {
+  padding-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+.home-user-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 2rem;
+  margin-bottom: 2rem;
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.home-stats-summary {
+  display: flex;
+  gap: 2rem;
+}
+
+.home-large-title {
+  font-size: 12vw; /* Adjusted to fit within screen comfortably */
+  width: 100%;
+  text-align: center;
+  font-weight: 900;
+  color: var(--primary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: -0.2vw;
+  line-height: 1;
+  text-shadow: 0.8vw 0.8vw 0px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  padding: 0 2vw;
+  box-sizing: border-box;
+}
+
+@keyframes title-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
 }
 
 .home-menu {
   flex: 1;
   display: flex;
-  justify-content: space-between; /* Change to space-between to push to sides */
+  justify-content: space-between;
   align-items: flex-end;
   gap: 0;
-  padding: 0 8rem 6rem 8rem; /* Increase horizontal padding */
-  max-width: 1400px; /* Optional: cap width for large screens */
+  padding: 0 8rem 4rem 8rem; /* Adjusted padding */
+  max-width: 1500px;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
@@ -178,16 +231,16 @@ body {
 
 .home-menu-left {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: flex-start;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-end;
   margin-bottom: 0;
 }
 
 .home-menu-right {
   display: flex;
   align-items: flex-end;
-  margin-left: 0; /* Remove fixed margin */
+  margin-left: 0;
 }
 
 .menu-card {
@@ -203,18 +256,18 @@ body {
 }
 
 .menu-card.landscape {
-  width: 500px;
+  width: 380px;
   height: 200px;
   flex-direction: row;
-  padding: 0 60px;
-  gap: 2rem;
+  padding: 0 40px;
+  gap: 1.5rem;
   justify-content: flex-start;
   transform: skewX(15deg);
 }
 
-/* Align the slanted edges by offsetting the cards */
+/* Remove vertical offset since they are side by side */
 .home-menu-left .menu-card.landscape:nth-child(1) {
-  margin-left: -58px;
+  margin-left: 0px;
 }
 
 .home-menu-left .menu-card.landscape:nth-child(2) {
