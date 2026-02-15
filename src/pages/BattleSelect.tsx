@@ -25,14 +25,14 @@ const BattleSelect: React.FC = () => {
 
   const handleSelect = (type: string) => {
     // どちらを選んでも次はバトル準備画面へ
-    navigate('/battle-prepare', { state: { battleType: type } });
+    navigate('/battle-prepare', { state: { battleType: type, from: '/battle-select' } });
   };
 
   return (
     <div className="battle-select-page">
       <header className="app-header">
         <div className="header-left">
-          <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
+          <button className="back-button" onClick={() => navigate('/home', { state: { from: '/battle-select' } })}>← 戻る</button>
         </div>
         <div className="header-center">
           <h1>バトル選択</h1>

@@ -22,7 +22,7 @@ const BattlePrepare: React.FC = () => {
 
   const handleStartBattle = () => {
     if (selectedChara && selectedEquip) {
-      navigate('/battle', { state: { selectedChara, selectedEquip, opponent } });
+      navigate('/battle', { state: { selectedChara, selectedEquip, opponent, from: '/battle-prepare' } });
     }
   };
 
@@ -37,7 +37,7 @@ const BattlePrepare: React.FC = () => {
     <div className="battle-prepare-page">
       <header className="app-header">
         <div className="header-left">
-          <button className="back-button" onClick={() => navigate('/battle-select')}>← 戻る</button>
+          <button className="back-button" onClick={() => navigate('/battle-select', { state: { from: '/battle-prepare' } })}>← 戻る</button>
         </div>
         <div className="header-center">
           <h1>バトル準備</h1>

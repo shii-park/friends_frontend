@@ -10,7 +10,7 @@ const GachaEffect: React.FC = () => {
   useEffect(() => {
     // 演出をシミュレーション（3秒後に結果画面へ）
     const timer = setTimeout(() => {
-      navigate('/gacha-result', { state: { count, results } });
+      navigate('/gacha-result', { state: { count, results, from: '/gacha-effect' } });
     }, 3000);
     return () => clearTimeout(timer);
   }, [navigate, count, results]);

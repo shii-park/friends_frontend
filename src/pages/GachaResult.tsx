@@ -46,10 +46,10 @@ const GachaResult: React.FC = () => {
         </div>
 
         <div className="result-actions">
-          <button className="back-to-home" onClick={() => navigate('/home')}>
+          <button className="back-to-home" onClick={() => navigate('/home', { state: { from: '/gacha-result' } })}>
             ホームに戻る
           </button>
-          <button className="back-to-gacha" onClick={() => navigate('/gacha')}>
+          <button className="back-to-gacha" onClick={() => navigate('/gacha', { state: { from: '/gacha-result' } })}>
             もう一度引く
           </button>
         </div>

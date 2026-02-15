@@ -86,9 +86,9 @@ const Battle: React.FC = () => {
   useEffect(() => {
     if (!isAnimating && (playerHp > 0 || opponentHp > 0)) {
       if (opponentHp <= 0) {
-        setTimeout(() => navigate('/battle-result', { state: { result: 'win' } }), 2000);
+        setTimeout(() => navigate('/battle-result', { state: { result: 'win', from: '/battle' } }), 2000);
       } else if (playerHp <= 0) {
-        setTimeout(() => navigate('/battle-result', { state: { result: 'lose' } }), 2000);
+        setTimeout(() => navigate('/battle-result', { state: { result: 'lose', from: '/battle' } }), 2000);
       }
     }
   }, [playerHp, opponentHp, isAnimating, navigate]);

@@ -20,7 +20,7 @@ const Gacha: React.FC = () => {
     
     if (results && results.length > 0) {
       // 演出画面へ遷移（結果データを渡す）
-      navigate('/gacha-effect', { state: { count, results } });
+      navigate('/gacha-effect', { state: { count, results, from: '/gacha' } });
     } else {
       alert('ガチャの実行に失敗しました');
     }
@@ -30,7 +30,7 @@ const Gacha: React.FC = () => {
     <div className="gacha-page">
       <header className="app-header">
         <div className="header-left">
-          <button className="back-button" onClick={() => navigate('/home')}>← 戻る</button>
+          <button className="back-button" onClick={() => navigate('/home', { state: { from: '/gacha' } })}>← 戻る</button>
         </div>
         <div className="header-center">
           <h1>ガチャ</h1>
