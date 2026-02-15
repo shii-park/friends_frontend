@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
+import gachaImage from '../assets/ガチャ.png';
 
 const Gacha: React.FC = () => {
   const navigate = useNavigate();
@@ -41,10 +42,7 @@ const Gacha: React.FC = () => {
 
       <main className="gacha-content">
         <div className="gacha-banner">
-          <div className="banner-content">
-            <h2>恒常ガチャ</h2>
-            <p>強力なキャラクターと装備を手に入れよう！</p>
-          </div>
+          <img src={gachaImage} alt="ガチャバナー" className="gacha-banner-image" />
         </div>
 
         <div className="gacha-actions">

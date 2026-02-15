@@ -1132,31 +1132,40 @@ body {
 
 .gacha-content {
   flex: 1;
-  padding: 3rem;
+  padding: 1.5rem 3rem; /* 上下のパディングを減らす */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3rem;
+  gap: 1.5rem; /* 要素間の隙間を半分にする */
+  overflow: hidden; /* コンテンツがはみ出さないように */
 }
 
 .gacha-banner {
   width: 100%;
   max-width: 800px;
-  height: 300px;
-  background: #000;
-  border: 4px solid var(--primary);
-  border-radius: 4px;
+  height: 60vh; /* 画面の高さの60%に拡大 */
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--primary);
-  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
 }
 
 .gacha-banner h2 {
   font-size: 3rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.gacha-banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 画像全体を表示 */
+  border-radius: 4px;
+}
+
+.gacha-actions {
+  margin-top: auto; /* ボタンを一番下に押し出す */
+  padding-bottom: 2rem;
 }
 
 .gacha-button-container {
