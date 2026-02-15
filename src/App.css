@@ -1219,14 +1219,14 @@ body {
 
 .gacha-banner-bg-text {
   position: absolute;
-  font-size: 16rem; /* 20remから少し縮小してバランス調整 */
+  font-size: 18rem; /* 16remから18remに微増させて迫力を調整 */
   font-weight: 950;
   color: #647D00;
   white-space: nowrap;
   z-index: 0;
   user-select: none;
   font-style: italic;
-  letter-spacing: -0.6rem;
+  letter-spacing: -0.7rem;
   opacity: 0.9;
   pointer-events: none;
 }
