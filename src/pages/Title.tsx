@@ -51,6 +51,3 @@ const Title: React.FC = () => {
 };
 
 export default Title;
-
-
-export default Title;

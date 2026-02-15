@@ -1,7 +1,7 @@
-import { User, Chara, Equip } from '../types/game';
+import type { User, Chara, Equip } from '../types/game';
 
 // 本来は .env などから取得する
-const API_BASE_URL = 'http://localhost:3000/api';
+// const _API_BASE_URL = 'http://localhost:3000/api';
 
 // 擬似的な通信遅延を再現するユーティリティ
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -10,7 +10,7 @@ export const apiService = {
   // ユーザー情報の取得
   getUser: async (userId: string): Promise<User> => {
     await sleep(500);
-    // モックデータを返す（実際は fetch(`${API_BASE_URL}/user/${userId}`)）
+    // モックデータを返す（実際は fetch(`${_API_BASE_URL}/user/${userId}`)）
     return {
       userId,
       userName: '開発者ユーザー',
@@ -37,7 +37,7 @@ export const apiService = {
   },
 
   // 所持カードの取得
-  getOwnedCards: async (userId: string): Promise<{ charas: Chara[], equips: Equip[], stones: number }> => {
+  getOwnedCards: async (_userId: string): Promise<{ charas: Chara[], equips: Equip[], stones: number }> => {
     await sleep(600);
     // 初期配布カードのモック
     return {
@@ -62,7 +62,7 @@ export const apiService = {
   },
 
   // ガチャを引く
-  drawGacha: async (userId: string, count: number): Promise<{ newItems: (Chara | Equip)[], remainingStones: number }> => {
+  drawGacha: async (_userId: string, count: number): Promise<{ newItems: (Chara | Equip)[], remainingStones: number }> => {
     await sleep(1500);
     // ここでバックエンドが抽選を行う想定
     const newItems: (Chara | Equip)[] = [];
@@ -95,7 +95,7 @@ export const apiService = {
   },
 
   // カード強化
-  levelUpCard: async (userId: string, cardId: string, type: 'chara' | 'equip'): Promise<{ success: boolean, updatedCard: Chara | Equip, newCoin: number }> => {
+  levelUpCard: async (_userId: string, _cardId: string, _type: 'chara' | 'equip'): Promise<{ success: boolean, updatedCard: Chara | Equip, newCoin: number }> => {
     await sleep(1000);
     // 本来はサーバー側で計算して結果を返す
     return {
@@ -106,7 +106,7 @@ export const apiService = {
   },
 
   // バトル結果の送信
-  updateBattleResult: async (userId: string, result: 'win' | 'lose'): Promise<{ rp: number, coin: number, stones: number }> => {
+  updateBattleResult: async (_userId: string, result: 'win' | 'lose'): Promise<{ rp: number, coin: number, stones: number }> => {
     await sleep(800);
     return {
       rp: result === 'win' ? 20 : 5,
