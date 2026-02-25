@@ -37,6 +37,13 @@ export interface Equip extends Card {
   buffEffect?: string;
 }
 
+// バトル用の手マッピング
+export type BackendHand = 'rock' | 'paper' | 'scissors';
+export type FrontendHand = 'G' | 'C' | 'P';
+export const HAND_TO_BACKEND: Record<FrontendHand, BackendHand> = { G: 'rock', C: 'scissors', P: 'paper' };
+export const HAND_FROM_BACKEND: Record<BackendHand, FrontendHand> = { rock: 'G', scissors: 'C', paper: 'P' };
+export const SPECIAL_FROM_BACKEND: Record<string, FrontendHand> = { rock: 'G', scissors: 'C', paper: 'P' };
+
 export interface User {
   userId: string;
   userName: string;

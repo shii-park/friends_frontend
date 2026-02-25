@@ -1,99 +1,129 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
+import { useBattleWebSocket } from '../hooks/useBattleWebSocket';
+import type { FrontendHand } from '../types/game';
+import { SPECIAL_FROM_BACKEND } from '../types/game';
 
-type Hand = 'G' | 'C' | 'P';
+type Hand = FrontendHand;
 
 const Battle: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, gachaStones } = useUser();
-  const { selectedChara, selectedEquip, opponent } = location.state || {};
+  const { selectedChara, selectedEquip } = location.state || {};
 
-  const [playerHp, setPlayerHp] = useState(() => 
-    selectedChara ? selectedChara.hp + (selectedEquip?.bonusHp || 0) : 0
-  );
-  const [opponentHp, setOpponentHp] = useState(() => 
-    opponent ? opponent.chara.hp + (opponent.equip?.bonusAtk || 0) : 0
-  );
+  const {
+    phase,
+    playerHP,
+    npcHP,
+    npcInfo,
+    lastRound,
+    gameOver,
+    error,
+    connect,
+    startBattle,
+    sendHand,
+    disconnect,
+  } = useBattleWebSocket();
+
   const [isAnimating, setIsAnimating] = useState(false);
-  const [damagePopup, setDamagePopup] = useState<{ value: number, target: 'player' | 'opponent' } | null>(null);
-  const [lastResult, setLastResult] = useState<{playerHand: Hand, opponentHand: Hand, winner: 'player' | 'opponent' | 'draw' | null}>({
-    playerHand: 'G',
-    opponentHand: 'G',
-    winner: null
-  });
+  const [damagePopup, setDamagePopup] = useState<{ value: string; target: 'player' | 'opponent' } | null>(null);
+  const [playerHand, setPlayerHand] = useState<Hand | null>(null);
+  const [initialPlayerHP, setInitialPlayerHP] = useState(0);
+  const [initialNpcHP, setInitialNpcHP] = useState(0);
+  const prevPlayerHP = useRef(0);
+  const prevNpcHP = useRef(0);
+  const hasConnected = useRef(false);
 
-  if (!selectedChara || !opponent) return null;
-
-  const calculateDamage = (attacker: any, defender: any, isSpecial: boolean) => {
-    const atk = (attacker.atk || attacker.chara.atk) + (attacker.bonusAtk || attacker.equip?.bonusAtk || 0);
-    const tech = (attacker.tech || attacker.chara.tech) + (attacker.bonusTech || attacker.equip?.bonusTech || 0);
-    
-    let dmg = atk * (0.8 + Math.random() * 0.2) + tech * (0.5 + Math.random() * 0.5);
-    if (isSpecial) dmg *= 1.5;
-
-    const defAtk = (defender.atk || defender.chara.atk) + (defender.bonusAtk || defender.equip?.bonusAtk || 0);
-    const def = defAtk * (0.3 + Math.random() * 0.2);
-
-    const finalDmg = Math.max(0, Math.floor(dmg - def));
-    return finalDmg;
-  };
-
-  const handleHandSelect = (playerHand: Hand) => {
-    if (isAnimating || playerHp <= 0 || opponentHp <= 0) return;
-
-    setIsAnimating(true);
-    const hands: Hand[] = ['G', 'C', 'P'];
-    const opponentHand = hands[Math.floor(Math.random() * 3)];
-
-    let winner: 'player' | 'opponent' | 'draw' = 'draw';
-    if (playerHand === opponentHand) winner = 'draw';
-    else if (
-      (playerHand === 'G' && opponentHand === 'C') ||
-      (playerHand === 'C' && opponentHand === 'P') ||
-      (playerHand === 'P' && opponentHand === 'G')
-    ) winner = 'player';
-    else winner = 'opponent';
-
-    setLastResult({ playerHand, opponentHand, winner });
-
-    setTimeout(() => {
-      processBattleTurn(winner, playerHand, opponentHand);
-    }, 1000);
-  };
-
-  const processBattleTurn = (winner: 'player' | 'opponent' | 'draw', playerHand: Hand, opponentHand: Hand) => {
-    if (winner === 'draw') {
-      // 引き分け
-    } else if (winner === 'player') {
-      const isSpecial = selectedChara.specialType === playerHand;
-      const dmg = calculateDamage({ ...selectedChara, ...selectedEquip }, opponent, isSpecial);
-      setOpponentHp((prev: number) => Math.max(0, prev - dmg));
-      setDamagePopup({ value: dmg, target: 'opponent' });
-    } else {
-      const isSpecial = opponent.chara.specialType === opponentHand;
-      const dmg = calculateDamage(opponent, { ...selectedChara, ...selectedEquip }, isSpecial);
-      setPlayerHp((prev: number) => Math.max(0, prev - dmg));
-      setDamagePopup({ value: dmg, target: 'player' });
-    }
-
-    setTimeout(() => setDamagePopup(null), 1000);
-    setIsAnimating(false);
-  };
-
-  // 決着判定
+  // mount時にWebSocket接続
   useEffect(() => {
-    if (!isAnimating && (playerHp > 0 || opponentHp > 0)) {
-      if (opponentHp <= 0) {
-        setTimeout(() => navigate('/battle-result', { state: { result: 'win', from: '/battle' } }), 2000);
-      } else if (playerHp <= 0) {
-        setTimeout(() => navigate('/battle-result', { state: { result: 'lose', from: '/battle' } }), 2000);
-      }
+    if (!hasConnected.current && selectedChara) {
+      hasConnected.current = true;
+      connect();
     }
-  }, [playerHp, opponentHp, isAnimating, navigate]);
+    return () => {
+      disconnect();
+    };
+  }, []);
 
-  const handToEmoji = (h: Hand) => h === 'G' ? '✊' : h === 'C' ? '✌️' : '✋';
+  // 接続完了後にバトル開始
+  useEffect(() => {
+    if (phase === 'waiting' && selectedChara && selectedEquip) {
+      startBattle(selectedChara.charaId, selectedEquip.equipId);
+    }
+  }, [phase, selectedChara, selectedEquip, startBattle]);
+
+  // ready受信時に初期HP保存
+  useEffect(() => {
+    if (phase === 'ready' && initialPlayerHP === 0) {
+      setInitialPlayerHP(playerHP);
+      setInitialNpcHP(npcHP);
+      prevPlayerHP.current = playerHP;
+      prevNpcHP.current = npcHP;
+    }
+  }, [phase, playerHP, npcHP, initialPlayerHP]);
+
+  // round_result受信時のアニメーション
+  useEffect(() => {
+    if (phase === 'round_result' && lastRound) {
+      setIsAnimating(true);
+
+      const hpDiffPlayer = prevPlayerHP.current - playerHP;
+      const hpDiffNpc = prevNpcHP.current - npcHP;
+
+      if (hpDiffNpc > 0) {
+        setDamagePopup({ value: `-${hpDiffNpc}`, target: 'opponent' });
+      } else if (hpDiffPlayer > 0) {
+        setDamagePopup({ value: `-${hpDiffPlayer}`, target: 'player' });
+      }
+
+      prevPlayerHP.current = playerHP;
+      prevNpcHP.current = npcHP;
+
+      const timer1 = setTimeout(() => setDamagePopup(null), 1000);
+      const timer2 = setTimeout(() => setIsAnimating(false), 1200);
+      return () => { clearTimeout(timer1); clearTimeout(timer2); };
+    }
+  }, [phase, lastRound, playerHP, npcHP]);
+
+  // game_over受信時のアニメーション＆遷移
+  useEffect(() => {
+    if (phase === 'game_over' && gameOver) {
+      setIsAnimating(true);
+
+      const hpDiffPlayer = prevPlayerHP.current - playerHP;
+      const hpDiffNpc = prevNpcHP.current - npcHP;
+
+      if (hpDiffNpc > 0) {
+        setDamagePopup({ value: `-${hpDiffNpc}`, target: 'opponent' });
+      } else if (hpDiffPlayer > 0) {
+        setDamagePopup({ value: `-${hpDiffPlayer}`, target: 'player' });
+      }
+
+      const timer = setTimeout(() => {
+        navigate('/battle-result', {
+          state: {
+            result: gameOver.outcome === 'win' ? 'win' : 'lose',
+            rankPointDelta: gameOver.rankPointDelta,
+            coinReward: gameOver.coinReward,
+            stoneReward: gameOver.stoneReward,
+            from: '/battle',
+          },
+        });
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, gameOver, navigate, playerHP, npcHP]);
+
+  const handleHandSelect = (hand: Hand) => {
+    if (isAnimating || phase === 'game_over') return;
+    setPlayerHand(hand);
+    setIsAnimating(true);
+    sendHand(hand);
+  };
+
+  const handToEmoji = (h: Hand) => (h === 'G' ? '✊' : h === 'C' ? '✌️' : '✋');
 
   const getRarityColor = (rarity: string) => {
     const colors: Record<string, string> = {
@@ -102,7 +132,64 @@ const Battle: React.FC = () => {
     return colors[rarity] || '#ccc';
   };
 
-  if (!user) return null;
+  if (!user || !selectedChara) return null;
+
+  // ローディング表示
+  if (phase === 'idle' || phase === 'connecting' || phase === 'waiting') {
+    return (
+      <div className="battle-page">
+        <header className="app-header">
+          <div className="header-left">
+            <div className="header-user-name">{user.userName}</div>
+          </div>
+          <div className="header-center">
+            <h1>BATTLE</h1>
+          </div>
+          <div className="header-right">
+            <div className="header-stats-item">RP: {user.rp}</div>
+            <div className="header-stats-item">コイン: {user.coin}</div>
+            <div className="header-stats-item">石: {gachaStones}</div>
+          </div>
+        </header>
+        <div className="battle-arena" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ textAlign: 'center', color: '#e98f11', fontSize: '1.5rem', fontWeight: 700 }}>
+            対戦相手を探しています...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // エラー表示
+  if (phase === 'error') {
+    return (
+      <div className="battle-page">
+        <header className="app-header">
+          <div className="header-left">
+            <div className="header-user-name">{user.userName}</div>
+          </div>
+          <div className="header-center">
+            <h1>BATTLE</h1>
+          </div>
+          <div className="header-right" />
+        </header>
+        <div className="battle-arena" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ color: '#ff4444', fontSize: '1.2rem' }}>エラー: {error}</div>
+          <button className="home-button" onClick={() => navigate('/home')}>ホームへ戻る</button>
+        </div>
+      </div>
+    );
+  }
+
+  const npcCharaName = npcInfo?.charaName || '???';
+  const npcCharaRarity = npcInfo?.charaRarity || 'C';
+  const npcEquipName = npcInfo?.equipName || '???';
+  const npcEquipRarity = npcInfo?.equipRarity || 'C';
+  const npcSpecial = npcInfo?.specialType || 'G';
+
+  const winner = lastRound
+    ? (prevPlayerHP.current > playerHP ? 'opponent' : prevNpcHP.current > npcHP ? 'player' : 'draw')
+    : null;
 
   return (
     <div className="battle-page">
@@ -124,37 +211,37 @@ const Battle: React.FC = () => {
         {/* Opponent Side */}
         <div className="battle-side opponent">
           <div className="chara-plate">
-            <div className="chara-name">{opponent.chara.name}</div>
+            <div className="chara-name">{npcCharaName}</div>
             <div className="hp-bar-container">
-              <div className="hp-bar" style={{ width: `${(opponentHp / (opponent.chara.hp + (opponent.equip?.bonusAtk || 0))) * 100}%` }}></div>
+              <div className="hp-bar" style={{ width: `${initialNpcHP > 0 ? (npcHP / initialNpcHP) * 100 : 0}%` }}></div>
             </div>
-            <div className="hp-text">{opponentHp} HP</div>
+            <div className="hp-text">{npcHP} HP</div>
           </div>
-          
+
           <div className="battle-cards-container">
-            <div className={`battle-card chara ${isAnimating && lastResult.winner === 'opponent' ? 'attacking' : ''}`}
-                 style={{ borderColor: getRarityColor(opponent.chara.rarity) }}>
+            <div className={`battle-card chara ${isAnimating && winner === 'opponent' ? 'attacking' : ''}`}
+                 style={{ borderColor: getRarityColor(npcCharaRarity) }}>
               <div className="battle-card-image">Chara</div>
-              <div className="battle-card-name">{opponent.chara.name}</div>
-              {damagePopup?.target === 'opponent' && <div className="damage-popup">-{damagePopup.value}</div>}
+              <div className="battle-card-name">{npcCharaName}</div>
+              {damagePopup?.target === 'opponent' && <div className="damage-popup">{damagePopup.value}</div>}
             </div>
             <div className="battle-card equip"
-                 style={{ borderColor: getRarityColor(opponent.equip.rarity) }}>
+                 style={{ borderColor: getRarityColor(npcEquipRarity) }}>
               <div className="battle-card-image mini">Equip</div>
-              <div className="battle-card-name mini">{opponent.equip.name}</div>
+              <div className="battle-card-name mini">{npcEquipName}</div>
             </div>
           </div>
         </div>
 
         <div className="battle-center">
-          {isAnimating ? (
+          {isAnimating && playerHand && lastRound ? (
             <div className="hand-display">
-              <div className="hand player-hand">{handToEmoji(lastResult.playerHand)}</div>
+              <div className="hand player-hand">{handToEmoji(playerHand)}</div>
               <div className="vs-text">VS</div>
-              <div className="hand opponent-hand">{handToEmoji(lastResult.opponentHand)}</div>
+              <div className="hand opponent-hand">{handToEmoji(lastRound.npcHand)}</div>
             </div>
           ) : (
-            playerHp > 0 && opponentHp > 0 && (
+            playerHP > 0 && npcHP > 0 && phase !== 'game_over' && (
               <div className="choose-hand-text">CHOOSE YOUR HAND!</div>
             )
           )}
@@ -168,20 +255,20 @@ const Battle: React.FC = () => {
               <div className="battle-card-image mini">Equip</div>
               <div className="battle-card-name mini">{selectedEquip.name}</div>
             </div>
-            <div className={`battle-card chara ${isAnimating && lastResult.winner === 'player' ? 'attacking' : ''}`}
+            <div className={`battle-card chara ${isAnimating && winner === 'player' ? 'attacking' : ''}`}
                  style={{ borderColor: getRarityColor(selectedChara.rarity) }}>
               <div className="battle-card-image">Chara</div>
               <div className="battle-card-name">{selectedChara.name}</div>
-              {damagePopup?.target === 'player' && <div className="damage-popup">-{damagePopup.value}</div>}
+              {damagePopup?.target === 'player' && <div className="damage-popup">{damagePopup.value}</div>}
             </div>
           </div>
 
           <div className="chara-plate">
             <div className="chara-name">{selectedChara.name}</div>
             <div className="hp-bar-container">
-              <div className="hp-bar" style={{ width: `${(playerHp / (selectedChara.hp + (selectedEquip?.bonusHp || 0))) * 100}%` }}></div>
+              <div className="hp-bar" style={{ width: `${initialPlayerHP > 0 ? (playerHP / initialPlayerHP) * 100 : 0}%` }}></div>
             </div>
-            <div className="hp-text">{playerHp} HP</div>
+            <div className="hp-text">{playerHP} HP</div>
           </div>
         </div>
       </div>
@@ -189,11 +276,11 @@ const Battle: React.FC = () => {
       <div className="battle-ui">
         <div className="hand-selector">
           {(['G', 'C', 'P'] as Hand[]).map(h => (
-            <button 
-              key={h} 
+            <button
+              key={h}
               className={`hand-button ${selectedChara.specialType === h ? 'special' : ''}`}
               onClick={() => handleHandSelect(h)}
-              disabled={isAnimating}
+              disabled={isAnimating || phase === 'game_over'}
             >
               <span className="hand-icon">{handToEmoji(h)}</span>
               <span className="hand-label">{h === 'G' ? 'グー' : h === 'C' ? 'チョキ' : 'パー'}</span>

@@ -82,22 +82,6 @@ export const apiService = {
     });
   },
 
-  // バトルスタート
-  startBattle: async (data: any): Promise<any> => {
-    return request<any>(`/battle`, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
-  },
-
-  // マッチング部屋に参加
-  joinMatching: async (data: any): Promise<any> => {
-    return request<any>(`/matching`, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
-  },
-
   // ユーザー情報を削除
   deleteUser: async (userId: string): Promise<boolean> => {
     try {
