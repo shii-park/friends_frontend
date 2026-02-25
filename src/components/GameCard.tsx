@@ -48,6 +48,10 @@ const GameCard: React.FC<GameCardProps> = ({ card, onClick, isMini = false }) =>
 
   const rarityColor = getRarityColor(card.rarity);
 
+  const getImageUrl = (url: string) => {
+    return new URL(`../assets/${url}`, import.meta.url).href;
+  };
+
   return (
     <motion.div
       className={`game-card-wrapper ${isMini ? 'mini' : ''} ${isSSR ? 'ssr-wrapper' : ''}`}
@@ -69,8 +73,14 @@ const GameCard: React.FC<GameCardProps> = ({ card, onClick, isMini = false }) =>
         whileTap={{ scale: 0.95 }}
       >
         <div style={{ transform: "translateZ(30px)", position: 'relative', zIndex: 2 }}>
-          <div className="card-image-placeholder">
-            {isChara ? 'Chara' : 'Equip'}
+          <div className="card-image-container">
+            {card.cardIconUrl ? (
+              <img src={getImageUrl(card.cardIconUrl)} alt={card.name} className="card-icon" />
+            ) : (
+              <div className="card-image-placeholder">
+                {isChara ? 'Chara' : 'Equip'}
+              </div>
+            )}
           </div>
           <div className="card-info">
             <div className="card-name">{card.name}</div>

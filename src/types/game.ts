@@ -4,6 +4,7 @@ export interface Card {
   cardId: string;
   name: string;
   rarity: Rarity;
+  cardIconUrl?: string;
   acquiredDate: string; // yyyy-mm-dd-MM:SS
   level: number;
   exp: number;
