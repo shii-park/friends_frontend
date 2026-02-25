@@ -14,7 +14,7 @@ const Home: React.FC = () => {
     <div className="home-page">
       <div className="home-main-container">
         <div className="home-title-container">
-          <h1 className="home-large-title">FRIENDS GAME</h1>
+          <h1 className="home-large-title">フリキング</h1>
           <div className="home-title-sub-info">
             <div className="home-user-info">
               <div className="home-user-name">{user.userName}</div>

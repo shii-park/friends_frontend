@@ -30,7 +30,7 @@ const Title: React.FC = () => {
   return (
     <div className="title-page">
       <div className="title-container">
-        <h1 className="game-title">Friends Game</h1>
+        <h1 className="game-title">フリキング</h1>
         
         {!user && (
           <div className="login-box">
