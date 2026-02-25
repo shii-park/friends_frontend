@@ -13,8 +13,8 @@
 
 /* Base Styles */
 :root {
-  --primary: #CCFF00; /* Neon Lime */
-  --primary-dark: #AACC00;
+  --primary: #e98f11; /* Neon Lime */
+  --primary-dark: #7e5503;
   --bg-dark: #1A1A1A; /* Deep Black Brand Color */
   --bg-panel: #222222; /* Slightly lighter black for depth */
   --text-main: #FFFFFF;
@@ -134,6 +134,14 @@ body {
   text-shadow: 5px 5px 0px rgba(0,0,0,1);
 }
 
+.game-logo {
+  width: 90vw;
+  max-width: 1000px;
+  height: auto;
+  margin-bottom: 3rem;
+  filter: drop-shadow(15px 15px 0px rgba(0,0,0,1));
+}
+
 .username-input {
   padding: 1rem 1.5rem;
   font-size: 1.2rem;
@@ -237,6 +245,14 @@ body {
   text-align: center;
 }
 
+.home-logo {
+  width: 60vw;
+  max-width: 600px;
+  height: auto;
+  filter: drop-shadow(8px 8px 0px rgba(0,0,0,0.5));
+  margin-bottom: 1rem;
+}
+
 .home-menu {
   flex: 1; /* 残りのスペースをすべて使う */
   margin-top: 2rem;
@@ -278,7 +294,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+  box-shadow: 10px 10px 0px var(--primary-dark); /* 暗いオレンジに変更 */
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -353,7 +369,7 @@ body {
 
 .menu-card:hover {
   transform: scale(1.05); /* 回転を削除し、拡大のみに */
-  box-shadow: 15px 15px 0px var(--primary) !important;
+  box-shadow: 15px 15px 0px var(--primary-dark) !important;
   z-index: 10;
 }
 

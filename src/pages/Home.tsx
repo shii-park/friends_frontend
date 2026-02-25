@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
+import homeLogo from '../assets/freeking.png';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Home: React.FC = () => {
     <div className="home-page">
       <div className="home-main-container">
         <div className="home-title-container">
-          <h1 className="home-large-title">フリキング</h1>
+          <img src={homeLogo} alt="フリキング" className="home-logo" />
           <div className="home-title-sub-info">
             <div className="home-user-info">
               <div className="home-user-name">{user.userName}</div>
