@@ -32,14 +32,15 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const [userData, storageData] = await Promise.all([
         apiService.getUser(userId).catch(e => { console.error('User API Error:', e); return null; }),
-        apiService.getStorage().catch(e => { console.error('Storage API Error:', e); return { charas: [], equips: [], stones: 0 }; })
+        apiService.getStorage().catch(e => { console.error('Storage API Error:', e); return { charas: [], equips: [] }; })
       ]);
-      
+
       if (userData) {
         setUser(userData);
+        // gachaStoneはユーザーデータから取得
+        setGachaStones(userData.gachaStone ?? 0);
         setOwnedCharas(storageData.charas || []);
         setOwnedEquips(storageData.equips || []);
-        setGachaStones(storageData.stones || 0);
       } else {
         setUser(null);
       }
@@ -102,12 +103,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const levelUpCard = async (cardId: string, _type: 'chara' | 'equip') => {
     setIsLoading(true);
     try {
-      const result = await apiService.upgradeCard(cardId);
-      if (result.success) {
-        await refreshUserData();
-        return { success: true };
-      }
-      return { success: false, message: '強化に失敗しました' };
+      await apiService.upgradeCard(cardId);
+      await refreshUserData();
+      return { success: true };
     } catch (error: any) {
       return { success: false, message: error.message };
     } finally {
@@ -118,9 +116,19 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const drawGacha = async (count: number): Promise<(Chara | Equip)[]> => {
     setIsLoading(true);
     try {
-      const result = await apiService.drawGacha(count);
-      await refreshUserData(); 
-      return result.newItems;
+      // ガチャを実行してinstanceIDと残り石数を取得
+      const drawResult = await apiService.drawGacha(count);
+      const newInstanceIdSet = new Set(drawResult.newInstanceIDs);
+
+      // ストレージを最新化して新規カードを特定
+      const storageData = await apiService.getStorage();
+      setOwnedCharas(storageData.charas || []);
+      setOwnedEquips(storageData.equips || []);
+      setGachaStones(drawResult.remainingStones);
+
+      // instanceIDで新規取得カードだけ返す（cardId = instanceID）
+      const allCards: (Chara | Equip)[] = [...storageData.charas, ...storageData.equips];
+      return allCards.filter(card => newInstanceIdSet.has(card.cardId));
     } catch (error) {
       console.error('Gacha failed:', error);
       return [];
@@ -130,13 +138,13 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <UserContext.Provider value={{ 
-      user, ownedCharas, ownedEquips, gachaStones, isLoading, 
-      register, login, updateStats, refreshUserData, drawGacha, levelUpCard 
+    <UserContext.Provider value={{
+      user, ownedCharas, ownedEquips, gachaStones, isLoading,
+      register, login, updateStats, refreshUserData, drawGacha, levelUpCard
     }}>
       {!isInitialized ? (
-        <div style={{ 
-          height: '100vh', width: '100vw', backgroundColor: '#1A1A1A', 
+        <div style={{
+          height: '100vh', width: '100vw', backgroundColor: '#1A1A1A',
           display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#e98f11',
           fontWeight: 900, fontSize: '2rem', letterSpacing: '4px'
         }}>

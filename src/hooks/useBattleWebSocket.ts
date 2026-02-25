@@ -94,6 +94,7 @@ export function useBattleWebSocket() {
   }, []);
 
   const connect = useCallback(() => {
+    if (wsRef.current) return; // 既に接続中の場合はスキップ（StrictMode対策）
     const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
     const wsUrl = baseUrl.replace(/^http/, 'ws') + '/battle/ws';
 
@@ -102,17 +103,23 @@ export function useBattleWebSocket() {
     wsRef.current = ws;
 
     ws.onopen = () => {
+      if (wsRef.current !== ws) return; // 古いWSのイベントを無視
       setPhase('waiting');
     };
 
-    ws.onmessage = handleMessage;
+    ws.onmessage = (event) => {
+      if (wsRef.current !== ws) return; // 古いWSのイベントを無視
+      handleMessage(event);
+    };
 
     ws.onerror = () => {
+      if (wsRef.current !== ws) return; // 古いWSのイベントを無視（StrictMode対策）
       setError('WebSocket接続エラー');
       setPhase('error');
     };
 
     ws.onclose = () => {
+      if (wsRef.current !== ws) return; // 古いWSのイベントを無視
       wsRef.current = null;
     };
   }, [handleMessage]);

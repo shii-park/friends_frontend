@@ -55,4 +55,5 @@ export interface User {
   registeredDate: string;
   rp: number;
   coin: number;
+  gachaStone: number;
 }

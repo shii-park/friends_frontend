@@ -1,4 +1,5 @@
-import type { User, Chara, Equip } from '../types/game';
+import type { User, Chara, Equip, Rarity } from '../types/game';
+import { SPECIAL_FROM_BACKEND } from '../types/game';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://friends-app-backend.gentlecoast-82b23d45.japanwest.azurecontainerapps.io';
 
@@ -29,6 +30,108 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return response.json();
 }
 
+// --- バックエンドのレスポンス型 ---
+
+interface BackendCardMaster {
+  cardID: number;
+  cardName: string;
+  cardKind: number; // 0=equip, 1=character
+  rarity: string;
+  cardIconURL: string;
+}
+
+interface BackendCharacterDetail {
+  characterID: string;
+  hp: number;
+  atk: number;
+  tech: number;
+  initHP: number;
+  initATK: number;
+  initTECH: number;
+  maxHP: number;
+  maxATK: number;
+  maxTECH: number;
+  specialType: string; // "rock" | "paper" | "scissors"
+}
+
+interface BackendEquipmentDetail {
+  equipmentID: string;
+  bonusHP: number;
+  bonusATK: number;
+  bonusTECH: number;
+  initBonusHP: number;
+  initBonusATK: number;
+  initBonusTECH: number;
+  maxBonusHP: number;
+  maxBonusATK: number;
+  maxBonusTECH: number;
+  buffEffect?: string;
+}
+
+interface BackendCardInstanceDetail {
+  instanceID: string;
+  level: number;
+  card: BackendCardMaster;
+  character?: BackendCharacterDetail;
+  equipment?: BackendEquipmentDetail;
+}
+
+interface BackendDrawResult {
+  instanceID: string;
+  cardID: number;
+  kind: string;
+  rarity: string;
+  isPickup: boolean;
+}
+
+// --- 変換関数 ---
+
+function mapToChara(item: BackendCardInstanceDetail): Chara {
+  const ch = item.character!;
+  return {
+    cardId: item.instanceID,
+    name: item.card.cardName,
+    rarity: item.card.rarity as Rarity,
+    acquiredDate: '',
+    level: item.level,
+    exp: 0,
+    charaId: ch.characterID,
+    hp: ch.hp,
+    atk: ch.atk,
+    tech: ch.tech,
+    initHp: ch.initHP,
+    initAtk: ch.initATK,
+    initTech: ch.initTECH,
+    maxHp: ch.maxHP,
+    maxAtk: ch.maxATK,
+    maxTech: ch.maxTECH,
+    specialType: SPECIAL_FROM_BACKEND[ch.specialType] || 'G',
+  };
+}
+
+function mapToEquip(item: BackendCardInstanceDetail): Equip {
+  const eq = item.equipment!;
+  return {
+    cardId: item.instanceID,
+    name: item.card.cardName,
+    rarity: item.card.rarity as Rarity,
+    acquiredDate: '',
+    level: item.level,
+    exp: 0,
+    equipId: eq.equipmentID,
+    bonusHp: eq.bonusHP,
+    bonusAtk: eq.bonusATK,
+    bonusTech: eq.bonusTECH,
+    initBonusHp: eq.initBonusHP,
+    initBonusAtk: eq.initBonusATK,
+    initBonusTech: eq.initBonusTECH,
+    maxBonusHp: eq.maxBonusHP,
+    maxBonusAtk: eq.maxBonusATK,
+    maxBonusTech: eq.maxBonusTECH,
+    buffEffect: eq.buffEffect,
+  };
+}
+
 export const apiService = {
   // 疎通確認
   ping: async (): Promise<string> => {
@@ -57,9 +160,19 @@ export const apiService = {
     });
   },
 
-  // ストレージ（所持カード）の取得
-  getStorage: async (): Promise<{ charas: Chara[], equips: Equip[], stones: number }> => {
-    return request<{ charas: Chara[], equips: Equip[], stones: number }>(`/storage`);
+  // ストレージ（所持カード詳細）の取得
+  getStorage: async (): Promise<{ charas: Chara[], equips: Equip[] }> => {
+    const data = await request<BackendCardInstanceDetail[]>(`/storage/detail`);
+    const charas: Chara[] = [];
+    const equips: Equip[] = [];
+    for (const item of data) {
+      if (item.character) {
+        charas.push(mapToChara(item));
+      } else if (item.equipment) {
+        equips.push(mapToEquip(item));
+      }
+    }
+    return { charas, equips };
   },
 
   // ガチャのラインナップ取得
@@ -67,18 +180,23 @@ export const apiService = {
     return request<any>(`/gacha/lineup`);
   },
 
-  // ガチャを引く
-  drawGacha: async (count: number): Promise<{ newItems: (Chara | Equip)[], remainingStones: number }> => {
-    return request<{ newItems: (Chara | Equip)[], remainingStones: number }>(`/gacha/draw`, {
+  // ガチャを引く（instanceIDリストと残り石数を返す）
+  drawGacha: async (count: number): Promise<{ newInstanceIDs: string[], remainingStones: number }> => {
+    const res = await request<{ gachaStone: number, results: BackendDrawResult[] }>(`/gacha/draw`, {
       method: 'POST',
       body: JSON.stringify({ count })
     });
+    return {
+      newInstanceIDs: res.results.map(r => r.instanceID),
+      remainingStones: res.gachaStone,
+    };
   },
 
   // カードを強化する
-  upgradeCard: async (cardId: string): Promise<{ success: boolean, updatedCard: Chara | Equip, newCoin: number }> => {
-    return request<{ success: boolean, updatedCard: Chara | Equip, newCoin: number }>(`/card/${cardId}/upgrade`, {
-      method: 'POST'
+  upgradeCard: async (instanceID: string): Promise<{ newLevel: number, cost: number }> => {
+    return request<{ newLevel: number, cost: number }>(`/card/${instanceID}/enhancement`, {
+      method: 'POST',
+      body: JSON.stringify({ times: 1 })
     });
   },
 

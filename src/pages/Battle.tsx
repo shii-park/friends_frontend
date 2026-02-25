@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
 import { useBattleWebSocket } from '../hooks/useBattleWebSocket';
 import type { FrontendHand } from '../types/game';
-import { SPECIAL_FROM_BACKEND } from '../types/game';
 
 type Hand = FrontendHand;
 
@@ -32,19 +31,14 @@ const Battle: React.FC = () => {
   const [playerHand, setPlayerHand] = useState<Hand | null>(null);
   const [initialPlayerHP, setInitialPlayerHP] = useState(0);
   const [initialNpcHP, setInitialNpcHP] = useState(0);
+  const [roundWinner, setRoundWinner] = useState<'player' | 'opponent' | 'draw' | null>(null);
   const prevPlayerHP = useRef(0);
   const prevNpcHP = useRef(0);
-  const hasConnected = useRef(false);
 
   // mount時にWebSocket接続
   useEffect(() => {
-    if (!hasConnected.current && selectedChara) {
-      hasConnected.current = true;
-      connect();
-    }
-    return () => {
-      disconnect();
-    };
+    if (selectedChara) connect();
+    return () => { disconnect(); };
   }, []);
 
   // 接続完了後にバトル開始
@@ -67,20 +61,24 @@ const Battle: React.FC = () => {
   // round_result受信時のアニメーション
   useEffect(() => {
     if (phase === 'round_result' && lastRound) {
-      setIsAnimating(true);
-
       const hpDiffPlayer = prevPlayerHP.current - playerHP;
       const hpDiffNpc = prevNpcHP.current - npcHP;
 
+      // winnerを先にstateに保存してからrefを更新
       if (hpDiffNpc > 0) {
+        setRoundWinner('player');
         setDamagePopup({ value: `-${hpDiffNpc}`, target: 'opponent' });
       } else if (hpDiffPlayer > 0) {
+        setRoundWinner('opponent');
         setDamagePopup({ value: `-${hpDiffPlayer}`, target: 'player' });
+      } else {
+        setRoundWinner('draw');
       }
 
       prevPlayerHP.current = playerHP;
       prevNpcHP.current = npcHP;
 
+      setIsAnimating(true);
       const timer1 = setTimeout(() => setDamagePopup(null), 1000);
       const timer2 = setTimeout(() => setIsAnimating(false), 1200);
       return () => { clearTimeout(timer1); clearTimeout(timer2); };
@@ -90,16 +88,17 @@ const Battle: React.FC = () => {
   // game_over受信時のアニメーション＆遷移
   useEffect(() => {
     if (phase === 'game_over' && gameOver) {
-      setIsAnimating(true);
-
       const hpDiffPlayer = prevPlayerHP.current - playerHP;
       const hpDiffNpc = prevNpcHP.current - npcHP;
 
       if (hpDiffNpc > 0) {
+        setRoundWinner('player');
         setDamagePopup({ value: `-${hpDiffNpc}`, target: 'opponent' });
       } else if (hpDiffPlayer > 0) {
+        setRoundWinner('opponent');
         setDamagePopup({ value: `-${hpDiffPlayer}`, target: 'player' });
       }
+      setIsAnimating(true);
 
       const timer = setTimeout(() => {
         navigate('/battle-result', {
@@ -185,11 +184,6 @@ const Battle: React.FC = () => {
   const npcCharaRarity = npcInfo?.charaRarity || 'C';
   const npcEquipName = npcInfo?.equipName || '???';
   const npcEquipRarity = npcInfo?.equipRarity || 'C';
-  const npcSpecial = npcInfo?.specialType || 'G';
-
-  const winner = lastRound
-    ? (prevPlayerHP.current > playerHP ? 'opponent' : prevNpcHP.current > npcHP ? 'player' : 'draw')
-    : null;
 
   return (
     <div className="battle-page">
@@ -219,7 +213,7 @@ const Battle: React.FC = () => {
           </div>
 
           <div className="battle-cards-container">
-            <div className={`battle-card chara ${isAnimating && winner === 'opponent' ? 'attacking' : ''}`}
+            <div className={`battle-card chara ${isAnimating && roundWinner === 'opponent' ? 'attacking' : ''}`}
                  style={{ borderColor: getRarityColor(npcCharaRarity) }}>
               <div className="battle-card-image">Chara</div>
               <div className="battle-card-name">{npcCharaName}</div>
@@ -255,7 +249,7 @@ const Battle: React.FC = () => {
               <div className="battle-card-image mini">Equip</div>
               <div className="battle-card-name mini">{selectedEquip.name}</div>
             </div>
-            <div className={`battle-card chara ${isAnimating && winner === 'player' ? 'attacking' : ''}`}
+            <div className={`battle-card chara ${isAnimating && roundWinner === 'player' ? 'attacking' : ''}`}
                  style={{ borderColor: getRarityColor(selectedChara.rarity) }}>
               <div className="battle-card-image">Chara</div>
               <div className="battle-card-name">{selectedChara.name}</div>
