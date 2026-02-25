@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
+import GameCard from '../components/GameCard';
 import type { Chara, Equip } from '../types/game';
 
 const Storage: React.FC = () => {
@@ -11,36 +12,17 @@ const Storage: React.FC = () => {
 
   if (!user) {
     return (
-      <div style={{ 
-        color: '#333', 
-        padding: '50px', 
-        backgroundColor: '#fff', 
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '20px'
-      }}>
+      <div className="error-container">
         <h2>ユーザー情報が見つかりません</h2>
         <p>タイトル画面からユーザー名を入力して「始める」を押してください。</p>
-        <button 
-          onClick={() => navigate('/')}
-          style={{ padding: '10px 20px', borderRadius: '8px', cursor: 'pointer' }}
-        >
-          タイトルへ戻る
-        </button>
+        <button onClick={() => navigate('/')}>タイトルへ戻る</button>
       </div>
     );
   }
 
   const getRarityColor = (rarity: string) => {
     const colors: Record<string, string> = {
-      C: '#a7b0a0',
-      UC: '#baed82',
-      R: '#11c9c3',
-      SR: '#004ef5',
-      SSR: '#f369ce',
+      C: '#a7b0a0', UC: '#baed82', R: '#11c9c3', SR: '#004ef5', SSR: '#f369ce',
     };
     return colors[rarity] || '#ccc';
   };
@@ -84,18 +66,8 @@ const Storage: React.FC = () => {
 
       <div className="storage-tabs-container">
         <div className="tab-buttons">
-          <button 
-            className={`tab-button ${tab === 'chara' ? 'active' : ''}`}
-            onClick={() => setTab('chara')}
-          >
-            キャラクター
-          </button>
-          <button 
-            className={`tab-button ${tab === 'equip' ? 'active' : ''}`}
-            onClick={() => setTab('equip')}
-          >
-            装備
-          </button>
+          <button className={`tab-button ${tab === 'chara' ? 'active' : ''}`} onClick={() => setTab('chara')}>キャラクター</button>
+          <button className={`tab-button ${tab === 'equip' ? 'active' : ''}`} onClick={() => setTab('equip')}>装備</button>
         </div>
       </div>
 
@@ -103,43 +75,19 @@ const Storage: React.FC = () => {
         <div className="card-grid">
           {tab === 'chara' ? (
             ownedCharas.map((chara: Chara) => (
-              <div 
+              <GameCard 
                 key={chara.cardId} 
-                className="storage-card chara-card"
-                style={{ borderColor: getRarityColor(chara.rarity), '--rarity-color': getRarityColor(chara.rarity) } as React.CSSProperties}
+                card={chara}
                 onClick={() => setSelectedCard({ id: chara.cardId, type: 'chara' })}
-              >
-                <div className="card-image-placeholder">Chara</div>
-                <div className="card-info">
-                  <div className="card-name">{chara.name}</div>
-                  <div className="card-level">Lv.{chara.level}</div>
-                  <div className="card-stats">
-                    <span>HP: {chara.hp}</span>
-                    <span>ATK: {chara.atk}</span>
-                    <span>TECH: {chara.tech}</span>
-                  </div>
-                </div>
-              </div>
+              />
             ))
           ) : (
             ownedEquips.map((equip: Equip) => (
-              <div 
+              <GameCard 
                 key={equip.cardId} 
-                className="storage-card equip-card"
-                style={{ borderColor: getRarityColor(equip.rarity), '--rarity-color': getRarityColor(equip.rarity) } as React.CSSProperties}
+                card={equip}
                 onClick={() => setSelectedCard({ id: equip.cardId, type: 'equip' })}
-              >
-                <div className="card-image-placeholder">Equip</div>
-                <div className="card-info">
-                  <div className="card-name">{equip.name}</div>
-                  <div className="card-level">Lv.{equip.level}</div>
-                  <div className="card-stats">
-                    <span>HP: +{equip.bonusHp}</span>
-                    <span>ATK: +{equip.bonusAtk}</span>
-                    <span>TECH: +{equip.bonusTech}</span>
-                  </div>
-                </div>
-              </div>
+              />
             ))
           )}
         </div>
@@ -156,7 +104,7 @@ const Storage: React.FC = () => {
             <h2>カード強化</h2>
             <div className="modal-card-info">
               <div className="modal-card-visual">
-                <div className="modal-image-placeholder">{selectedCard.type === 'chara' ? 'Chara' : 'Equip'}</div>
+                <GameCard card={currentCard} />
               </div>
               <div className="modal-card-details">
                 <h3>{currentCard.name}</h3>
@@ -176,16 +124,9 @@ const Storage: React.FC = () => {
                 )}
               </div>
             </div>
-            
             <div className="modal-actions">
-              <p className="upgrade-cost">
-                消費コイン: {currentCard.level < 10 ? costs[currentCard.level + 1] : '-'}
-              </p>
-              <button 
-                className="upgrade-button" 
-                disabled={isLoading || currentCard.level >= 10 || user.coin < costs[currentCard.level + 1]}
-                onClick={handleLevelUp}
-              >
+              <p className="upgrade-cost">消費コイン: {currentCard.level < 10 ? costs[currentCard.level + 1] : '-'}</p>
+              <button className="upgrade-button" disabled={isLoading || currentCard.level >= 10 || user.coin < costs[currentCard.level + 1]} onClick={handleLevelUp}>
                 {isLoading ? '強化中...' : '強化する'}
               </button>
               <button className="close-button" onClick={() => setSelectedCard(null)}>閉じる</button>
