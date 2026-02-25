@@ -7,23 +7,16 @@ import type { Chara, Equip } from '../types/game';
 const BattlePrepare: React.FC = () => {
   const navigate = useNavigate();
   const { user, ownedCharas, ownedEquips } = useUser();
-  
+
   const [selectedChara, setSelectedChara] = useState<Chara | null>(null);
   const [selectedEquip, setSelectedEquip] = useState<Equip | null>(null);
   const [step, setStep] = useState<1 | 2>(1);
 
   if (!user) return null;
 
-  // 対戦相手のモックデータ
-  const opponent = {
-    name: '強敵ライバル',
-    chara: { name: '伝説の剣士', rarity: 'SSR', level: 10, hp: 800, atk: 80, tech: 50 } as Chara,
-    equip: { name: '神殺しの剣', rarity: 'SSR', level: 10, bonusHp: 50, bonusAtk: 100, bonusTech: 30 } as Equip
-  };
-
   const handleStartBattle = () => {
     if (selectedChara && selectedEquip) {
-      navigate('/battle', { state: { selectedChara, selectedEquip, opponent, from: '/battle-prepare' } });
+      navigate('/battle', { state: { selectedChara, selectedEquip, from: '/battle-prepare' } });
     }
   };
 
@@ -43,14 +36,14 @@ const BattlePrepare: React.FC = () => {
       <main className="battle-prepare-content">
         <div className="selection-section">
           <div className="step-indicator">
-            <span 
-              className={step === 1 ? 'active' : ''} 
+            <span
+              className={step === 1 ? 'active' : ''}
               onClick={() => setStep(1)}
             >
               1. キャラクター選択
             </span>
-            <span 
-              className={step === 2 ? 'active' : ''} 
+            <span
+              className={step === 2 ? 'active' : ''}
               onClick={() => setStep(2)}
             >
               2. 装備選択
@@ -61,8 +54,8 @@ const BattlePrepare: React.FC = () => {
             {step === 1 ? (
               <div className="card-grid mini">
                 {ownedCharas.map((chara) => (
-                  <GameCard 
-                    key={chara.cardId} 
+                  <GameCard
+                    key={chara.cardId}
                     card={chara}
                     isMini={true}
                     onClick={() => { setSelectedChara(chara); setStep(2); }}
@@ -72,8 +65,8 @@ const BattlePrepare: React.FC = () => {
             ) : (
               <div className="card-grid mini">
                 {ownedEquips.map((equip) => (
-                  <GameCard 
-                    key={equip.cardId} 
+                  <GameCard
+                    key={equip.cardId}
                     card={equip}
                     isMini={true}
                     onClick={() => setSelectedEquip(equip)}
@@ -102,15 +95,12 @@ const BattlePrepare: React.FC = () => {
 
             <div className="opponent-side">
               <h3>ENEMY</h3>
-              <div className="preview-card-holder">
-                <GameCard card={opponent.chara} />
-                <div style={{ marginTop: '10px' }}><GameCard card={opponent.equip} isMini /></div>
-              </div>
+              <div className="preview-card-placeholder">???（ランダムで選ばれます）</div>
             </div>
           </div>
 
-          <button 
-            className="battle-start-button" 
+          <button
+            className="battle-start-button"
             disabled={!selectedChara || !selectedEquip}
             onClick={handleStartBattle}
           >
