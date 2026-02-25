@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
+import titleLogo from '../assets/freeking.png';
 
 const Title: React.FC = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const Title: React.FC = () => {
   return (
     <div className="title-page">
       <div className="title-container">
-        <h1 className="game-title">Friends Game</h1>
+        <img src={titleLogo} alt="フリキング" className="game-logo" />
         
         {!user && (
           <div className="login-box">

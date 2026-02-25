@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
+import GameCard from '../components/GameCard';
 import type { Chara, Equip } from '../types/game';
 
 const BattlePrepare: React.FC = () => {
@@ -16,21 +17,14 @@ const BattlePrepare: React.FC = () => {
   // 対戦相手のモックデータ
   const opponent = {
     name: '強敵ライバル',
-    chara: { name: '伝説の剣士', rarity: 'SSR', level: 10, hp: 800, atk: 80, tech: 50 },
-    equip: { name: '神殺しの剣', rarity: 'SSR', level: 10, bonusHp: 50, bonusAtk: 100, bonusTech: 30 }
+    chara: { name: '伝説の剣士', rarity: 'SSR', level: 10, hp: 800, atk: 80, tech: 50 } as Chara,
+    equip: { name: '神殺しの剣', rarity: 'SSR', level: 10, bonusHp: 50, bonusAtk: 100, bonusTech: 30 } as Equip
   };
 
   const handleStartBattle = () => {
     if (selectedChara && selectedEquip) {
       navigate('/battle', { state: { selectedChara, selectedEquip, opponent, from: '/battle-prepare' } });
     }
-  };
-
-  const getRarityColor = (rarity: string) => {
-    const colors: Record<string, string> = {
-      C: '#a7b0a0', UC: '#baed82', R: '#11c9c3', SR: '#004ef5', SSR: '#f369ce',
-    };
-    return colors[rarity] || '#ccc';
   };
 
   return (
@@ -43,7 +37,6 @@ const BattlePrepare: React.FC = () => {
           <h1>バトル準備</h1>
         </div>
         <div className="header-right">
-          {/* 追加のステータスがあればここに表示 */}
         </div>
       </header>
 
@@ -68,46 +61,23 @@ const BattlePrepare: React.FC = () => {
             {step === 1 ? (
               <div className="card-grid mini">
                 {ownedCharas.map((chara) => (
-                  <div 
+                  <GameCard 
                     key={chara.cardId} 
-                    className={`storage-card ${selectedChara?.cardId === chara.cardId ? 'selected' : ''}`}
-                    style={{ borderColor: getRarityColor(chara.rarity), '--rarity-color': getRarityColor(chara.rarity) } as React.CSSProperties}
+                    card={chara}
+                    isMini={true}
                     onClick={() => { setSelectedChara(chara); setStep(2); }}
-                  >
-                    <div className="card-image-placeholder">Chara</div>
-                    <div className="card-info">
-                      <div className="card-name">{chara.name}</div>
-                      <div className="card-level">Lv.{chara.level}</div>
-                                        <div className="card-stats">
-                                          <span>HP: {chara.hp}</span>
-                                          <span>ATK: {chara.atk}</span>
-                                          <span>TECH: {chara.tech}</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : (
-                                <div className="card-grid mini">
-                                  {ownedEquips.map((equip) => (
-                                    <div 
-                                      key={equip.cardId} 
-                                      className={`storage-card ${selectedEquip?.cardId === equip.cardId ? 'selected' : ''}`}
-                                      style={{ borderColor: getRarityColor(equip.rarity), '--rarity-color': getRarityColor(equip.rarity) } as React.CSSProperties}
-                                      onClick={() => setSelectedEquip(equip)}
-                                    >
-                                      <div className="card-image-placeholder">Equip</div>
-                                      <div className="card-info">
-                                        <div className="card-name">{equip.name}</div>
-                                        <div className="card-level">Lv.{equip.level}</div>
-                                        <div className="card-stats">
-                                          <span>HP: +{equip.bonusHp}</span>
-                                          <span>ATK: +{equip.bonusAtk}</span>
-                                          <span>TECH: +{equip.bonusTech}</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                      
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="card-grid mini">
+                {ownedEquips.map((equip) => (
+                  <GameCard 
+                    key={equip.cardId} 
+                    card={equip}
+                    isMini={true}
+                    onClick={() => setSelectedEquip(equip)}
+                  />
                 ))}
               </div>
             )}
@@ -118,35 +88,23 @@ const BattlePrepare: React.FC = () => {
           <div className="vs-container">
             <div className="player-side">
               <h3>YOU</h3>
-              <div className="preview-card">
-                {selectedChara ? (
-                  <>
-                    <div className="preview-chara-name">{selectedChara.name}</div>
-                    <div className="preview-equip-name">{selectedEquip ? `E: ${selectedEquip.name}` : '装備未選択'}</div>
-                    <div className="preview-stats-total">
-                      <div>HP: {selectedChara.hp + (selectedEquip?.bonusHp || 0)}</div>
-                      <div>ATK: {selectedChara.atk + (selectedEquip?.bonusAtk || 0)}</div>
-                      <div>TECH: {selectedChara.tech + (selectedEquip?.bonusTech || 0)}</div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="empty-preview">キャラを選択してください</div>
-                )}
-              </div>
+              {selectedChara ? (
+                <div className="preview-card-holder">
+                  <GameCard card={selectedChara} />
+                  {selectedEquip && <div style={{ marginTop: '10px' }}><GameCard card={selectedEquip} isMini /></div>}
+                </div>
+              ) : (
+                <div className="preview-card-placeholder">キャラを選択してください</div>
+              )}
             </div>
 
             <div className="vs-badge">VS</div>
 
             <div className="opponent-side">
               <h3>ENEMY</h3>
-              <div className="preview-card opponent">
-                <div className="preview-chara-name">{opponent.chara.name}</div>
-                <div className="preview-equip-name">E: {opponent.equip.name}</div>
-                <div className="preview-stats-total">
-                  <div>HP: {opponent.chara.hp + (opponent.equip?.bonusHp || 0)}</div>
-                  <div>ATK: {opponent.chara.atk + (opponent.equip?.bonusAtk || 0)}</div>
-                  <div>TECH: {opponent.chara.tech + (opponent.equip?.bonusTech || 0)}</div>
-                </div>
+              <div className="preview-card-holder">
+                <GameCard card={opponent.chara} />
+                <div style={{ marginTop: '10px' }}><GameCard card={opponent.equip} isMini /></div>
               </div>
             </div>
           </div>

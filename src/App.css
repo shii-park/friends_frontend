@@ -13,8 +13,8 @@
 
 /* Base Styles */
 :root {
-  --primary: #CCFF00; /* Neon Lime */
-  --primary-dark: #AACC00;
+  --primary: #e98f11; /* Neon Lime */
+  --primary-dark: #7e5503;
   --bg-dark: #1A1A1A; /* Deep Black Brand Color */
   --bg-panel: #222222; /* Slightly lighter black for depth */
   --text-main: #FFFFFF;
@@ -134,6 +134,14 @@ body {
   text-shadow: 5px 5px 0px rgba(0,0,0,1);
 }
 
+.game-logo {
+  width: 90vw;
+  max-width: 1000px;
+  height: auto;
+  margin-bottom: 3rem;
+  filter: drop-shadow(15px 15px 0px rgba(0,0,0,1));
+}
+
 .username-input {
   padding: 1rem 1.5rem;
   font-size: 1.2rem;
@@ -237,6 +245,14 @@ body {
   text-align: center;
 }
 
+.home-logo {
+  width: 60vw;
+  max-width: 600px;
+  height: auto;
+  filter: drop-shadow(8px 8px 0px rgba(0,0,0,0.5));
+  margin-bottom: 1rem;
+}
+
 .home-menu {
   flex: 1; /* 残りのスペースをすべて使う */
   margin-top: 2rem;
@@ -278,7 +294,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+  box-shadow: 10px 10px 0px var(--primary-dark); /* 暗いオレンジに変更 */
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -353,7 +369,7 @@ body {
 
 .menu-card:hover {
   transform: scale(1.05); /* 回転を削除し、拡大のみに */
-  box-shadow: 15px 15px 0px var(--primary) !important;
+  box-shadow: 15px 15px 0px var(--primary-dark) !important;
   z-index: 10;
 }
 
@@ -450,61 +466,120 @@ body {
 }
 
 .card-grid.mini {
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 2rem;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1.5rem;
+  padding: 10px;
   align-items: flex-start;
 }
 
-.card-grid.mini .storage-card {
-  padding: 12px;
-  position: relative;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  height: 160px; /* Reduced base height */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+/* GameCard mini properties */
+.game-card-wrapper.mini .storage-card {
+  padding: 10px;
+  height: 140px;
 }
 
-.card-grid.mini .storage-card .card-image-placeholder {
-  height: 100px;
+.game-card-wrapper.mini .card-image-placeholder {
+  height: 60px;
+  font-size: 0.7rem;
 }
 
-.card-grid.mini .storage-card .card-stats {
-  opacity: 0;
-  margin-top: 10px;
-  transition: all 0.3s ease;
-  display: flex;
+.game-card-wrapper.mini .card-info {
+  margin-top: 6px;
 }
 
-.card-grid.mini .storage-card:hover {
-  height: 230px; /* Expands downwards */
-  margin-bottom: -70px; /* Prevents pushing other elements */
-  transform: scale(1.05) !important;
+.game-card-wrapper.mini .card-name {
+  font-size: 0.8rem;
+}
+
+.game-card-wrapper.mini .card-stats {
+  display: none; /* miniの時は基本隠す */
+}
+
+.game-card-wrapper.mini:hover .storage-card {
+  height: 200px; /* ホバーで展開 */
+  margin-bottom: -60px;
   z-index: 100;
-  background: #000;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.8), 8px 8px 0px var(--rarity-color) !important;
-  overflow: visible;
 }
 
-.card-grid.mini .storage-card:hover .card-stats {
-  opacity: 1;
+.game-card-wrapper.mini:hover .card-stats {
+  display: flex;
+  font-size: 0.7rem;
+  margin-top: 5px;
+}
+
+.storage-card-wrapper {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  perspective: 1000px;
 }
 
 .storage-card {
   background: #000;
   border: 2px solid var(--primary);
-  border-radius: 4px;
+  border-radius: 8px; /* 少し丸みを強める */
   padding: 20px;
-  box-shadow: 5px 5px 0px rgba(204, 255, 0, 0.1);
-  transition: all 0.2s;
-  cursor: pointer;
+  box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.2s;
   color: white;
+  position: relative;
+  overflow: hidden;
 }
 
 .storage-card:hover {
-  box-shadow: 8px 8px 0px var(--rarity-color) !important;
-  transform: translate(-2px, -2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 8px 8px 0px var(--rarity-color) !important;
+}
+
+.card-glare {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 5;
+  mix-blend-mode: soft-light;
+}
+
+/* SSR Hologram */
+.ssr-card {
+  box-shadow: 0 0 20px rgba(243, 105, 206, 0.3), 5px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+.ssr-hologram {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background-image: linear-gradient(
+    110deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.1) 45%,
+    rgba(100, 200, 255, 0.15) 50%,
+    rgba(255, 100, 255, 0.15) 55%,
+    rgba(255, 255, 255, 0.1) 60%,
+    transparent 65%
+  );
+  background-size: 250% 250%;
+  mix-blend-mode: overlay; /* color-dodgeからoverlayに変更して馴染ませる */
+  filter: brightness(1.1) contrast(1.1);
+}
+
+.ssr-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(45deg, #f369ce, #004ef5, #11c9c3, #f369ce);
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0.3; /* 0.5から0.3に低下 */
+  filter: blur(6px); /* 8pxから6pxにしてシャープに */
+  animation: border-glow 6s linear infinite; /* 4sから6sにしてゆっくりに */
+}
+
+@keyframes border-glow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .card-info {
@@ -647,15 +722,53 @@ body {
   background: #000;
   border: 3px solid var(--primary);
   border-radius: 4px;
-  padding: 2.5rem;
+  padding: 1.5rem; /* 2.5remから削減 */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
   box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
+  min-height: 500px; /* 高さを確保 */
+  justify-content: center;
 }
 
-.vs-badge { font-size: 3rem; font-weight: 900; color: var(--primary); font-style: italic; text-shadow: 4px 4px 0px #000; }
+.player-side, .opponent-side {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-card-holder {
+  width: 160px; /* カードの幅に合わせる */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.preview-card-placeholder {
+  width: 160px;
+  height: 220px;
+  border: 2px dashed rgba(204, 255, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 20px;
+}
+
+.vs-badge { 
+  font-size: 2.5rem; /* 3remから微減 */
+  font-weight: 900; 
+  color: var(--primary); 
+  font-style: italic; 
+  text-shadow: 4px 4px 0px #000;
+  margin: 0.5rem 0;
+}
 
 .player-side h3, .opponent-side h3 { color: white; font-weight: 900; text-transform: uppercase; margin-bottom: 0.5rem; font-size: 0.9rem; }
 

@@ -1,18 +1,12 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import GameCard from '../components/GameCard';
 import type { Chara, Equip } from '../types/game';
 
 const GachaResult: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const results: (Chara | Equip)[] = location.state?.results || [];
-
-  const getRarityColor = (rarity: string) => {
-    const colors: Record<string, string> = {
-      C: '#a7b0a0', UC: '#baed82', R: '#11c9c3', SR: '#004ef5', SSR: '#f369ce',
-    };
-    return colors[rarity] || '#ccc';
-  };
 
   return (
     <div className="gacha-result-page">
@@ -24,34 +18,7 @@ const GachaResult: React.FC = () => {
         <div className="result-grid">
           {results.length > 0 ? (
             results.map((item, index) => (
-              <div 
-                key={item.cardId + index} 
-                className="storage-card"
-                style={{ borderColor: getRarityColor(item.rarity), '--rarity-color': getRarityColor(item.rarity) } as React.CSSProperties}
-              >
-                <div className="card-image-placeholder">
-                  {'charaId' in item ? 'Chara' : 'Equip'}
-                </div>
-                <div className="card-info">
-                  <div className="card-name">{item.name}</div>
-                  <div className="card-level">Lv.{item.level}</div>
-                  <div className="card-stats">
-                    {'charaId' in item ? (
-                      <>
-                        <span>HP: {(item as Chara).hp}</span>
-                        <span>ATK: {(item as Chara).atk}</span>
-                        <span>TECH: {(item as Chara).tech}</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>HP: +{(item as Equip).bonusHp}</span>
-                        <span>ATK: +{(item as Equip).bonusAtk}</span>
-                        <span>TECH: +{(item as Equip).bonusTech}</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
+              <GameCard key={item.cardId + index} card={item} />
             ))
           ) : (
             <div className="empty-result" style={{ padding: '50px', background: 'white', borderRadius: '16px', color: '#333' }}>
