@@ -8,6 +8,7 @@ interface UserContextType {
   ownedEquips: Equip[];
   gachaStones: number;
   isLoading: boolean;
+  register: (userName: string) => Promise<void>;
   login: (userName: string) => Promise<void>;
   updateStats: (rp: number, coin: number) => Promise<void>;
   refreshUserData: () => Promise<void>;
@@ -43,9 +44,25 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   useEffect(() => {
-    const savedUserId = localStorage.getItem('userId') || 'dev-user';
-    fetchAllData(savedUserId);
+    const savedUserId = localStorage.getItem('userId');
+    if (savedUserId) {
+      fetchAllData(savedUserId);
+    }
   }, []);
+
+  const register = async (userName: string) => {
+    setIsLoading(true);
+    try {
+      const registeredUser = await apiService.register(userName);
+      localStorage.setItem('userId', registeredUser.userId);
+      await fetchAllData(registeredUser.userId);
+    } catch (error) {
+      console.error('Registration failed:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const login = async (userName: string) => {
     setIsLoading(true);
@@ -62,8 +79,10 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const refreshUserData = async () => {
-    const currentUserId = user?.userId || localStorage.getItem('userId') || 'dev-user';
-    await fetchAllData(currentUserId);
+    const currentUserId = user?.userId || localStorage.getItem('userId');
+    if (currentUserId) {
+      await fetchAllData(currentUserId);
+    }
   };
 
   const updateStats = async (_rp: number, _coin: number) => {
@@ -105,7 +124,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   return (
     <UserContext.Provider value={{ 
       user, ownedCharas, ownedEquips, gachaStones, isLoading, 
-      login, updateStats, refreshUserData, drawGacha, levelUpCard 
+      register, login, updateStats, refreshUserData, drawGacha, levelUpCard 
     }}>
       {children}
     </UserContext.Provider>

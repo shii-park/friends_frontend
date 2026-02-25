@@ -1,23 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
 
 const Title: React.FC = () => {
   const navigate = useNavigate();
-  const { user, login, isLoading } = useUser();
-  const [userName, setUserName] = React.useState('');
+  const { user, register, isLoading } = useUser();
+  const [userName, setUserName] = useState('');
 
   const handleStart = async () => {
-    if (!user && !userName.trim()) {
+    if (user) {
+      navigate('/home', { state: { from: '/' } });
+      return;
+    }
+
+    if (!userName.trim()) {
       alert('ユーザー名を入力してください');
       return;
     }
     
-    if (!user) {
-      await login(userName);
+    try {
+      await register(userName);
+      navigate('/home', { state: { from: '/' } });
+    } catch (error) {
+      console.error(error);
+      alert('登録に失敗しました。もう一度お試しください。');
     }
-    
-    navigate('/home');
   };
 
   return (
@@ -34,7 +41,14 @@ const Title: React.FC = () => {
               onChange={(e) => setUserName(e.target.value)}
               className="username-input"
               disabled={isLoading}
+              onKeyDown={(e) => e.key === 'Enter' && handleStart()}
             />
+          </div>
+        )}
+
+        {user && (
+          <div className="user-welcome">
+            <p>おかえりなさい、{user.userName}さん！</p>
           </div>
         )}
 

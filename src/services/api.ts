@@ -36,6 +36,14 @@ export const apiService = {
     return res.text();
   },
 
+  // ユーザー登録
+  register: async (userName: string): Promise<User> => {
+    return request<User>(`/register`, {
+      method: 'POST',
+      body: JSON.stringify({ userName })
+    });
+  },
+
   // ユーザー情報の取得
   getUser: async (userId: string): Promise<User> => {
     return request<User>(`/user/${userId}/get`);
