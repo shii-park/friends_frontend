@@ -24,23 +24,30 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [ownedEquips, setOwnedEquips] = useState<Equip[]>([]);
   const [gachaStones, setGachaStones] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   const fetchAllData = async (userId: string) => {
     setIsLoading(true);
+    console.log('Fetching all data for user:', userId);
     try {
       const [userData, storageData] = await Promise.all([
-        apiService.getUser(userId),
-        apiService.getStorage()
+        apiService.getUser(userId).catch(e => { console.error('User API Error:', e); return null; }),
+        apiService.getStorage().catch(e => { console.error('Storage API Error:', e); return { charas: [], equips: [], stones: 0 }; })
       ]);
-      setUser(userData);
-      setOwnedCharas(storageData.charas);
-      setOwnedEquips(storageData.equips);
-      setGachaStones(storageData.stones);
+      
+      if (userData) {
+        setUser(userData);
+        setOwnedCharas(storageData.charas || []);
+        setOwnedEquips(storageData.equips || []);
+        setGachaStones(storageData.stones || 0);
+      } else {
+        setUser(null);
+      }
     } catch (error) {
-      console.error('Failed to fetch data:', error);
-      // APIに失敗した場合はユーザーをnullに戻すなどの処理が必要
+      console.error('General Fetch Error:', error);
     } finally {
       setIsLoading(false);
+      setIsInitialized(true);
     }
   };
 
@@ -48,6 +55,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const savedUserId = localStorage.getItem('userId');
     if (savedUserId) {
       fetchAllData(savedUserId);
+    } else {
+      setIsInitialized(true);
     }
   }, []);
 
@@ -125,7 +134,15 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       user, ownedCharas, ownedEquips, gachaStones, isLoading, 
       register, login, updateStats, refreshUserData, drawGacha, levelUpCard 
     }}>
-      {children}
+      {!isInitialized ? (
+        <div style={{ 
+          height: '100vh', width: '100vw', backgroundColor: '#1A1A1A', 
+          display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#e98f11',
+          fontWeight: 900, fontSize: '2rem', letterSpacing: '4px'
+        }}>
+          NOW LOADING...
+        </div>
+      ) : children}
     </UserContext.Provider>
   );
 };
