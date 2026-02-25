@@ -450,45 +450,45 @@ body {
 }
 
 .card-grid.mini {
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 2rem;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1.5rem;
+  padding: 10px;
   align-items: flex-start;
 }
 
-.card-grid.mini .storage-card {
-  padding: 12px;
-  position: relative;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  height: 160px; /* Reduced base height */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+/* GameCard mini properties */
+.game-card-wrapper.mini .storage-card {
+  padding: 10px;
+  height: 140px;
 }
 
-.card-grid.mini .storage-card .card-image-placeholder {
-  height: 100px;
+.game-card-wrapper.mini .card-image-placeholder {
+  height: 60px;
+  font-size: 0.7rem;
 }
 
-.card-grid.mini .storage-card .card-stats {
-  opacity: 0;
-  margin-top: 10px;
-  transition: all 0.3s ease;
-  display: flex;
+.game-card-wrapper.mini .card-info {
+  margin-top: 6px;
 }
 
-.card-grid.mini .storage-card:hover {
-  height: 230px; /* Expands downwards */
-  margin-bottom: -70px; /* Prevents pushing other elements */
-  transform: scale(1.05) !important;
+.game-card-wrapper.mini .card-name {
+  font-size: 0.8rem;
+}
+
+.game-card-wrapper.mini .card-stats {
+  display: none; /* miniの時は基本隠す */
+}
+
+.game-card-wrapper.mini:hover .storage-card {
+  height: 200px; /* ホバーで展開 */
+  margin-bottom: -60px;
   z-index: 100;
-  background: #000;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.8), 8px 8px 0px var(--rarity-color) !important;
-  overflow: visible;
 }
 
-.card-grid.mini .storage-card:hover .card-stats {
-  opacity: 1;
+.game-card-wrapper.mini:hover .card-stats {
+  display: flex;
+  font-size: 0.7rem;
+  margin-top: 5px;
 }
 
 .storage-card-wrapper {
@@ -706,15 +706,53 @@ body {
   background: #000;
   border: 3px solid var(--primary);
   border-radius: 4px;
-  padding: 2.5rem;
+  padding: 1.5rem; /* 2.5remから削減 */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
   box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
+  min-height: 500px; /* 高さを確保 */
+  justify-content: center;
 }
 
-.vs-badge { font-size: 3rem; font-weight: 900; color: var(--primary); font-style: italic; text-shadow: 4px 4px 0px #000; }
+.player-side, .opponent-side {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-card-holder {
+  width: 160px; /* カードの幅に合わせる */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.preview-card-placeholder {
+  width: 160px;
+  height: 220px;
+  border: 2px dashed rgba(204, 255, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 20px;
+}
+
+.vs-badge { 
+  font-size: 2.5rem; /* 3remから微減 */
+  font-weight: 900; 
+  color: var(--primary); 
+  font-style: italic; 
+  text-shadow: 4px 4px 0px #000;
+  margin: 0.5rem 0;
+}
 
 .player-side h3, .opponent-side h3 { color: white; font-weight: 900; text-transform: uppercase; margin-bottom: 0.5rem; font-size: 0.9rem; }
 
