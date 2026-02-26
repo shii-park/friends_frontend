@@ -33,6 +33,14 @@ const Collection: React.FC = () => {
     tab === 'chara' ? e.card.base.cardKind === 1 : e.card.base.cardKind === 0
   );
 
+  // レアリティ順にソート (SSR > SR > R > UC > C)
+  const rarityOrder: Record<string, number> = { SSR: 5, SR: 4, R: 3, UC: 2, C: 1 };
+  const sortedEntries = [...filteredEntries].sort((a, b) => {
+    const orderA = rarityOrder[a.card.base.rarity] || 0;
+    const orderB = rarityOrder[b.card.base.rarity] || 0;
+    return orderB - orderA;
+  });
+
   const obtainedCount = entries.filter(e => e.state === 'get').length;
   const totalCount = entries.length;
 
@@ -62,11 +70,11 @@ const Collection: React.FC = () => {
           <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--primary)', fontWeight: 900 }}>LOADING COLLECTION...</div>
         ) : (
           <div className="card-grid">
-            {filteredEntries.map((entry) => (
+            {sortedEntries.map((entry) => (
               <CollectionCard 
                 key={entry.card.base.cardID} 
                 entry={entry}
-                onClick={() => entry.state !== 'NotFound' && setSelectedEntry(entry)}
+                onClick={() => entry.state !== 'notFound' && setSelectedEntry(entry)}
               />
             ))}
           </div>
@@ -78,8 +86,8 @@ const Collection: React.FC = () => {
         <div className="modal-overlay" onClick={() => setSelectedEntry(null)}>
           <div className="strengthen-modal" onClick={e => e.stopPropagation()}>
             <h2>{selectedEntry.state === 'get' ? selectedEntry.card.base.cardName : '???'}</h2>
-            <div className="modal-card-info" style={{ alignItems: 'flex-start' }}>
-              <div className="modal-card-visual" style={{ width: '200px' }}>
+            <div className="modal-card-info" style={{ alignItems: 'flex-start', background: 'transparent', border: 'none' }}>
+              <div className="modal-card-visual" style={{ width: '220px', perspective: '1000px' }}>
                 <CollectionCard entry={selectedEntry} />
               </div>
               <div className="modal-card-details">
