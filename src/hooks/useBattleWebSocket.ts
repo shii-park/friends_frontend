@@ -95,15 +95,15 @@ export function useBattleWebSocket(battleType: 'npc' | 'online' = 'npc') {
             charaName: data.npcCharaName || '???',
             charaRarity: data.npcCharaRarity || 'C',
             charaIconUrl: data.npcCharaIconURL,
-            charaHp: data.npcCharaHP || 0,
-            charaAtk: data.npcCharaATK || 0,
-            charaTech: data.npcCharaTECH || 0,
+            charaHp: data.npcCharaHP,
+            charaAtk: data.npcCharaATK,
+            charaTech: data.npcCharaTECH,
             equipName: data.npcEquipName || '???',
             equipRarity: data.npcEquipRarity || 'C',
             equipIconUrl: data.npcEquipIconURL,
-            equipHp: data.npcEquipHP || 0,
-            equipAtk: data.npcEquipATK || 0,
-            equipTech: data.npcEquipTECH || 0,
+            equipHp: data.npcEquipHP,
+            equipAtk: data.npcEquipATK,
+            equipTech: data.npcEquipTECH,
             specialType: SPECIAL_FROM_BACKEND[data.npcSpecialType] || 'G',
           });
           setPlayerBattleInfo({
@@ -121,14 +121,12 @@ export function useBattleWebSocket(battleType: 'npc' | 'online' = 'npc') {
           setPhase('ready');
 
           // ★ここで自動prepare
-          // setState後に送ってもOKなので即呼ぶ
           prepareRound();
           break;
 
         // 追加：NPCの予告テキスト受信
         case 'npc_hint':
           setNpcHintText(data.npcHandText || null);
-          // phaseは変えない（UIは任意）。必要なら 'ready' のまま表示でOK
           break;
 
         case 'round_result':
@@ -146,8 +144,7 @@ export function useBattleWebSocket(battleType: 'npc' | 'online' = 'npc') {
 
           setPhase('round_result');
 
-          // ★次ラウンドの予告を自動要求（アニメ後にしたいならBattle.tsx側で呼ぶ方式にする）
-          // ここで先に予告を出してOKなら即prepare
+          // ★次ラウンドの予告を自動要求
           prepareRound();
           break;
 
@@ -169,7 +166,6 @@ export function useBattleWebSocket(battleType: 'npc' | 'online' = 'npc') {
             stoneReward: data.stoneReward || 0,
           });
 
-          // 終了時は予告不要
           preparedRef.current = false;
           setNpcHintText(null);
 
@@ -205,30 +201,29 @@ export function useBattleWebSocket(battleType: 'npc' | 'online' = 'npc') {
     wsRef.current = ws;
 
     ws.onopen = () => {
-      if (wsRef.current !== ws) return; // 古いWSのイベントを無視
+      if (wsRef.current !== ws) return;
       setPhase('waiting');
     };
 
     ws.onmessage = (event) => {
-      if (wsRef.current !== ws) return; // 古いWSのイベントを無視
+      if (wsRef.current !== ws) return;
       handleMessage(event);
     };
 
     ws.onerror = () => {
-      if (wsRef.current !== ws) return; // 古いWSのイベントを無視（StrictMode対策）
+      if (wsRef.current !== ws) return;
       setError('WebSocket接続エラー');
       setPhase('error');
     };
 
     ws.onclose = () => {
-      if (wsRef.current !== ws) return; // 古いWSのイベントを無視
+      if (wsRef.current !== ws) return;
       wsRef.current = null;
     };
   }, [handleMessage, battleType]);
 
   const startBattle = useCallback((charaID: string, equipID: string) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
-      // バトル開始時は状態を初期化
       setError(null);
       setLastRound(null);
       setGameOver(null);
@@ -247,7 +242,6 @@ export function useBattleWebSocket(battleType: 'npc' | 'online' = 'npc') {
 
   const sendHand = useCallback((hand: FrontendHand) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
-      // 手を送ったら予告は「消費済み」とみなす（次の予告はround_result後に行う）
       setNpcHintText(null);
 
       wsRef.current.send(
@@ -284,11 +278,11 @@ export function useBattleWebSocket(battleType: 'npc' | 'online' = 'npc') {
     lastRound,
     gameOver,
     error,
-    npcHintText, // 追加
+    npcHintText,
     opponentDisconnected: phase === 'opponent_disconnected',
     connect,
     startBattle,
-    prepareRound, // 追加（Battle.tsx側でアニメ後に呼びたい場合にも使える）
+    prepareRound,
     sendHand,
     disconnect,
   };
