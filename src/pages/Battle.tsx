@@ -309,10 +309,12 @@ const Battle: React.FC = () => {
         </div>
 
         <div className="battle-center">
-          {isAnimating && playerHand && lastRound ? (
+          {isAnimating && playerHand ? (
             <div className="hand-display">
               <div className="hand player-hand">{handToEmoji(playerHand)}</div>
+
               <div className={`vs-text${!roundResultReady ? ' vs-text--waiting' : ''}`}>VS</div>
+
               <div
                 key={roundResultReady ? 'ready' : 'waiting'}
                 className={`hand opponent-hand${!roundResultReady ? ' hand-unknown' : ''}`}
