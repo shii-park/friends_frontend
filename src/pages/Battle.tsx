@@ -299,8 +299,13 @@ const Battle: React.FC = () => {
           {isAnimating && playerHand && lastRound ? (
             <div className="hand-display">
               <div className="hand player-hand">{handToEmoji(playerHand)}</div>
-              <div className="vs-text">VS</div>
-              <div className="hand opponent-hand">{handToEmoji(lastRound.npcHand)}</div>
+              <div className={`vs-text${!roundResultReady ? ' vs-text--waiting' : ''}`}>VS</div>
+              <div
+                key={roundResultReady ? 'ready' : 'waiting'}
+                className={`hand opponent-hand${!roundResultReady ? ' hand-unknown' : ''}`}
+              >
+                {roundResultReady && lastRound ? handToEmoji(lastRound.npcHand) : '?'}
+              </div>
             </div>
           ) : phase === 'game_over' && gameOver ? (
             <div className={`finish-text ${gameOver.outcome === 'win' ? 'victory' : 'lose'}`}>
