@@ -51,7 +51,7 @@ const Battle: React.FC = () => {
   // 接続完了後にバトル開始
   useEffect(() => {
     if (phase === 'waiting' && selectedChara && selectedEquip) {
-      startBattle(selectedChara.charaId, selectedEquip.equipId);
+      startBattle(selectedChara.cardId, selectedEquip.cardId);
     }
   }, [phase, selectedChara, selectedEquip, startBattle]);
 
