@@ -68,10 +68,10 @@ const Battle: React.FC = () => {
       // winnerを先にstateに保存してからrefを更新
       if (hpDiffNpc > 0) {
         setRoundWinner('player');
-        setDamagePopup({ value: `-${hpDiffNpc}`, target: 'opponent' });
+        setDamagePopup({ value: `-${hpDiffNpc}dmg`, target: 'opponent' });
       } else if (hpDiffPlayer > 0) {
         setRoundWinner('opponent');
-        setDamagePopup({ value: `-${hpDiffPlayer}`, target: 'player' });
+        setDamagePopup({ value: `-${hpDiffPlayer}dmg`, target: 'player' });
       } else {
         setRoundWinner('draw');
       }
@@ -94,10 +94,10 @@ const Battle: React.FC = () => {
 
       if (hpDiffNpc > 0) {
         setRoundWinner('player');
-        setDamagePopup({ value: `-${hpDiffNpc}`, target: 'opponent' });
+        setDamagePopup({ value: `-${hpDiffNpc}dmg`, target: 'opponent' });
       } else if (hpDiffPlayer > 0) {
         setRoundWinner('opponent');
-        setDamagePopup({ value: `-${hpDiffPlayer}`, target: 'player' });
+        setDamagePopup({ value: `-${hpDiffPlayer}dmg`, target: 'player' });
       }
       setIsAnimating(true);
 
@@ -233,7 +233,9 @@ const Battle: React.FC = () => {
                 <span>ATK: {npcInfo?.charaAtk}</span>
                 <span>TECH: {npcInfo?.charaTech}</span>
               </div>
-              {damagePopup?.target === 'opponent' && <div className="damage-popup">{damagePopup.value}</div>}
+              {damagePopup?.target === 'opponent' && (
+                <div className="damage-popup opponent">{damagePopup.value}</div>
+              )}
             </div>
             <div className="battle-card equip"
                  style={{ borderColor: getRarityColor(npcEquipRarity) }}>
@@ -302,7 +304,9 @@ const Battle: React.FC = () => {
                 <span>ATK: {playerBattleInfo?.charaAtk}</span>
                 <span>TECH: {playerBattleInfo?.charaTech}</span>
               </div>
-              {damagePopup?.target === 'player' && <div className="damage-popup">{damagePopup.value}</div>}
+              {damagePopup?.target === 'player' && (
+                <div className="damage-popup player">{damagePopup.value}</div>
+              )}
             </div>
           </div>
 

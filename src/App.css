@@ -1122,17 +1122,38 @@ body {
 }
 
 .damage-popup {
-  color: var(--primary);
-  font-size: 3rem;
-  font-weight: 900;
-  text-shadow: 2px 2px 0 #000;
   position: absolute;
-  animation: damage-float 0.8s forwards;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 4.5rem; /* さらに大きく */
+  font-weight: 950;
+  font-style: italic;
+  text-shadow: 
+    4px 4px 0 #000, 
+    -2px -2px 0 #000, 
+    2px -2px 0 #000, 
+    -2px 2px 0 #000,
+    0px 0px 20px rgba(0,0,0,0.5); /* 影を強化 */
+  z-index: 1000;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: damage-float 0.8s ease-out forwards;
+}
+
+/* 色分け用のクラス（JS側で付与される想定） */
+.damage-popup.player {
+  color: #ff4444; /* 自分がダメージを受けた時は赤 */
+}
+
+.damage-popup.opponent {
+  color: #ffcc00; /* 相手にダメージを与えた時は黄色 */
 }
 
 @keyframes damage-float {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-50px); opacity: 0; }
+  0% { transform: translateX(-50%) translateY(20px) scale(0.5); opacity: 0; }
+  20% { transform: translateX(-50%) translateY(-10px) scale(1.3); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(-50px) scale(1); opacity: 0; }
 }
 
 /* Strengthen Modal Refinement */
