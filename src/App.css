@@ -1698,6 +1698,249 @@ body {
   box-shadow: 6px 6px 0px #000;
 }
 
+/* =============================================
+   Matching Screen
+   ============================================= */
+
+.matching-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.matching-arena {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* グリッド背景 */
+.matching-arena::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(233, 143, 17, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(233, 143, 17, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* スキャンライン */
+.matching-scanline {
+  position: absolute;
+  top: -10%;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(233, 143, 17, 0.04) 50%,
+    transparent
+  );
+  animation: scan-down 3s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes scan-down {
+  0%   { top: -40%; }
+  100% { top: 110%; }
+}
+
+/* VS コンテナ */
+.matching-vs-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 560px;
+  z-index: 1;
+}
+
+/* サイドラベル */
+.matching-side-label {
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.matching-player-side,
+.matching-opponent-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* プレイヤーカード（オレンジグロー） */
+.matching-card-player {
+  width: 110px;
+  height: 150px;
+  border: 3px solid var(--primary);
+  border-radius: 4px;
+  background: #000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(233, 143, 17, 0.35), 6px 6px 0 #000;
+  animation: player-card-glow 2s ease-in-out infinite;
+}
+
+@keyframes player-card-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(233, 143, 17, 0.3), 6px 6px 0 #000; }
+  50%       { box-shadow: 0 0 35px rgba(233, 143, 17, 0.75), 6px 6px 0 #000; }
+}
+
+/* 相手カード（フリッカー） */
+.matching-card-unknown {
+  width: 110px;
+  height: 150px;
+  border: 3px solid #3a3a3a;
+  border-radius: 4px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: unknown-flicker 2s ease-in-out infinite;
+}
+
+@keyframes unknown-flicker {
+  0%, 100% { border-color: #2a2a2a; background: #0d0d0d; }
+  40%       { border-color: #555;    background: #181818; }
+  60%       { border-color: #3a3a3a; background: #111; }
+}
+
+.unknown-question {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #3a3a3a;
+  animation: question-pulse 2s ease-in-out infinite;
+  line-height: 1;
+}
+
+@keyframes question-pulse {
+  0%, 100% { color: #2a2a2a; }
+  50%       { color: #555; }
+}
+
+.matching-chara-name {
+  margin-top: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.matching-chara-name--unknown {
+  color: #444;
+}
+
+/* 中央レーダー */
+.matching-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.matching-radar {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  animation: radar-expand 2.4s ease-out infinite;
+}
+
+.radar-ring.ring-1 { animation-delay: 0s; }
+.radar-ring.ring-2 { animation-delay: 0.8s; }
+.radar-ring.ring-3 { animation-delay: 1.6s; }
+
+@keyframes radar-expand {
+  0%   { width: 16px; height: 16px; opacity: 0.9; }
+  100% { width: 120px; height: 120px; opacity: 0; }
+}
+
+.matching-vs-text {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--primary);
+  text-shadow: 0 0 16px var(--primary), 0 0 32px rgba(233, 143, 17, 0.5);
+  letter-spacing: 0.1em;
+  z-index: 1;
+  animation: vs-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes vs-glow {
+  0%, 100% { text-shadow: 0 0 12px var(--primary); }
+  50%       { text-shadow: 0 0 24px var(--primary), 0 0 48px rgba(233, 143, 17, 0.6); }
+}
+
+/* ステータス */
+.matching-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1;
+}
+
+.matching-status-text {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--primary);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+}
+
+.matching-dots {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.matching-dots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: dot-bounce 1.4s ease-in-out infinite;
+}
+
+.matching-dots span:nth-child(2) { animation-delay: 0.2s; }
+.matching-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dot-bounce {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.7) translateY(0); }
+  40%           { opacity: 1;   transform: scale(1.2) translateY(-4px); }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .app-header { height: auto; flex-direction: column; padding: 1rem; }
