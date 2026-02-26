@@ -29,6 +29,7 @@ const Battle: React.FC = () => {
   } = useBattleWebSocket(battleType ?? 'npc');
 
   const [isAnimating, setIsAnimating] = useState(false);
+  const [roundResultReady, setRoundResultReady] = useState(false);
   const [damagePopup, setDamagePopup] = useState<{ value: string; target: 'player' | 'opponent' } | null>(null);
   const [playerHand, setPlayerHand] = useState<Hand | null>(null);
   const [initialPlayerHP, setInitialPlayerHP] = useState(0);
@@ -80,6 +81,7 @@ const Battle: React.FC = () => {
       prevPlayerHP.current = playerHP;
       prevNpcHP.current = npcHP;
 
+      setRoundResultReady(true);
       setIsAnimating(true);
       const timer1 = setTimeout(() => setDamagePopup(null), 1000);
       const timer2 = setTimeout(() => setIsAnimating(false), 1200);
@@ -100,6 +102,7 @@ const Battle: React.FC = () => {
         setRoundWinner('opponent');
         setDamagePopup({ value: `-${hpDiffPlayer}dmg`, target: 'player' });
       }
+      setRoundResultReady(true);
       setIsAnimating(true);
 
       const timer = setTimeout(() => {
@@ -120,6 +123,7 @@ const Battle: React.FC = () => {
   const handleHandSelect = (hand: Hand) => {
     if (isAnimating || phase === 'game_over') return;
     setPlayerHand(hand);
+    setRoundResultReady(false);
     setIsAnimating(true);
     sendHand(hand);
   };
@@ -261,7 +265,7 @@ const Battle: React.FC = () => {
         </div>
 
         <div className="battle-center">
-          {isAnimating && playerHand && lastRound ? (
+          {isAnimating && roundResultReady && playerHand && lastRound ? (
             <div className="hand-display">
               <div className="hand player-hand">{handToEmoji(playerHand)}</div>
               <div className="vs-text">VS</div>
