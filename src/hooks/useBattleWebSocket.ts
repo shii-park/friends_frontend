@@ -5,8 +5,10 @@ import { HAND_TO_BACKEND, HAND_FROM_BACKEND, SPECIAL_FROM_BACKEND } from '../typ
 export interface NpcInfo {
   charaName: string;
   charaRarity: string;
+  charaIconUrl?: string;
   equipName: string;
   equipRarity: string;
+  equipIconUrl?: string;
   specialType: FrontendHand;
 }
 
@@ -48,8 +50,10 @@ export function useBattleWebSocket() {
         setNpcInfo({
           charaName: data.npcCharaName || '???',
           charaRarity: data.npcCharaRarity || 'C',
+          charaIconUrl: data.npcCharaIconURL,
           equipName: data.npcEquipName || '???',
           equipRarity: data.npcEquipRarity || 'C',
+          equipIconUrl: data.npcEquipIconURL,
           specialType: SPECIAL_FROM_BACKEND[data.npcSpecialType] || 'G',
         });
         setPhase('ready');

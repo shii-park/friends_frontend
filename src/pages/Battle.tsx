@@ -131,6 +131,10 @@ const Battle: React.FC = () => {
     return colors[rarity] || '#ccc';
   };
 
+  const getImageUrl = (url: string) => {
+    return new URL(`../assets/${url}`, import.meta.url).href;
+  };
+
   if (!user || !selectedChara) return null;
 
   // ローディング表示
@@ -215,13 +219,25 @@ const Battle: React.FC = () => {
           <div className="battle-cards-container">
             <div className={`battle-card chara ${isAnimating && roundWinner === 'opponent' ? 'attacking' : ''}`}
                  style={{ borderColor: getRarityColor(npcCharaRarity) }}>
-              <div className="battle-card-image">Chara</div>
+              <div className="battle-card-image">
+                {npcInfo?.charaIconUrl ? (
+                  <img src={getImageUrl(npcInfo.charaIconUrl)} alt={npcCharaName} className="card-icon" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  'Chara'
+                )}
+              </div>
               <div className="battle-card-name">{npcCharaName}</div>
               {damagePopup?.target === 'opponent' && <div className="damage-popup">{damagePopup.value}</div>}
             </div>
             <div className="battle-card equip"
                  style={{ borderColor: getRarityColor(npcEquipRarity) }}>
-              <div className="battle-card-image mini">Equip</div>
+              <div className="battle-card-image mini">
+                {npcInfo?.equipIconUrl ? (
+                  <img src={getImageUrl(npcInfo.equipIconUrl)} alt={npcEquipName} className="card-icon" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  'Equip'
+                )}
+              </div>
               <div className="battle-card-name mini">{npcEquipName}</div>
             </div>
           </div>
@@ -246,12 +262,24 @@ const Battle: React.FC = () => {
           <div className="battle-cards-container">
             <div className="battle-card equip"
                  style={{ borderColor: getRarityColor(selectedEquip.rarity) }}>
-              <div className="battle-card-image mini">Equip</div>
+              <div className="battle-card-image mini">
+                {selectedEquip.cardIconUrl ? (
+                  <img src={getImageUrl(selectedEquip.cardIconUrl)} alt={selectedEquip.name} className="card-icon" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  'Equip'
+                )}
+              </div>
               <div className="battle-card-name mini">{selectedEquip.name}</div>
             </div>
             <div className={`battle-card chara ${isAnimating && roundWinner === 'player' ? 'attacking' : ''}`}
                  style={{ borderColor: getRarityColor(selectedChara.rarity) }}>
-              <div className="battle-card-image">Chara</div>
+              <div className="battle-card-image">
+                {selectedChara.cardIconUrl ? (
+                  <img src={getImageUrl(selectedChara.cardIconUrl)} alt={selectedChara.name} className="card-icon" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  'Chara'
+                )}
+              </div>
               <div className="battle-card-name">{selectedChara.name}</div>
               {damagePopup?.target === 'player' && <div className="damage-popup">{damagePopup.value}</div>}
             </div>
