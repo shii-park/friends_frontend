@@ -67,7 +67,6 @@ const Battle: React.FC = () => {
       const hpDiffPlayer = prevPlayerHP.current - playerHP;
       const hpDiffNpc = prevNpcHP.current - npcHP;
 
-      // winnerを先にstateに保存してからrefを更新
       if (hpDiffNpc > 0) {
         setRoundWinner('player');
         setDamagePopup({ value: `-${hpDiffNpc}dmg`, target: 'opponent' });
@@ -143,50 +142,107 @@ const Battle: React.FC = () => {
 
   if (!user || !selectedChara) return null;
 
-  // ローディング表示
-  if (phase === 'idle' || phase === 'connecting' || phase === 'waiting' || phase === 'matching') {
-    const loadingText = battleType === 'online' && phase === 'matching'
-      ? 'マッチング中...'
-      : '対戦相手を探しています...';
+  // ヘッダー共通パーツ
+  const header = (
+    <header className="app-header">
+      <div className="header-left">
+        <div className="header-user-name">{user.userName}</div>
+      </div>
+      <div className="header-center">
+        <h1>BATTLE</h1>
+      </div>
+      <div className="header-right">
+        <div className="header-stats-item">RP: {user.rp}</div>
+        <div className="header-stats-item">コイン: {user.coin}</div>
+        <div className="header-stats-item">石: {gachaStones}</div>
+      </div>
+    </header>
+  );
+
+  // NPC戦ローディング
+  if (phase === 'idle' || phase === 'connecting' || phase === 'waiting') {
     return (
-      <div className="battle-page">
-        <header className="app-header">
-          <div className="header-left">
-            <div className="header-user-name">{user.userName}</div>
-          </div>
-          <div className="header-center">
-            <h1>BATTLE</h1>
-          </div>
-          <div className="header-right">
-            <div className="header-stats-item">RP: {user.rp}</div>
-            <div className="header-stats-item">コイン: {user.coin}</div>
-            <div className="header-stats-item">石: {gachaStones}</div>
-          </div>
-        </header>
-        <div className="battle-arena" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div className="battle-page" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        {header}
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ textAlign: 'center', color: '#e98f11', fontSize: '1.5rem', fontWeight: 700 }}>
-            {loadingText}
+            対戦相手を探しています...
           </div>
         </div>
       </div>
     );
   }
 
-  // エラー表示
+  // オンラインマッチング待機画面
+  if (phase === 'matching') {
+    return (
+      <div className="battle-page matching-page">
+        {header}
+        <div className="matching-arena">
+          <div className="matching-scanline" />
+
+          <div className="matching-vs-container">
+            {/* プレイヤー側 */}
+            <div className="matching-player-side">
+              <div className="matching-side-label">YOU</div>
+              <div
+                className="matching-card-player"
+                style={{ borderColor: getRarityColor(selectedChara.rarity) }}
+              >
+                {selectedChara.cardIconUrl ? (
+                  <img
+                    src={getImageUrl(selectedChara.cardIconUrl)}
+                    alt={selectedChara.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <span style={{ fontSize: '2.5rem' }}>⚔️</span>
+                )}
+              </div>
+              <div className="matching-chara-name">{selectedChara.name}</div>
+            </div>
+
+            {/* 中央：レーダー＋VS */}
+            <div className="matching-center">
+              <div className="matching-radar">
+                <div className="radar-ring ring-1" />
+                <div className="radar-ring ring-2" />
+                <div className="radar-ring ring-3" />
+                <div className="matching-vs-text">VS</div>
+              </div>
+            </div>
+
+            {/* 相手側 */}
+            <div className="matching-opponent-side">
+              <div className="matching-side-label">ENEMY</div>
+              <div className="matching-card-unknown">
+                <span className="unknown-question">?</span>
+              </div>
+              <div className="matching-chara-name matching-chara-name--unknown">???</div>
+            </div>
+          </div>
+
+          {/* ステータス */}
+          <div className="matching-status">
+            <div className="matching-status-text">MATCHING</div>
+            <div className="matching-dots">
+              <span /><span /><span />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // エラー・切断表示
   if (phase === 'error' || opponentDisconnected) {
     return (
-      <div className="battle-page">
-        <header className="app-header">
-          <div className="header-left">
-            <div className="header-user-name">{user.userName}</div>
+      <div className="battle-page" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        {header}
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ color: '#ff4444', fontSize: '1.2rem' }}>
+            {opponentDisconnected ? '対戦相手が切断しました' : `エラー: ${error}`}
           </div>
-          <div className="header-center">
-            <h1>BATTLE</h1>
-          </div>
-          <div className="header-right" />
-        </header>
-        <div className="battle-arena" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ color: '#ff4444', fontSize: '1.2rem' }}>エラー: {error}</div>
           <button className="home-button" onClick={() => navigate('/home')}>ホームへ戻る</button>
         </div>
       </div>
@@ -200,19 +256,7 @@ const Battle: React.FC = () => {
 
   return (
     <div className="battle-page">
-      <header className="app-header">
-        <div className="header-left">
-          <div className="header-user-name">{user.userName}</div>
-        </div>
-        <div className="header-center">
-          <h1>BATTLE</h1>
-        </div>
-        <div className="header-right">
-          <div className="header-stats-item">RP: {user.rp}</div>
-          <div className="header-stats-item">コイン: {user.coin}</div>
-          <div className="header-stats-item">石: {gachaStones}</div>
-        </div>
-      </header>
+      {header}
 
       <div className="battle-arena">
         {/* Opponent Side */}
