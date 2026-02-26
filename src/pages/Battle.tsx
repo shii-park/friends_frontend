@@ -17,6 +17,7 @@ const Battle: React.FC = () => {
     playerHP,
     npcHP,
     npcInfo,
+    playerBattleInfo,
     lastRound,
     gameOver,
     error,
@@ -227,6 +228,11 @@ const Battle: React.FC = () => {
                 )}
               </div>
               <div className="battle-card-name">{npcCharaName}</div>
+              <div className="battle-card-stats">
+                <span>HP: {npcInfo?.charaHp}</span>
+                <span>ATK: {npcInfo?.charaAtk}</span>
+                <span>TECH: {npcInfo?.charaTech}</span>
+              </div>
               {damagePopup?.target === 'opponent' && <div className="damage-popup">{damagePopup.value}</div>}
             </div>
             <div className="battle-card equip"
@@ -239,6 +245,11 @@ const Battle: React.FC = () => {
                 )}
               </div>
               <div className="battle-card-name mini">{npcEquipName}</div>
+              <div className="battle-card-stats mini">
+                <span>HP+: {npcInfo?.equipHp}</span>
+                <span>ATK+: {npcInfo?.equipAtk}</span>
+                <span>TECH+: {npcInfo?.equipTech}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -270,6 +281,11 @@ const Battle: React.FC = () => {
                 )}
               </div>
               <div className="battle-card-name mini">{selectedEquip.name}</div>
+              <div className="battle-card-stats mini">
+                <span>HP+: {playerBattleInfo?.equipHp}</span>
+                <span>ATK+: {playerBattleInfo?.equipAtk}</span>
+                <span>TECH+: {playerBattleInfo?.equipTech}</span>
+              </div>
             </div>
             <div className={`battle-card chara ${isAnimating && roundWinner === 'player' ? 'attacking' : ''}`}
                  style={{ borderColor: getRarityColor(selectedChara.rarity) }}>
@@ -281,6 +297,11 @@ const Battle: React.FC = () => {
                 )}
               </div>
               <div className="battle-card-name">{selectedChara.name}</div>
+              <div className="battle-card-stats">
+                <span>HP: {playerBattleInfo?.charaHp}</span>
+                <span>ATK: {playerBattleInfo?.charaAtk}</span>
+                <span>TECH: {playerBattleInfo?.charaTech}</span>
+              </div>
               {damagePopup?.target === 'player' && <div className="damage-popup">{damagePopup.value}</div>}
             </div>
           </div>

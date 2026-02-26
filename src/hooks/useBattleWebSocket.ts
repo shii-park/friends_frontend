@@ -6,10 +6,25 @@ export interface NpcInfo {
   charaName: string;
   charaRarity: string;
   charaIconUrl?: string;
+  charaHp: number;
+  charaAtk: number;
+  charaTech: number;
   equipName: string;
   equipRarity: string;
   equipIconUrl?: string;
+  equipHp: number;
+  equipAtk: number;
+  equipTech: number;
   specialType: FrontendHand;
+}
+
+export interface PlayerBattleInfo {
+  charaHp: number;
+  charaAtk: number;
+  charaTech: number;
+  equipHp: number;
+  equipAtk: number;
+  equipTech: number;
 }
 
 export interface RoundResultData {
@@ -36,6 +51,7 @@ export function useBattleWebSocket() {
   const [playerHP, setPlayerHP] = useState(0);
   const [npcHP, setNpcHP] = useState(0);
   const [npcInfo, setNpcInfo] = useState<NpcInfo | null>(null);
+  const [playerBattleInfo, setPlayerBattleInfo] = useState<PlayerBattleInfo | null>(null);
   const [lastRound, setLastRound] = useState<RoundResultData | null>(null);
   const [gameOver, setGameOver] = useState<GameOverData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -51,10 +67,24 @@ export function useBattleWebSocket() {
           charaName: data.npcCharaName || '???',
           charaRarity: data.npcCharaRarity || 'C',
           charaIconUrl: data.npcCharaIconURL,
+          charaHp: data.npcCharaHP || 0,
+          charaAtk: data.npcCharaATK || 0,
+          charaTech: data.npcCharaTECH || 0,
           equipName: data.npcEquipName || '???',
           equipRarity: data.npcEquipRarity || 'C',
           equipIconUrl: data.npcEquipIconURL,
+          equipHp: data.npcEquipHP || 0,
+          equipAtk: data.npcEquipATK || 0,
+          equipTech: data.npcEquipTECH || 0,
           specialType: SPECIAL_FROM_BACKEND[data.npcSpecialType] || 'G',
+        });
+        setPlayerBattleInfo({
+          charaHp: data.playerCharaHP || 0,
+          charaAtk: data.playerCharaATK || 0,
+          charaTech: data.playerCharaTECH || 0,
+          equipHp: data.playerEquipHP || 0,
+          equipAtk: data.playerEquipATK || 0,
+          equipTech: data.playerEquipTECH || 0,
         });
         setPhase('ready');
         break;
@@ -168,6 +198,7 @@ export function useBattleWebSocket() {
     playerHP,
     npcHP,
     npcInfo,
+    playerBattleInfo,
     lastRound,
     gameOver,
     error,
