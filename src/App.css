@@ -258,7 +258,7 @@ body {
   margin-top: 2rem;
   width: 100%;
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
+  grid-template-columns: 1.8fr 1fr; /* 左側を少し広く（1.6fr -> 1.8fr） */
   gap: 4rem;
   align-items: stretch; /* 子供を縦一杯に伸ばす */
   padding: 0;
@@ -302,8 +302,8 @@ body {
   flex: 1;
   height: 200px;
   flex-direction: row;
-  padding: 0 40px;
-  gap: 1.5rem;
+  padding: 0 30px; /* 40px -> 30px に少し詰める */
+  gap: 1.2rem;
   justify-content: flex-start;
 }
 
@@ -399,6 +399,7 @@ body {
   margin: 0;
   color: var(--primary);
   text-transform: uppercase;
+  white-space: nowrap; /* 改行を禁止 */
 }
 
 .menu-desc {
