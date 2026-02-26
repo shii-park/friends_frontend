@@ -13,12 +13,12 @@
 
 /* Base Styles */
 :root {
-  --primary: #e98f11; /* Neon Lime */
+  --primary: #e98f11; /* Brand Orange */
   --primary-dark: #7e5503;
   --bg-dark: #1A1A1A; /* Deep Black Brand Color */
   --bg-panel: #222222; /* Slightly lighter black for depth */
   --text-main: #FFFFFF;
-  --text-accent: #CCFF00;
+  --text-accent: #ffb347; /* Light Orange */
   --text-sub: #888888;
   --shadow-sm: 0 4px 0px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 8px 0px rgba(0, 0, 0, 0.2);
@@ -619,7 +619,7 @@ body {
   width: 100%;
   aspect-ratio: 3/4;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(204, 255, 0, 0.2);
+  border: 1px solid rgba(233, 143, 17, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -682,7 +682,7 @@ body {
   padding: 4rem 2rem;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+  box-shadow: 10px 10px 0px rgba(233, 143, 17, 0.2);
 }
 
 .battle-type-card:hover {
@@ -774,7 +774,7 @@ body {
 .preview-card-placeholder {
   width: 160px;
   height: 220px;
-  border: 2px dashed rgba(204, 255, 0, 0.3);
+  border: 2px dashed rgba(233, 143, 17, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -943,7 +943,7 @@ body {
   background: var(--primary);
   height: 100%;
   transition: width 0.5s ease;
-  box-shadow: 0 0 10px rgba(204, 255, 0, 0.5); /* Glow effect */
+  box-shadow: 0 0 10px rgba(233, 143, 17, 0.5); /* Glow effect */
 }
 
 .hp-text {
@@ -1101,7 +1101,7 @@ body {
   background: #000;
   padding: 1.5rem 3rem;
   border-radius: 4px;
-  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+  box-shadow: 10px 10px 0px rgba(233, 143, 17, 0.2);
   border: 2px solid var(--primary);
 }
 
@@ -1128,7 +1128,7 @@ body {
   padding: 1rem 3rem;
   border-radius: 4px;
   border: 2px solid var(--primary);
-  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+  box-shadow: 10px 10px 0px rgba(233, 143, 17, 0.2);
 }
 
 .finish-text {
@@ -1225,7 +1225,7 @@ body {
   max-width: 650px;
   width: 90%;
   position: relative;
-  box-shadow: 0 0 30px rgba(204, 255, 0, 0.1), 15px 15px 0px rgba(0, 0, 0, 1);
+  box-shadow: 0 0 30px rgba(233, 143, 17, 0.1), 15px 15px 0px rgba(0, 0, 0, 1);
   color: white;
 }
 
@@ -1246,7 +1246,7 @@ body {
   align-items: center;
   background: rgba(255, 255, 255, 0.03);
   padding: 2rem;
-  border: 1px solid rgba(204, 255, 0, 0.1);
+  border: 1px solid rgba(233, 143, 17, 0.1);
   margin-bottom: 2rem;
 }
 
@@ -1388,7 +1388,7 @@ body {
 
 .reward-item {
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(204, 255, 0, 0.2);
+  border: 1px solid rgba(233, 143, 17, 0.2);
   margin-bottom: 0.8rem;
   padding: 0.8rem 1.5rem;
   display: flex;
@@ -1448,13 +1448,13 @@ body {
   position: absolute;
   font-size: 18rem; /* 16remから18remに微増させて迫力を調整 */
   font-weight: 950;
-  color: #647D00;
+  color: var(--primary-dark); /* オレンジの暗い色に変更 */
   white-space: nowrap;
   z-index: 0;
   user-select: none;
   font-style: italic;
   letter-spacing: -0.7rem;
-  opacity: 0.9;
+  opacity: 0.6; /* 少し透過を強めて馴染ませる */
   pointer-events: none;
 }
 
