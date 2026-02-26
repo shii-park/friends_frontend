@@ -43,9 +43,9 @@ export interface GameOverData {
   stoneReward: number;
 }
 
-type BattlePhase = 'idle' | 'connecting' | 'waiting' | 'ready' | 'round_result' | 'game_over' | 'error';
+type BattlePhase = 'idle' | 'connecting' | 'waiting' | 'matching' | 'ready' | 'round_result' | 'game_over' | 'error' | 'opponent_disconnected';
 
-export function useBattleWebSocket() {
+export function useBattleWebSocket(battleType: 'npc' | 'online' = 'npc') {
   const wsRef = useRef<WebSocket | null>(null);
   const [phase, setPhase] = useState<BattlePhase>('idle');
   const [playerHP, setPlayerHP] = useState(0);
@@ -120,6 +120,15 @@ export function useBattleWebSocket() {
         setPhase('game_over');
         break;
 
+      case 'matching':
+        setPhase('matching');
+        break;
+
+      case 'opponent_disconnected':
+        setError('対戦相手が切断しました');
+        setPhase('opponent_disconnected');
+        break;
+
       case 'error':
         setError(data.error);
         setPhase('error');
@@ -130,7 +139,8 @@ export function useBattleWebSocket() {
   const connect = useCallback(() => {
     if (wsRef.current) return; // 既に接続中の場合はスキップ（StrictMode対策）
     const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-    const wsUrl = baseUrl.replace(/^http/, 'ws') + '/battle/ws';
+    const path = battleType === 'online' ? '/battle/online/ws' : '/battle/ws';
+    const wsUrl = baseUrl.replace(/^http/, 'ws') + path;
 
     setPhase('connecting');
     const ws = new WebSocket(wsUrl);
@@ -156,7 +166,7 @@ export function useBattleWebSocket() {
       if (wsRef.current !== ws) return; // 古いWSのイベントを無視
       wsRef.current = null;
     };
-  }, [handleMessage]);
+  }, [handleMessage, battleType]);
 
   const startBattle = useCallback((charaID: string, equipID: string) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -202,6 +212,7 @@ export function useBattleWebSocket() {
     lastRound,
     gameOver,
     error,
+    opponentDisconnected: phase === 'opponent_disconnected',
     connect,
     startBattle,
     sendHand,

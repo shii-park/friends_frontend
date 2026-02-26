@@ -10,7 +10,7 @@ const Battle: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, gachaStones } = useUser();
-  const { selectedChara, selectedEquip } = location.state || {};
+  const { selectedChara, selectedEquip, battleType } = location.state || {};
 
   const {
     phase,
@@ -21,11 +21,12 @@ const Battle: React.FC = () => {
     lastRound,
     gameOver,
     error,
+    opponentDisconnected,
     connect,
     startBattle,
     sendHand,
     disconnect,
-  } = useBattleWebSocket();
+  } = useBattleWebSocket(battleType ?? 'npc');
 
   const [isAnimating, setIsAnimating] = useState(false);
   const [damagePopup, setDamagePopup] = useState<{ value: string; target: 'player' | 'opponent' } | null>(null);
@@ -139,7 +140,10 @@ const Battle: React.FC = () => {
   if (!user || !selectedChara) return null;
 
   // ローディング表示
-  if (phase === 'idle' || phase === 'connecting' || phase === 'waiting') {
+  if (phase === 'idle' || phase === 'connecting' || phase === 'waiting' || phase === 'matching') {
+    const loadingText = battleType === 'online' && phase === 'matching'
+      ? 'マッチング中...'
+      : '対戦相手を探しています...';
     return (
       <div className="battle-page">
         <header className="app-header">
@@ -157,7 +161,7 @@ const Battle: React.FC = () => {
         </header>
         <div className="battle-arena" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ textAlign: 'center', color: '#e98f11', fontSize: '1.5rem', fontWeight: 700 }}>
-            対戦相手を探しています...
+            {loadingText}
           </div>
         </div>
       </div>
@@ -165,7 +169,7 @@ const Battle: React.FC = () => {
   }
 
   // エラー表示
-  if (phase === 'error') {
+  if (phase === 'error' || opponentDisconnected) {
     return (
       <div className="battle-page">
         <header className="app-header">
