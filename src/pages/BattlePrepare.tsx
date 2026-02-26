@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
 import GameCard from '../components/GameCard';
 import type { Chara, Equip } from '../types/game';
 
 const BattlePrepare: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, ownedCharas, ownedEquips } = useUser();
+  const { battleType } = location.state || {};
 
   const [selectedChara, setSelectedChara] = useState<Chara | null>(null);
   const [selectedEquip, setSelectedEquip] = useState<Equip | null>(null);
@@ -16,7 +18,7 @@ const BattlePrepare: React.FC = () => {
 
   const handleStartBattle = () => {
     if (selectedChara && selectedEquip) {
-      navigate('/battle', { state: { selectedChara, selectedEquip, from: '/battle-prepare' } });
+      navigate('/battle', { state: { selectedChara, selectedEquip, battleType, from: '/battle-prepare' } });
     }
   };
 
