@@ -39,6 +39,10 @@ const Battle: React.FC = () => {
   const prevPlayerHP = useRef(0);
   const prevNpcHP = useRef(0);
 
+  // ★TSエラーの原因：roundResultReady が未定義だったので、ここで定義する
+  // 「round_result を受け取って lastRound があるとき＝相手の手が確定」
+  const roundResultReady = phase === 'round_result' && !!lastRound;
+
   // mount時にWebSocket接続
   useEffect(() => {
     if (selectedChara) connect();
