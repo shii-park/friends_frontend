@@ -36,7 +36,7 @@ interface BackendCardMaster {
   cardID: number;
   cardName: string;
   cardKind: number; // 0=equip, 1=character
-  rarity: string;
+  rarity: Rarity;
   cardIconURL: string;
 }
 
@@ -91,14 +91,14 @@ interface BackendCollectionEntry {
       cardName: string;
       cardIcon?: string;
       detail?: string;
-      rarity: string;
+      rarity: Rarity;
       cardKind: number;
       latestAcquiredDate: string;
     };
     character?: BackendCharacterDetail;
     equip?: BackendEquipmentDetail;
   };
-  state: 'NotFound' | 'Find' | 'Get';
+  state: 'notFound' | 'find' | 'get';
   count: number;
 }
 
