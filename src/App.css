@@ -461,8 +461,8 @@ body {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* 幅を少し狭めて詰めやすくする */
+  gap: 1.5rem;
 }
 
 .card-grid.mini {
@@ -475,7 +475,7 @@ body {
 /* GameCard mini properties */
 .game-card-wrapper.mini .storage-card {
   padding: 10px;
-  height: 140px;
+  height: 180px; /* ステータス分高さを確保 */
 }
 
 .game-card-wrapper.mini .card-image-placeholder {
@@ -492,19 +492,17 @@ body {
 }
 
 .game-card-wrapper.mini .card-stats {
-  display: none; /* miniの時は基本隠す */
-}
-
-.game-card-wrapper.mini:hover .storage-card {
-  height: 200px; /* ホバーで展開 */
-  margin-bottom: -60px;
-  z-index: 100;
-}
-
-.game-card-wrapper.mini:hover .card-stats {
-  display: flex;
+  display: flex; /* miniの時も常に表示 */
   font-size: 0.7rem;
   margin-top: 5px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.game-card-wrapper.mini .card-level {
+  font-size: 0.65rem;
+  padding: 1px 4px;
 }
 
 .storage-card-wrapper {
@@ -737,20 +735,20 @@ body {
 }
 .step-indicator span.active { color: var(--primary); opacity: 1; font-weight: 900; border-bottom: 3px solid var(--primary); }
 
-.preview-section { width: 420px; display: flex; flex-direction: column; gap: 2rem; }
+.preview-section { width: 500px; display: flex; flex-direction: column; gap: 2rem; }
 
 .vs-container {
   background: #000;
   border: 3px solid var(--primary);
   border-radius: 4px;
-  padding: 1.5rem; /* 2.5remから削減 */
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
-  min-height: 500px; /* 高さを確保 */
-  justify-content: center;
+  min-height: 600px; /* 少し高さを確保 */
+  justify-content: flex-start;
 }
 
 .player-side, .opponent-side {
@@ -807,14 +805,21 @@ body {
 
 .preview-stats-total {
   display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  flex-direction: row; /* 横並びに変更 */
+  justify-content: space-between;
+  gap: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 0.8rem;
-  font-size: 0.9rem;
+  padding-top: 1.2rem;
+  font-size: 0.85rem;
   font-weight: 800;
   color: var(--primary);
-  text-align: left;
+  text-align: center;
+  width: 100%;
+}
+
+.preview-stats-total p {
+  margin: 0;
+  white-space: nowrap;
 }
 
 .battle-start-button {

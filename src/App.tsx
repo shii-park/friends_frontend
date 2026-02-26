@@ -89,8 +89,12 @@ function AnimatedRoutes() {
     if (from === '/home' && battlePaths.includes(to)) return { direction: 1, type: 'horizontal' };
     if (battlePaths.includes(from) && to === '/home') return { direction: -1, type: 'horizontal' };
     
-    // バトル内での遷移も横スライド
-    if (battlePaths.includes(from) && battlePaths.includes(to)) return { direction: 1, type: 'horizontal' };
+    // バトル内での遷移（進む：右スライド、戻る：左スライド）
+    if (battlePaths.includes(from) && battlePaths.includes(to)) {
+      const fromIndex = battlePaths.indexOf(from);
+      const toIndex = battlePaths.indexOf(to);
+      return { direction: toIndex > fromIndex ? 1 : -1, type: 'horizontal' };
+    }
 
     // ズーム: ホーム <-> ガチャ関連
     const gachaPaths = ['/gacha', '/gacha-effect', '/gacha-result'];
