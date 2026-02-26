@@ -38,15 +38,12 @@ const BattlePrepare: React.FC = () => {
       <main className="battle-prepare-content">
         <div className="selection-section">
           <div className="step-indicator">
-            <span
-              className={step === 1 ? 'active' : ''}
-              onClick={() => setStep(1)}
-            >
+            <span className={step === 1 ? 'active' : ''}>
               1. キャラクター選択
             </span>
             <span
               className={step === 2 ? 'active' : ''}
-              onClick={() => setStep(2)}
+              onClick={selectedChara ? () => setStep(2) : undefined}
             >
               2. 装備選択
             </span>
