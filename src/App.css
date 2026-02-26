@@ -1121,6 +1121,43 @@ body {
   box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
 }
 
+.finish-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  font-style: italic;
+  z-index: 2000;
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: -5px;
+  animation: finish-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.finish-text.victory {
+  color: #ffcc00;
+  text-shadow: 
+    8px 8px 0 #004ef5, 
+    -4px -4px 0 #fff,
+    0 0 50px rgba(255, 204, 0, 0.5);
+}
+
+.finish-text.lose {
+  color: #ff4444;
+  text-shadow: 
+    8px 8px 0 #4b0082, 
+    -4px -4px 0 #000,
+    0 0 50px rgba(255, 68, 68, 0.5);
+}
+
+@keyframes finish-pop {
+  0% { transform: translate(-50%, -50%) scale(0) rotate(-20deg); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(-10deg); opacity: 1; }
+}
+
 .damage-popup {
   position: absolute;
   top: -60px;
