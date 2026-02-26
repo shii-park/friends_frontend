@@ -24,8 +24,8 @@ const Battle: React.FC = () => {
     opponentDisconnected,
     connect,
     startBattle,
-    prepareRound, // ★追加
-    npcHintText,  // ★追加
+    prepareRound,
+    npcHintText,
     sendHand,
     disconnect,
   } = useBattleWebSocket(battleType ?? 'npc');
@@ -63,13 +63,19 @@ const Battle: React.FC = () => {
     }
   }, [phase, playerHP, npcHP, initialPlayerHP]);
 
+  // ★最初のラウンド用：readyになったらNPCの手を先に決めてもらう
+  useEffect(() => {
+    if (phase === 'ready') {
+      prepareRound();
+    }
+  }, [phase, prepareRound]);
+
   // round_result受信時のアニメーション
   useEffect(() => {
     if (phase === 'round_result' && lastRound) {
       const hpDiffPlayer = prevPlayerHP.current - playerHP;
       const hpDiffNpc = prevNpcHP.current - npcHP;
 
-      // winnerを先にstateに保存してからrefを更新
       if (hpDiffNpc > 0) {
         setRoundWinner('player');
         setDamagePopup({ value: `-${hpDiffNpc}dmg`, target: 'opponent' });
@@ -89,7 +95,7 @@ const Battle: React.FC = () => {
       // ★アニメが終わったら次ラウンドの予告を要求する
       const timer2 = setTimeout(() => {
         setIsAnimating(false);
-        prepareRound(); // ここで "prepare_round" を送る → npcHintText が更新される
+        prepareRound();
       }, 1200);
 
       return () => { clearTimeout(timer1); clearTimeout(timer2); };
@@ -122,6 +128,7 @@ const Battle: React.FC = () => {
           },
         });
       }, 2000);
+
       return () => clearTimeout(timer);
     }
   }, [phase, gameOver, navigate, playerHP, npcHP]);
@@ -173,6 +180,7 @@ const Battle: React.FC = () => {
             <div className="header-stats-item">石: {gachaStones}</div>
           </div>
         </header>
+
         <div className="battle-arena" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ textAlign: 'center', color: '#e98f11', fontSize: '1.5rem', fontWeight: 700 }}>
             {loadingText}
@@ -195,6 +203,7 @@ const Battle: React.FC = () => {
           </div>
           <div className="header-right" />
         </header>
+
         <div
           className="battle-arena"
           style={{
