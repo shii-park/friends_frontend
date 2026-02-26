@@ -39,6 +39,8 @@ const Battle: React.FC = () => {
   const prevPlayerHP = useRef(0);
   const prevNpcHP = useRef(0);
 
+  const roundResultReady = phase === 'round_result' && !!lastRound;
+
   // mount時にWebSocket接続
   useEffect(() => {
     if (selectedChara) connect();
