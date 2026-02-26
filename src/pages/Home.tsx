@@ -37,17 +37,30 @@ const Home: React.FC = () => {
               >
                 <span className="menu-icon">🎒</span>
                 <div className="menu-text">
-                  <h2 className="menu-label">ストレージ</h2>
-                  <p className="menu-desc">キャラクター・装備の確認</p>
+                  <h2 className="menu-label">STORAGE</h2>
+                  <p className="menu-desc">所持カードの確認・強化</p>
                 </div>
               </button>
               <button
                 className="menu-card landscape"
+                onClick={() => navigate('/collection', { state: { from: '/home' } })}
+              >
+                <span className="menu-icon">📖</span>
+                <div className="menu-text">
+                  <h2 className="menu-label">COLLECTION</h2>
+                  <p className="menu-desc">カード図鑑を見る</p>
+                </div>
+              </button>
+            </div>
+            <div className="home-menu-cards-row" style={{ marginTop: '2rem' }}>
+              <button
+                className="menu-card landscape"
+                style={{ width: '100%' }}
                 onClick={() => navigate('/gacha', { state: { from: '/home' } })}
               >
                 <span className="menu-icon">💎</span>
                 <div className="menu-text">
-                  <h2 className="menu-label">ガチャ</h2>
+                  <h2 className="menu-label">GACHA</h2>
                   <p className="menu-desc">新しいカードを入手</p>
                 </div>
               </button>
