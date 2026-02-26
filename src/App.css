@@ -13,12 +13,12 @@
 
 /* Base Styles */
 :root {
-  --primary: #e98f11; /* Neon Lime */
+  --primary: #e98f11; /* Brand Orange */
   --primary-dark: #7e5503;
   --bg-dark: #1A1A1A; /* Deep Black Brand Color */
   --bg-panel: #222222; /* Slightly lighter black for depth */
   --text-main: #FFFFFF;
-  --text-accent: #CCFF00;
+  --text-accent: #ffb347; /* Light Orange */
   --text-sub: #888888;
   --shadow-sm: 0 4px 0px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 8px 0px rgba(0, 0, 0, 0.2);
@@ -258,7 +258,7 @@ body {
   margin-top: 2rem;
   width: 100%;
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
+  grid-template-columns: 1.8fr 1fr; /* 左側を少し広く（1.6fr -> 1.8fr） */
   gap: 4rem;
   align-items: stretch; /* 子供を縦一杯に伸ばす */
   padding: 0;
@@ -302,8 +302,8 @@ body {
   flex: 1;
   height: 200px;
   flex-direction: row;
-  padding: 0 40px;
-  gap: 1.5rem;
+  padding: 0 30px; /* 40px -> 30px に少し詰める */
+  gap: 1.2rem;
   justify-content: flex-start;
 }
 
@@ -399,6 +399,7 @@ body {
   margin: 0;
   color: var(--primary);
   text-transform: uppercase;
+  white-space: nowrap; /* 改行を禁止 */
 }
 
 .menu-desc {
@@ -461,8 +462,8 @@ body {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* 幅を少し狭めて詰めやすくする */
+  gap: 1.5rem;
 }
 
 .card-grid.mini {
@@ -475,7 +476,7 @@ body {
 /* GameCard mini properties */
 .game-card-wrapper.mini .storage-card {
   padding: 10px;
-  height: 140px;
+  height: 180px; /* ステータス分高さを確保 */
 }
 
 .game-card-wrapper.mini .card-image-placeholder {
@@ -492,19 +493,17 @@ body {
 }
 
 .game-card-wrapper.mini .card-stats {
-  display: none; /* miniの時は基本隠す */
-}
-
-.game-card-wrapper.mini:hover .storage-card {
-  height: 200px; /* ホバーで展開 */
-  margin-bottom: -60px;
-  z-index: 100;
-}
-
-.game-card-wrapper.mini:hover .card-stats {
-  display: flex;
+  display: flex; /* miniの時も常に表示 */
   font-size: 0.7rem;
   margin-top: 5px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.game-card-wrapper.mini .card-level {
+  font-size: 0.65rem;
+  padding: 1px 4px;
 }
 
 .storage-card-wrapper {
@@ -564,16 +563,20 @@ body {
   filter: brightness(1.1) contrast(1.1);
 }
 
-.ssr-card::after {
+.collection-card.ssr-card {
+  box-shadow: 0 0 20px rgba(243, 105, 206, 0.3), 5px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+.collection-card.ssr-card::after {
   content: '';
   position: absolute;
   inset: -1px;
   background: linear-gradient(45deg, #f369ce, #004ef5, #11c9c3, #f369ce);
   z-index: -1;
   border-radius: inherit;
-  opacity: 0.3; /* 0.5から0.3に低下 */
-  filter: blur(6px); /* 8pxから6pxにしてシャープに */
-  animation: border-glow 6s linear infinite; /* 4sから6sにしてゆっくりに */
+  opacity: 0.3;
+  filter: blur(6px);
+  animation: border-glow 6s linear infinite;
 }
 
 @keyframes border-glow {
@@ -616,7 +619,7 @@ body {
   width: 100%;
   aspect-ratio: 3/4;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(204, 255, 0, 0.2);
+  border: 1px solid rgba(233, 143, 17, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -679,7 +682,7 @@ body {
   padding: 4rem 2rem;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+  box-shadow: 10px 10px 0px rgba(233, 143, 17, 0.2);
 }
 
 .battle-type-card:hover {
@@ -737,20 +740,20 @@ body {
 }
 .step-indicator span.active { color: var(--primary); opacity: 1; font-weight: 900; border-bottom: 3px solid var(--primary); }
 
-.preview-section { width: 420px; display: flex; flex-direction: column; gap: 2rem; }
+.preview-section { width: 500px; display: flex; flex-direction: column; gap: 2rem; }
 
 .vs-container {
   background: #000;
   border: 3px solid var(--primary);
   border-radius: 4px;
-  padding: 1.5rem; /* 2.5remから削減 */
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
-  min-height: 500px; /* 高さを確保 */
-  justify-content: center;
+  min-height: 600px; /* 少し高さを確保 */
+  justify-content: flex-start;
 }
 
 .player-side, .opponent-side {
@@ -771,7 +774,7 @@ body {
 .preview-card-placeholder {
   width: 160px;
   height: 220px;
-  border: 2px dashed rgba(204, 255, 0, 0.3);
+  border: 2px dashed rgba(233, 143, 17, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -807,14 +810,21 @@ body {
 
 .preview-stats-total {
   display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  flex-direction: row; /* 横並びに変更 */
+  justify-content: space-between;
+  gap: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 0.8rem;
-  font-size: 0.9rem;
+  padding-top: 1.2rem;
+  font-size: 0.85rem;
   font-weight: 800;
   color: var(--primary);
-  text-align: left;
+  text-align: center;
+  width: 100%;
+}
+
+.preview-stats-total p {
+  margin: 0;
+  white-space: nowrap;
 }
 
 .battle-start-button {
@@ -891,6 +901,27 @@ body {
   z-index: 10;
 }
 
+.battle-card-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 10px;
+  gap: 2px;
+  margin-top: 5px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.battle-card-stats.mini {
+  font-size: 0.65rem;
+  margin-top: 2px;
+  padding-left: 5px;
+}
+
 .battle-side.opponent .chara-plate {
   top: 2rem;
   left: 2rem;
@@ -912,7 +943,7 @@ body {
   background: var(--primary);
   height: 100%;
   transition: width 0.5s ease;
-  box-shadow: 0 0 10px rgba(204, 255, 0, 0.5); /* Glow effect */
+  box-shadow: 0 0 10px rgba(233, 143, 17, 0.5); /* Glow effect */
 }
 
 .hp-text {
@@ -1070,7 +1101,7 @@ body {
   background: #000;
   padding: 1.5rem 3rem;
   border-radius: 4px;
-  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+  box-shadow: 10px 10px 0px rgba(233, 143, 17, 0.2);
   border: 2px solid var(--primary);
 }
 
@@ -1097,21 +1128,79 @@ body {
   padding: 1rem 3rem;
   border-radius: 4px;
   border: 2px solid var(--primary);
-  box-shadow: 10px 10px 0px rgba(204, 255, 0, 0.2);
+  box-shadow: 10px 10px 0px rgba(233, 143, 17, 0.2);
+}
+
+.finish-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  font-style: italic;
+  z-index: 2000;
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: -5px;
+  animation: finish-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.finish-text.victory {
+  color: #ffcc00;
+  text-shadow: 
+    8px 8px 0 #004ef5, 
+    -4px -4px 0 #fff,
+    0 0 50px rgba(255, 204, 0, 0.5);
+}
+
+.finish-text.lose {
+  color: #ff4444;
+  text-shadow: 
+    8px 8px 0 #4b0082, 
+    -4px -4px 0 #000,
+    0 0 50px rgba(255, 68, 68, 0.5);
+}
+
+@keyframes finish-pop {
+  0% { transform: translate(-50%, -50%) scale(0) rotate(-20deg); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(-10deg); opacity: 1; }
 }
 
 .damage-popup {
-  color: var(--primary);
-  font-size: 3rem;
-  font-weight: 900;
-  text-shadow: 2px 2px 0 #000;
   position: absolute;
-  animation: damage-float 0.8s forwards;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 4.5rem; /* さらに大きく */
+  font-weight: 950;
+  font-style: italic;
+  text-shadow: 
+    4px 4px 0 #000, 
+    -2px -2px 0 #000, 
+    2px -2px 0 #000, 
+    -2px 2px 0 #000,
+    0px 0px 20px rgba(0,0,0,0.5); /* 影を強化 */
+  z-index: 1000;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: damage-float 0.8s ease-out forwards;
+}
+
+/* 色分け用のクラス（JS側で付与される想定） */
+.damage-popup.player {
+  color: #ff4444; /* 自分がダメージを受けた時は赤 */
+}
+
+.damage-popup.opponent {
+  color: #ffcc00; /* 相手にダメージを与えた時は黄色 */
 }
 
 @keyframes damage-float {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-50px); opacity: 0; }
+  0% { transform: translateX(-50%) translateY(20px) scale(0.5); opacity: 0; }
+  20% { transform: translateX(-50%) translateY(-10px) scale(1.3); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(-50px) scale(1); opacity: 0; }
 }
 
 /* Strengthen Modal Refinement */
@@ -1136,7 +1225,7 @@ body {
   max-width: 650px;
   width: 90%;
   position: relative;
-  box-shadow: 0 0 30px rgba(204, 255, 0, 0.1), 15px 15px 0px rgba(0, 0, 0, 1);
+  box-shadow: 0 0 30px rgba(233, 143, 17, 0.1), 15px 15px 0px rgba(0, 0, 0, 1);
   color: white;
 }
 
@@ -1157,7 +1246,7 @@ body {
   align-items: center;
   background: rgba(255, 255, 255, 0.03);
   padding: 2rem;
-  border: 1px solid rgba(204, 255, 0, 0.1);
+  border: 1px solid rgba(233, 143, 17, 0.1);
   margin-bottom: 2rem;
 }
 
@@ -1267,16 +1356,20 @@ body {
 .result-container {
   background: #000;
   border: 4px solid var(--primary);
-  padding: 4rem;
-  box-shadow: 15px 15px 0px rgba(204, 255, 0, 0.1);
+  padding: 3rem 4rem;
+  box-shadow: 15px 15px 0px rgba(0, 0, 0, 0.5);
+  max-width: 500px; /* 幅を制限 */
+  width: 90%;
+  margin: 0 auto;
 }
 
 .result-title {
   color: var(--primary);
-  font-size: 6rem;
+  font-size: 5rem; /* 少しだけ小さくして収まりを良くする */
   font-weight: 900;
   text-transform: uppercase;
   text-shadow: 6px 6px 0px rgba(0,0,0,1);
+  margin-bottom: 2rem;
 }
 
 .rewards-section {
@@ -1294,10 +1387,10 @@ body {
 }
 
 .reward-item {
-  background: #111;
-  border: 2px solid var(--primary);
-  margin-bottom: 1rem;
-  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(233, 143, 17, 0.2);
+  margin-bottom: 0.8rem;
+  padding: 0.8rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1355,13 +1448,13 @@ body {
   position: absolute;
   font-size: 18rem; /* 16remから18remに微増させて迫力を調整 */
   font-weight: 950;
-  color: #647D00;
+  color: var(--primary-dark); /* オレンジの暗い色に変更 */
   white-space: nowrap;
   z-index: 0;
   user-select: none;
   font-style: italic;
   letter-spacing: -0.7rem;
-  opacity: 0.9;
+  opacity: 0.6; /* 少し透過を強めて馴染ませる */
   pointer-events: none;
 }
 
@@ -1430,6 +1523,25 @@ body {
   justify-content: center;
   align-items: center;
   color: var(--primary);
+  overflow: hidden;
+  position: relative;
+}
+
+.gacha-bg-flash {
+  position: absolute;
+  inset: 0;
+  background: white;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.crystal-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .crystal {
@@ -1437,26 +1549,73 @@ body {
   height: 100px;
   background: var(--primary);
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  margin: 0 auto 2rem;
-  animation: pulse 1s infinite alternate, rotate 3s infinite linear;
+  margin: 0;
+  animation: rotate 3s infinite linear;
   box-shadow: 0 0 50px var(--primary);
+  z-index: 5;
+  position: relative;
 }
 
-@keyframes pulse {
-  from { transform: scale(1); opacity: 0.8; }
-  to { transform: scale(1.2); opacity: 1; }
+.crystal.ssr {
+  background: linear-gradient(45deg, #ff0000, #ffeb00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+  background-size: 400% 400%;
+  animation: rotate 3s infinite linear, rainbow-bg 3s linear infinite;
+  box-shadow: 0 0 80px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes rainbow-bg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.energy-ring {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: ring-pulse 2s ease-out infinite;
+}
+
+.energy-ring.ssr {
+  border-color: #fff;
+  box-shadow: 0 0 30px #00ffff;
+}
+
+@keyframes ring-pulse {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.particle.ssr {
+  background: #fff;
+  box-shadow: 0 0 10px #fff;
+}
+
+.effect-text {
+  position: absolute;
+  bottom: 20%;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 20px var(--primary);
 }
 
 @keyframes rotate {
   from { transform: rotateY(0deg); }
   to { transform: rotateY(360deg); }
-}
-
-.effect-text {
-  font-size: 2rem;
-  font-weight: 900;
-  letter-spacing: 8px;
-  text-transform: uppercase;
 }
 
 /* Gacha Result Page */

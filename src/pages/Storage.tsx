@@ -43,6 +43,12 @@ const Storage: React.FC = () => {
     }
   };
 
+  // 強化後のステータスを計算する関数
+  const calculateNextStat = (init: number, max: number, currentLevel: number) => {
+    if (currentLevel >= 10) return max;
+    return Math.floor(init + (max - init) / 9 * currentLevel);
+  };
+
   const currentCard = getCardData();
   const { isLoading } = useUser();
   const costs: Record<number, number> = {
@@ -111,22 +117,22 @@ const Storage: React.FC = () => {
                 <p className="modal-level">Lv.{currentCard.level} <span className="arrow">→</span> {currentCard.level < 10 ? currentCard.level + 1 : 'MAX'}</p>
                 {selectedCard.type === 'chara' ? (
                   <div className="modal-stats">
-                    <p><span>HP</span> <span>{(currentCard as Chara).hp} <span className="arrow">→</span> {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</span></p>
-                    <p><span>ATK</span> <span>{(currentCard as Chara).atk} <span className="arrow">→</span> {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</span></p>
-                    <p><span>TECH</span> <span>{(currentCard as Chara).tech} <span className="arrow">→</span> {(currentCard as Chara).level < 10 ? '???' : 'MAX'}</span></p>
+                    <p><span>HP</span> <span>{(currentCard as Chara).hp} <span className="arrow">→</span> {currentCard.level < 10 ? calculateNextStat((currentCard as Chara).initHp, (currentCard as Chara).maxHp, currentCard.level) : 'MAX'}</span></p>
+                    <p><span>ATK</span> <span>{(currentCard as Chara).atk} <span className="arrow">→</span> {currentCard.level < 10 ? calculateNextStat((currentCard as Chara).initAtk, (currentCard as Chara).maxAtk, currentCard.level) : 'MAX'}</span></p>
+                    <p><span>TECH</span> <span>{(currentCard as Chara).tech} <span className="arrow">→</span> {currentCard.level < 10 ? calculateNextStat((currentCard as Chara).initTech, (currentCard as Chara).maxTech, currentCard.level) : 'MAX'}</span></p>
                   </div>
                 ) : (
                   <div className="modal-stats">
-                    <p><span>Bonus HP</span> <span>+{(currentCard as Equip).bonusHp} <span className="arrow">→</span> {(currentCard as Equip).level < 10 ? '???' : 'MAX'}</span></p>
-                    <p><span>Bonus ATK</span> <span>+{(currentCard as Equip).bonusAtk} <span className="arrow">→</span> {(currentCard as Equip).level < 10 ? '???' : 'MAX'}</span></p>
-                    <p><span>Bonus TECH</span> <span>+{(currentCard as Equip).bonusTech} <span className="arrow">→</span> {(currentCard as Equip).level < 10 ? '???' : 'MAX'}</span></p>
+                    <p><span>Bonus HP</span> <span>+{(currentCard as Equip).bonusHp} <span className="arrow">→</span> {currentCard.level < 10 ? '+' + calculateNextStat((currentCard as Equip).initBonusHp, (currentCard as Equip).maxBonusHp, currentCard.level) : 'MAX'}</span></p>
+                    <p><span>Bonus ATK</span> <span>+{(currentCard as Equip).bonusAtk} <span className="arrow">→</span> {currentCard.level < 10 ? '+' + calculateNextStat((currentCard as Equip).initBonusAtk, (currentCard as Equip).maxBonusAtk, currentCard.level) : 'MAX'}</span></p>
+                    <p><span>Bonus TECH</span> <span>+{(currentCard as Equip).bonusTech} <span className="arrow">→</span> {currentCard.level < 10 ? '+' + calculateNextStat((currentCard as Equip).initBonusTech, (currentCard as Equip).maxBonusTech, currentCard.level) : 'MAX'}</span></p>
                   </div>
                 )}
               </div>
             </div>
             <div className="modal-actions">
-              <p className="upgrade-cost">消費コイン: {currentCard.level < 10 ? costs[currentCard.level + 1] : '-'}</p>
-              <button className="upgrade-button" disabled={isLoading || currentCard.level >= 10 || user.coin < costs[currentCard.level + 1]} onClick={handleLevelUp}>
+              <p className="upgrade-cost">消費コイン: {currentCard.level < 10 ? costs[currentCard.level + 1].toLocaleString() : '-'}</p>
+              <button className="upgrade-button" disabled={isLoading || currentCard.level >= 10 || user.coin < (costs[currentCard.level + 1] || 0)} onClick={handleLevelUp}>
                 {isLoading ? '強化中...' : '強化する'}
               </button>
               <button className="close-button" onClick={() => setSelectedCard(null)}>閉じる</button>

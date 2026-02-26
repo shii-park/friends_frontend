@@ -52,23 +52,21 @@ const BattlePrepare: React.FC = () => {
 
           <div className="selection-list">
             {step === 1 ? (
-              <div className="card-grid mini">
+              <div className="card-grid">
                 {ownedCharas.map((chara) => (
                   <GameCard
                     key={chara.cardId}
                     card={chara}
-                    isMini={true}
                     onClick={() => { setSelectedChara(chara); setStep(2); }}
                   />
                 ))}
               </div>
             ) : (
-              <div className="card-grid mini">
+              <div className="card-grid">
                 {ownedEquips.map((equip) => (
                   <GameCard
                     key={equip.cardId}
                     card={equip}
-                    isMini={true}
                     onClick={() => setSelectedEquip(equip)}
                   />
                 ))}
@@ -78,24 +76,31 @@ const BattlePrepare: React.FC = () => {
         </div>
 
         <div className="preview-section">
-          <div className="vs-container">
-            <div className="player-side">
-              <h3>YOU</h3>
+          <div className="vs-container" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '1rem', padding: '2rem 1rem' }}>
+            <div className="player-side" style={{ transform: 'translateY(30px)', flex: 1 }}>
+              <h3 style={{ marginBottom: '1rem' }}>YOU</h3>
               {selectedChara ? (
-                <div className="preview-card-holder">
-                  <GameCard card={selectedChara} />
-                  {selectedEquip && <div style={{ marginTop: '10px' }}><GameCard card={selectedEquip} isMini /></div>}
+                <div className="preview-card-holder" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                  <GameCard card={selectedChara} isMini />
+                  {selectedEquip ? (
+                    <GameCard card={selectedEquip} isMini />
+                  ) : (
+                    <div className="preview-card-placeholder" style={{ width: '100px', height: '140px', fontSize: '0.7rem' }}>装備未選択</div>
+                  )}
                 </div>
               ) : (
-                <div className="preview-card-placeholder">キャラを選択してください</div>
+                <div className="preview-card-placeholder" style={{ width: '100px', height: '140px', fontSize: '0.7rem' }}>選択中...</div>
               )}
             </div>
 
-            <div className="vs-badge">VS</div>
+            <div className="vs-badge" style={{ fontSize: '3rem', zIndex: 10 }}>VS</div>
 
-            <div className="opponent-side">
-              <h3>ENEMY</h3>
-              <div className="preview-card-placeholder">???（ランダムで選ばれます）</div>
+            <div className="opponent-side" style={{ transform: 'translateY(-30px)', flex: 1 }}>
+              <h3 style={{ marginBottom: '1rem' }}>ENEMY</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'center' }}>
+                <div className="preview-card-placeholder" style={{ width: '100px', height: '140px', fontSize: '0.7rem' }}>???</div>
+                <div className="preview-card-placeholder" style={{ width: '100px', height: '140px', fontSize: '0.7rem' }}>???</div>
+              </div>
             </div>
           </div>
 

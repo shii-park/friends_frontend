@@ -17,7 +17,7 @@ const BattleResult: React.FC = () => {
   }, []);
 
   return (
-    <div className={`battle-result-page ${result}`}>
+    <div className={`battle-result-page ${result}`} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <div className="result-container">
         <h1 className="result-title">{result === 'win' ? 'VICTORY' : 'DEFEAT'}</h1>
 

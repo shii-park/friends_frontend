@@ -17,6 +17,7 @@ const Battle: React.FC = () => {
     playerHP,
     npcHP,
     npcInfo,
+    playerBattleInfo,
     lastRound,
     gameOver,
     error,
@@ -67,10 +68,10 @@ const Battle: React.FC = () => {
       // winnerを先にstateに保存してからrefを更新
       if (hpDiffNpc > 0) {
         setRoundWinner('player');
-        setDamagePopup({ value: `-${hpDiffNpc}`, target: 'opponent' });
+        setDamagePopup({ value: `-${hpDiffNpc}dmg`, target: 'opponent' });
       } else if (hpDiffPlayer > 0) {
         setRoundWinner('opponent');
-        setDamagePopup({ value: `-${hpDiffPlayer}`, target: 'player' });
+        setDamagePopup({ value: `-${hpDiffPlayer}dmg`, target: 'player' });
       } else {
         setRoundWinner('draw');
       }
@@ -93,10 +94,10 @@ const Battle: React.FC = () => {
 
       if (hpDiffNpc > 0) {
         setRoundWinner('player');
-        setDamagePopup({ value: `-${hpDiffNpc}`, target: 'opponent' });
+        setDamagePopup({ value: `-${hpDiffNpc}dmg`, target: 'opponent' });
       } else if (hpDiffPlayer > 0) {
         setRoundWinner('opponent');
-        setDamagePopup({ value: `-${hpDiffPlayer}`, target: 'player' });
+        setDamagePopup({ value: `-${hpDiffPlayer}dmg`, target: 'player' });
       }
       setIsAnimating(true);
 
@@ -217,7 +218,7 @@ const Battle: React.FC = () => {
           </div>
 
           <div className="battle-cards-container">
-            <div className={`battle-card chara ${isAnimating && roundWinner === 'opponent' ? 'attacking' : ''}`}
+            <div className={`battle-card chara ${isAnimating && roundWinner === 'opponent' ? 'attacking' : ''} ${damagePopup?.target === 'opponent' ? 'taking-damage' : ''}`}
                  style={{ borderColor: getRarityColor(npcCharaRarity) }}>
               <div className="battle-card-image">
                 {npcInfo?.charaIconUrl ? (
@@ -227,7 +228,14 @@ const Battle: React.FC = () => {
                 )}
               </div>
               <div className="battle-card-name">{npcCharaName}</div>
-              {damagePopup?.target === 'opponent' && <div className="damage-popup">{damagePopup.value}</div>}
+              <div className="battle-card-stats">
+                <span>HP: {npcInfo?.charaHp}</span>
+                <span>ATK: {npcInfo?.charaAtk}</span>
+                <span>TECH: {npcInfo?.charaTech}</span>
+              </div>
+              {damagePopup?.target === 'opponent' && (
+                <div className="damage-popup opponent">{damagePopup.value}</div>
+              )}
             </div>
             <div className="battle-card equip"
                  style={{ borderColor: getRarityColor(npcEquipRarity) }}>
@@ -239,6 +247,11 @@ const Battle: React.FC = () => {
                 )}
               </div>
               <div className="battle-card-name mini">{npcEquipName}</div>
+              <div className="battle-card-stats mini">
+                <span>HP+: {npcInfo?.equipHp}</span>
+                <span>ATK+: {npcInfo?.equipAtk}</span>
+                <span>TECH+: {npcInfo?.equipTech}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -249,6 +262,10 @@ const Battle: React.FC = () => {
               <div className="hand player-hand">{handToEmoji(playerHand)}</div>
               <div className="vs-text">VS</div>
               <div className="hand opponent-hand">{handToEmoji(lastRound.npcHand)}</div>
+            </div>
+          ) : phase === 'game_over' && gameOver ? (
+            <div className={`finish-text ${gameOver.outcome === 'win' ? 'victory' : 'lose'}`}>
+              {gameOver.outcome === 'win' ? 'VICTORY!' : 'LOSE...'}
             </div>
           ) : (
             playerHP > 0 && npcHP > 0 && phase !== 'game_over' && (
@@ -270,8 +287,13 @@ const Battle: React.FC = () => {
                 )}
               </div>
               <div className="battle-card-name mini">{selectedEquip.name}</div>
+              <div className="battle-card-stats mini">
+                <span>HP+: {playerBattleInfo?.equipHp}</span>
+                <span>ATK+: {playerBattleInfo?.equipAtk}</span>
+                <span>TECH+: {playerBattleInfo?.equipTech}</span>
+              </div>
             </div>
-            <div className={`battle-card chara ${isAnimating && roundWinner === 'player' ? 'attacking' : ''}`}
+            <div className={`battle-card chara ${isAnimating && roundWinner === 'player' ? 'attacking' : ''} ${damagePopup?.target === 'player' ? 'taking-damage' : ''}`}
                  style={{ borderColor: getRarityColor(selectedChara.rarity) }}>
               <div className="battle-card-image">
                 {selectedChara.cardIconUrl ? (
@@ -281,7 +303,14 @@ const Battle: React.FC = () => {
                 )}
               </div>
               <div className="battle-card-name">{selectedChara.name}</div>
-              {damagePopup?.target === 'player' && <div className="damage-popup">{damagePopup.value}</div>}
+              <div className="battle-card-stats">
+                <span>HP: {playerBattleInfo?.charaHp}</span>
+                <span>ATK: {playerBattleInfo?.charaAtk}</span>
+                <span>TECH: {playerBattleInfo?.charaTech}</span>
+              </div>
+              {damagePopup?.target === 'player' && (
+                <div className="damage-popup player">{damagePopup.value}</div>
+              )}
             </div>
           </div>
 

@@ -9,6 +9,7 @@ import BattleSelect from './pages/BattleSelect';
 import BattlePrepare from './pages/BattlePrepare';
 import Battle from './pages/Battle';
 import BattleResult from './pages/BattleResult';
+import Collection from './pages/Collection';
 import Gacha from './pages/Gacha';
 import GachaEffect from './pages/GachaEffect';
 import GachaResult from './pages/GachaResult';
@@ -80,17 +81,21 @@ function AnimatedRoutes() {
     const from = location.state?.from;
     const to = location.pathname;
 
-    // 縦スライド: ホーム <-> ストレージ
-    if (from === '/home' && to === '/storage') return { direction: 1, type: 'vertical' };
-    if (from === '/storage' && to === '/home') return { direction: -1, type: 'vertical' };
+    // 縦スライド: ホーム <-> ストレージ / 図鑑
+    if (from === '/home' && (to === '/storage' || to === '/collection')) return { direction: 1, type: 'vertical' };
+    if ((from === '/storage' || from === '/collection') && to === '/home') return { direction: -1, type: 'vertical' };
 
     // 横スライド: ホーム <-> バトル関連
     const battlePaths = ['/battle-select', '/battle-prepare', '/battle', '/battle-result'];
     if (from === '/home' && battlePaths.includes(to)) return { direction: 1, type: 'horizontal' };
     if (battlePaths.includes(from) && to === '/home') return { direction: -1, type: 'horizontal' };
     
-    // バトル内での遷移も横スライド
-    if (battlePaths.includes(from) && battlePaths.includes(to)) return { direction: 1, type: 'horizontal' };
+    // バトル内での遷移（進む：右スライド、戻る：左スライド）
+    if (battlePaths.includes(from) && battlePaths.includes(to)) {
+      const fromIndex = battlePaths.indexOf(from);
+      const toIndex = battlePaths.indexOf(to);
+      return { direction: toIndex > fromIndex ? 1 : -1, type: 'horizontal' };
+    }
 
     // ズーム: ホーム <-> ガチャ関連
     const gachaPaths = ['/gacha', '/gacha-effect', '/gacha-result'];
@@ -119,6 +124,7 @@ function AnimatedRoutes() {
         
         {/* ストレージ関連 */}
         <Route path="/storage" element={<PageTransition transitionConfig={transitionConfig}><Storage /></PageTransition>} />
+        <Route path="/collection" element={<PageTransition transitionConfig={transitionConfig}><Collection /></PageTransition>} />
         <Route path="/strage" element={<Navigate to="/storage" replace />} />
         
         {/* ガチャ関連 */}

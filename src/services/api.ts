@@ -84,6 +84,29 @@ interface BackendDrawResult {
   isPickup: boolean;
 }
 
+interface BackendCollectionEntry {
+  card: {
+    base: {
+      cardID: string;
+      cardName: string;
+      cardIcon?: string;
+      detail?: string;
+      rarity: string;
+      cardKind: number;
+      latestAcquiredDate: string;
+    };
+    character?: BackendCharacterDetail;
+    equip?: BackendEquipmentDetail;
+  };
+  state: 'NotFound' | 'Find' | 'Get';
+  count: number;
+}
+
+interface BackendCollectionResponse {
+  entries: BackendCollectionEntry[];
+  count: number;
+}
+
 // --- 変換関数 ---
 
 function mapToChara(item: BackendCardInstanceDetail): Chara {
@@ -175,6 +198,11 @@ export const apiService = {
       }
     }
     return { charas, equips };
+  },
+
+  // 図鑑データの取得
+  getCollection: async (): Promise<BackendCollectionResponse> => {
+    return request<BackendCollectionResponse>(`/collection`);
   },
 
   // ガチャのラインナップ取得
