@@ -1523,6 +1523,25 @@ body {
   justify-content: center;
   align-items: center;
   color: var(--primary);
+  overflow: hidden;
+  position: relative;
+}
+
+.gacha-bg-flash {
+  position: absolute;
+  inset: 0;
+  background: white;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.crystal-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .crystal {
@@ -1530,26 +1549,73 @@ body {
   height: 100px;
   background: var(--primary);
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  margin: 0 auto 2rem;
-  animation: pulse 1s infinite alternate, rotate 3s infinite linear;
+  margin: 0;
+  animation: rotate 3s infinite linear;
   box-shadow: 0 0 50px var(--primary);
+  z-index: 5;
+  position: relative;
 }
 
-@keyframes pulse {
-  from { transform: scale(1); opacity: 0.8; }
-  to { transform: scale(1.2); opacity: 1; }
+.crystal.ssr {
+  background: linear-gradient(45deg, #ff0000, #ffeb00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+  background-size: 400% 400%;
+  animation: rotate 3s infinite linear, rainbow-bg 3s linear infinite;
+  box-shadow: 0 0 80px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes rainbow-bg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.energy-ring {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: ring-pulse 2s ease-out infinite;
+}
+
+.energy-ring.ssr {
+  border-color: #fff;
+  box-shadow: 0 0 30px #00ffff;
+}
+
+@keyframes ring-pulse {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.particle.ssr {
+  background: #fff;
+  box-shadow: 0 0 10px #fff;
+}
+
+.effect-text {
+  position: absolute;
+  bottom: 20%;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 20px var(--primary);
 }
 
 @keyframes rotate {
   from { transform: rotateY(0deg); }
   to { transform: rotateY(360deg); }
-}
-
-.effect-text {
-  font-size: 2rem;
-  font-weight: 900;
-  letter-spacing: 8px;
-  text-transform: uppercase;
 }
 
 /* Gacha Result Page */
