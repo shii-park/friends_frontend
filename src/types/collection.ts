@@ -1,4 +1,4 @@
-import { Rarity } from './game';
+import type { Rarity } from './game';
 
 export type CardState = 'notFound' | 'find' | 'get';
 
@@ -14,7 +14,7 @@ export interface CollectionEntry {
       latestAcquiredDate: string;
     };
     character?: {
-      charaID: string;
+      characterID: string;
       initHP: number;
       initATK: number;
       initTECH: number;
@@ -24,7 +24,7 @@ export interface CollectionEntry {
       specialType: string;
     };
     equip?: {
-      equipID: string;
+      equipmentID: string;
       initBonusHP: number;
       initBonusATK: number;
       initBonusTECH: number;
